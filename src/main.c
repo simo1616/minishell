@@ -6,13 +6,11 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 12:26:49 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/01/17 12:26:52 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/01/17 15:22:34 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-#define MAX_CMD_LEN 1024
+#include "minishell.h"
 
 char	**parse_cmd(char *cmd)
 {
@@ -22,11 +20,11 @@ char	**parse_cmd(char *cmd)
 
 	args = malloc(sizeof(char *) * 64);
 	i = 0;
-	token = strtok(cmd, " \n");
+	token = ft_strtok(cmd, " \n");
 	while (token != NULL && i < 63)
 	{
-		args[i] = strdup(token);
-		token = strtok(NULL, " \n");
+		args[i] = ft_strdup(token);
+		token = ft_strtok(NULL, " \n");
 		i++;
 	}
 	args[i] = NULL;

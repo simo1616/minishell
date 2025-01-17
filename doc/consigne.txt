@@ -1,0 +1,108 @@
+1. Gestion des processus et appels systèmes
+Création de processus :
+
+fork() : création d’un processus fils qui est la copie du processus père.
+execve() : remplacement de l’image du processus courant par un nouveau programme.
+Interaction de fork() et execve() pour lancer de nouvelles commandes.
+Attente de processus :
+
+wait(), waitpid(), wait3(), wait4() : récupérer le code de retour d’un processus, gérer plusieurs processus en parallèle.
+Gestion des descripteurs de fichiers (FD) :
+
+dup(), dup2() : duplication de descripteurs pour la redirection et les pipes.
+pipe() : création d’un tuyau unidirectionnel pour relier la sortie d’un programme à l’entrée d’un autre.
+2. Signaux et interaction clavier (Ctrl-C, Ctrl-D, Ctrl-)
+Signaux POSIX :
+
+SIGINT (Ctrl-C), SIGQUIT (Ctrl-), etc.
+Comprendre comment intercepter et gérer ces signaux dans un shell.
+Fonctions liées :
+
+signal() ou sigaction() : installer un handler de signal.
+Respecter la contrainte du projet : une unique variable globale pour noter qu’un signal a été reçu, sans accéder à des structures complexes dans le handler.
+Cas particulier Ctrl-D :
+
+Ce n’est pas un signal, c’est l’envoi de EOF sur l’entrée standard.
+Savoir le distinguer et fermer proprement le shell le cas échéant.
+3. Lecture interactive et historique
+Bibliothèque readline() :
+
+readline(), add_history(), rl_clear_history(), etc.
+Comprendre comment fonctionne l’historique, comment on l’intègre à son shell.
+Gérer les particularités (fuites mémoire autorisées dans readline() mais pas dans votre code).
+Éventuellement la configuration de termcap ou ncurses, si vous souhaitez personnaliser le prompt, mais ce n’est pas strictement obligatoire pour le mandatory.
+
+4. Parsing et lexing
+Découpage en tokens :
+
+Caractères spéciaux : espaces, tabulations, métacaractères (|, <, >, etc.).
+Gestion des quotes (simples et doubles) et de leur impact sur le parsing.
+Analyse syntaxique :
+
+Construire une structure (tableau, liste, ou AST) représentant les commandes, leurs arguments, leurs redirections, etc.
+Conventions d’échappement (facultatif côté Minishell si le backslash n’est pas explicitement demandé, mais c’est intéressant à connaître).
+
+5. Redirections et pipes
+Redirections : <, >, <<, >>
+
+Comprendre comment ouvrir/fermer des fichiers.
+Rediriger l’entrée ou la sortie d’un processus vers un fichier ou un pipe.
+Heredoc (<<) :
+
+Gérer la lecture en boucle jusqu’au delimiter, sans polluer l’historique (bien lire dans le sujet qu’il n’est pas nécessaire de l’enregistrer).
+Pipes multiples :
+
+Savoir chaîner plusieurs commandes cmd1 | cmd2 | cmd3 ....
+Créer autant de pipes et de forks qu’il y a de commandes dans le pipeline.
+6. Variables d’environnement et expansions
+Variables d’environnement :
+
+Fonctionnement de char **envp fourni à main().
+Accès/Modification via getenv(), setenv() (ou manuellement dans un tableau de chaînes).
+Conserver et mettre à jour un copie de l’environnement dans votre shell (selon les projets 42, on fait parfois un clone plutôt que d’utiliser directement environ).
+Expansion :
+
+$VAR : substituer la valeur de la variable.
+$? : substituer le code de retour de la dernière commande.
+Attention à ne pas expand dans les quotes simples ( ' ' ) mais à le faire dans les quotes doubles ( " " ).
+7. Builtins (interne au shell)
+echo, cd, pwd, export, unset, env, exit :
+
+Comprendre leurs comportements, leurs options minimales (ex. echo -n).
+Savoir distinguer un builtin d’une commande système dans le PATH.
+Comment structurer vos fonctions pour les builtins :
+
+Par exemple, une table de correspondance (nom de builtin → pointeur sur fonction).
+8. Mécanismes d’erreur et gestion de la mémoire
+Gestion des retours d’erreur :
+
+Appels systèmes (open, close, fork, exec, etc.) peuvent échouer.
+Savoir afficher un message d’erreur ou retourner un code adapté.
+Libération mémoire (leaks) :
+
+Travailler avec valgrind (ou leaks sur macOS) pour traquer les fuites.
+Savoir où et quand free : structures de tokens, tableaux d’arguments, etc.
+Erreurs de parsing / syntaxe :
+
+Parfois, on doit signaler qu’une commande n’est pas valide (ex. > >).
+Dans le cadre de Minishell, suivez au plus près le comportement de bash pour les cas de syntaxe.
+9. Aspects Makefile et Norme (propres à 42)
+Makefile :
+
+Règles habituelles (all, clean, fclean, re, etc.).
+Gérer l’inclusion d’une libft si nécessaire.
+Norme 42 :
+
+Longueur de fonctions, style d’accolades, nommage de variables, etc.
+Vérifier régulièrement avec norminette.
+10. (Optionnel) Gestion des opérateurs avancés (Bonus)
+Si vous visez le Bonus (logique &&, ||, wildcards *, etc.), il faudra approfondir :
+
+Parseur plus élaboré :
+
+Gestion d’une arborescence (AST) avec opérateurs logiques, priorités, etc.
+Interprétation des opérateurs pour enchaîner ou stopper l’exécution selon le code retour des commandes précédentes.
+Wildcards * :
+
+Lecture du répertoire courant (via opendir(), readdir()).
+Filtrage des noms de fichiers pour matcher le pattern * (globbing).

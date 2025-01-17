@@ -5,16 +5,19 @@ LIBFT = libft/libft.a
 # Compilateur et flags
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -g
-INC = -I ./libft/inc
+INC = -I ./libft/inc -I ./inc
 
 # Sources et objets
-SRCS = main.c
-OBJS = $(SRCS:.c=.o)
+SRC_DIR = src/
+SRCS = main.c \
+       utils.c
+
+OBJS = $(addprefix $(SRC_DIR), $(SRCS:.c=.o))
 
 # Règles
 all: $(LIBFT) $(NAME)
 
-# Compilation de libft (qui inclut gnl et printf)
+# Compilation de libft
 $(LIBFT):
 	@make -C libft
 
@@ -23,7 +26,7 @@ $(NAME): $(OBJS)
 	$(CC) $(OBJS) $(CFLAGS) $(INC) -L./libft -lft -o $(NAME)
 
 # Compilation des .o
-%.o: %.c
+$(SRC_DIR)%.o: $(SRC_DIR)%.c
 	$(CC) $(CFLAGS) $(INC) -c $< -o $@
 
 clean:
