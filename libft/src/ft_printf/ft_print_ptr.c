@@ -6,11 +6,10 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 22:22:37 by mbendidi          #+#    #+#             */
-/*   Updated: 2024/12/17 22:22:41 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/01/17 12:24:15 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
 #include "libft.h"
 
 int	ft_ptr_len(uintptr_t num)

@@ -6,11 +6,10 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 22:22:25 by mbendidi          #+#    #+#             */
-/*   Updated: 2024/12/17 22:22:45 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/01/17 12:24:08 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
 #include "libft.h"
 
 int	ft_hex_len(unsigned	int num)

@@ -6,11 +6,11 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 22:23:13 by mbendidi          #+#    #+#             */
-/*   Updated: 2024/12/17 22:23:14 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/01/17 12:25:10 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
 
 int	ft_printchar(int c)
 {

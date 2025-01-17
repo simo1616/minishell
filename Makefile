@@ -4,7 +4,7 @@ LIBFT = libft/libft.a
 
 # Compilateur et flags
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 INC = -I ./libft/inc
 
 # Sources et objets

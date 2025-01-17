@@ -6,7 +6,7 @@
 #    By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/17 20:56:21 by mbendidi          #+#    #+#              #
-#    Updated: 2024/12/25 17:38:17 by mbendidi         ###   ########.fr        #
+#    Updated: 2025/01/17 12:37:12 by mbendidi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ INCLUDE     = inc/
 SRC_DIR     = src/
 OBJ_DIR     = obj/
 CC          = gcc
-CFLAGS      = -Wall -Werror -Wextra -I
+CFLAGS      = -Wall -Werror -Wextra -g -I
 RM          = rm -f
 AR          = ar rcs
 

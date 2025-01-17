@@ -6,13 +6,11 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 22:23:02 by mbendidi          #+#    #+#             */
-/*   Updated: 2024/12/17 22:23:06 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/01/17 12:24:54 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
 #include "libft.h"
-#include <stdlib.h>
 
 void	ft_putstr(char *str)
 {
