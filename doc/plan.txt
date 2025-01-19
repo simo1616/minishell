@@ -1,0 +1,105 @@
+1. Qu’est-ce qu’on doit apprendre ?
+Avant de se lancer dans l’implémentation, il faut maîtriser (ou au moins avoir des bases solides) sur :
+
+Les appels système et la gestion des processus
+
+fork(), execve(), wait(), waitpid(), wait3(), wait4().
+Les notions de retour de processus (exit status).
+Les pipes et les redirections
+
+pipe(), dup2(), ouverture/fermeture de fichiers pour <, >, <<, >>.
+La gestion de l’environnement
+
+Comprendre comment manipuler ou cloner les variables d’environnement (tableau char **envp, etc.).
+L’expansion des variables ($VAR, $?).
+Les signaux
+
+SIGINT (Ctrl-C), SIGQUIT (Ctrl-) et comment les intercepter (via signal() ou sigaction()).
+Savoir gérer ctrl-D (EOF) correctement.
+La partie “lecture interactive”
+
+Bibliothèque readline(), add_history(), etc.
+Comprendre que readline() peut avoir des fuites autorisées, mais pas dans votre code à vous.
+Le parsing / lexing
+
+Savoir découper la ligne de commande en tokens (traitement des espaces, |, <, >, etc.).
+Gérer les quotes simples/doubles et l’impact sur l’expansion.
+Optionnellement, la construction d’un AST (arbre syntaxique) ou d’une structure de commandes pour mieux organiser l’exécution.
+Les builtins
+
+echo, cd, pwd, export, unset, env, exit.
+Comment détecter qu’une commande est un builtin plutôt qu’un programme externe.
+La norme 42 et le Makefile
+
+Organisation du code, respect du style, découpage de fonctions, etc.
+Règles Makefile (all, clean, fclean, re, etc.).
+2. Répartition des tâches recommandée
+Pour un Minishell, on conseille souvent de séparer en deux grandes parties :
+
+Le “front-end” (Parsing / Lexing / Construction interne)
+Le “back-end” (Exécution / Builtins / Signaux / Redirections)
+2.1. Exemple de répartition
+(Étudiant A)
+Parsing / Lexing
+
+Découper la ligne en tokens (gestion des quotes, |, <, >, etc.).
+Créer une structure (p. ex. liste chaînée ou AST) qui représentera la commande et ses redirections.
+Gestion des expansions de variables
+
+$VAR, $?, prise en compte des guillemets simples/doubles.
+(Optionnel) Mise en place d’un AST
+
+Si vous voulez aller plus loin dans le parsing (faciliter la gestion des opérateurs, etc.).
+(Étudiant B)
+Exécution / Processus
+
+Implémenter le système de fork/execve.
+Gestion des pipes (|) : création et chaînage de plusieurs pipes.
+Gestion des redirections (<, >, <<, >>) : ouverture, fermeture, dup2().
+Gestion de l’environnement (copie des variables, PATH, etc.).
+Builtins
+
+Implémentation de echo, cd, pwd, export, unset, env, exit.
+Vérifier si la commande est un builtin ou un programme externe via le PATH.
+Signaux
+
+Installation des handlers pour SIGINT (ctrl-C) et SIGQUIT (ctrl-).
+Gestion du ctrl-D (EOF) en sortie propre du shell.
+Historique (avec readline())
+
+Appeler readline(), add_history() pour conserver l’historique des commandes.
+2.2. Collaboration (intégration)
+Définissez ensemble la structure de données que vous (A) renverrez après le parsing, pour que (B) puisse exécuter facilement.
+Revues de code mutuelles : quand A a fini le parsing, B teste l’intégration avec l’exécution.
+Tests en continu : chaque partie (A ou B) doit régulièrement compiler le projet complet et vérifier que tout s’imbrique correctement.
+3. Conseils pour éviter les “couacs” d’intégration
+Documentation minimale dès le début
+
+Un petit schéma de votre structure de commande (tokens, champs pour les redirections, etc.).
+Des explications sur la façon dont vous gérez l’expansion des variables.
+Point régulier de synchro
+
+Décidez d’un mini “daily” où vous dites ce qui est fait, ce qui reste à faire, et si vous avez des blocages.
+Si possible, faites des pull requests sur Git pour relire le code de l’autre avant de merger.
+Tests unitaires
+
+Vous pouvez avoir un fichier de tests simples pour valider le parsing (ex: “ls -l | grep .c > out.txt”) ou pour valider que vos redirections fonctionnent.
+Limiter l’usage de variables globales
+
+Le sujet Minishell insiste sur un usage limité (une variable globale max pour les signaux).
+Évitez de stocker toute la logique dans le global (souvent source de bugs).
+S’assurer que chacun apprend
+
+Même si vous déléguez le “back-end” à votre collègue, faites des revues de code pour comprendre ses choix.
+Inversement, laissez-le jeter un œil sur votre parser, afin qu’il sache comment “lire” vos structures.
+4. Check-list rapide
+Étudiant B (Exécution, signaux, etc.) doit absolument :
+
+Bien revoir fork(), execve(), wait*().
+Comprendre la logique de pipe() + dup2().
+Maîtriser la différence entre un builtin et une commande système.
+Étudiant A (Parsing, expansions) doit :
+
+Se familiariser avec les concepts de lexing (splitting de la ligne de commande).
+Traiter les quotes (simples / doubles) et la façon d’expanser (quand on n’expanse pas dans un single quote, etc.).
+Renvoyer une structure simple et claire pour la partie exécution.
