@@ -11,6 +11,7 @@
 # include <readline/history.h>
 # include <signal.h>
 
+// qsmdfkjqmsldkjfqlksjdf
 // Une seule variable globale pour les signaux
 extern int g_received_signal;
 
