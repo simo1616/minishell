@@ -1,9 +1,10 @@
 #include "minishell.h"
 
-int main(int ac, char **av, char **envp)
+int main (int ac, char **av, char **envp)
 {
-    char *cmd_line;
-    t_shell_env *shell_env;
+    char		*cmd_line;
+    t_shell_env	*shell_env;
+	t_cmd		*cmds;
 
     (void)ac;
     (void)av;
@@ -31,14 +32,16 @@ int main(int ac, char **av, char **envp)
                 shell_env->exit_status = 130;
             g_received_signal = 0;
         }
-
-        // TODO: Parsing et exécution à implémenter
-		// ls -l -> args a/out | & ; cat -e 
-		// execve(args, &env,null)
-        
+		// parsing
+        cmds = parse_command_line(cmd_line);
+		
+		// excecuting 
+        execute_commands(cmds, shell_env);
+    	free_cmds(cmds);
         free(cmd_line);
     }
     
     destroy_shell_env(shell_env);
     return (shell_env->exit_status);
 }
+

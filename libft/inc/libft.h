@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 22:16:22 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/01/17 12:51:53 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/01/24 10:57:35 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int					ft_isdigit(int c);
 int					ft_isalnum(int c);
 int					ft_isascii(int c);
 int					ft_isprint(int c);
+int					ft_isspace(int c);
 
 /* ft_str */
 size_t				ft_strlen(const char *s);

@@ -23,9 +23,37 @@ typedef struct s_shell_env
     int     running;        // Flag pour contrôler l'exécution du shell
 } t_shell_env;
 
-// Prototypes
-t_shell_env  *create_shell_env(char **envp);
-void         destroy_shell_env(t_shell_env *shell_env);
-void         signal_setup(void);
+typedef enum e_redir_type
+{
+	REDIR_IN,
+	REDIR_OUT,
+	REDIR_APPEND,
+	REDIR_HEREDOC,
+}	t_redir_type;
+
+typedef struct s_redir
+{
+	t_redir_type	type;
+	char			*filename;
+	struct	s_redir	*next;
+}	t_redir;
+
+typedef struct s_cmd 
+{
+	char			**av;
+	t_redir			*redirs;
+	struct s_cmd	*next;
+} t_cmd;
+
+t_shell_env	*create_shell_env(char **envp);
+void		destroy_shell_env(t_shell_env *shell_env);
+void		signal_setup(void);
+t_cmd 		*parse_command_line(char *line);
+void		execute_commands(t_cmd *cmds, t_shell_env *shell_env);
+int			count_tokens(char *str);
+char		*get_next_token(char **str);
+void 		free_cmds(t_cmd *cmds);
+void 		free_argv(char **argv);
+void 		free_redirs(t_redir *redirs);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/17 20:56:21 by mbendidi          #+#    #+#              #
-#    Updated: 2025/01/17 12:37:12 by mbendidi         ###   ########.fr        #
+#    Updated: 2025/01/24 10:20:53 by mbendidi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ RM          = rm -f
 AR          = ar rcs
 
 FTIS_DIR    = ft_is/
-FTIS        = ft_isalnum ft_isalpha ft_isascii ft_isdigit ft_isprint
+FTIS        = ft_isalnum ft_isalpha ft_isascii ft_isdigit ft_isprint ft_isspace
 
 FTMEM_DIR   = ft_mem/
 FTMEM       = ft_bzero ft_calloc ft_memchr ft_memcmp ft_memcpy ft_memmove ft_memset

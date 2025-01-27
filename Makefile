@@ -12,7 +12,9 @@ INC = -I ./libft/inc -I ./inc
 SRC_DIR = src/
 SRCS 	= main.c \
 		env.c \
-		signal.c
+		signal.c \
+		parse.c \
+		free.c
 
 OBJS = $(addprefix $(SRC_DIR), $(SRCS:.c=.o))
 
