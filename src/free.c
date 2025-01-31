@@ -20,7 +20,7 @@ void free_redirs(t_redir *redirs)
 }
 
 // Libère le tableau d'arguments d'une commande
-void free_argv(char **argv)
+void free_av(char **argv)
 {
     int i;
 
@@ -51,7 +51,7 @@ void free_cmds(t_cmd *cmds)
             free_redirs(current->redirs);
         // Puis les arguments
         if (current->av)
-            free_argv(current->av);
+            free_av(current->av);
         // Enfin la structure de commande elle-même
         free(current);
         current = next;

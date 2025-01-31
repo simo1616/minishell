@@ -53,7 +53,7 @@ void		execute_commands(t_cmd *cmds, t_shell_env *shell_env);
 int			count_tokens(char *str);
 char		*get_next_token(char **str);
 void 		free_cmds(t_cmd *cmds);
-void 		free_argv(char **argv);
+void 		free_av(char **argv);
 void 		free_redirs(t_redir *redirs);
 
 #endif
