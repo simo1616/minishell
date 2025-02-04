@@ -14,7 +14,8 @@ SRCS 	= main.c \
 		env.c \
 		signal.c \
 		parse.c \
-		free.c
+		free.c \
+		env_utils.c 
 
 OBJS = $(addprefix $(SRC_DIR), $(SRCS:.c=.o))
 
