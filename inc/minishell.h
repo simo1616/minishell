@@ -11,7 +11,6 @@
 # include <readline/history.h>
 # include <signal.h>
 
-// qsmdfkjqmsldkjfqlksjdf
 // Une seule variable globale pour les signaux
 extern int g_received_signal;
 
@@ -55,5 +54,7 @@ char		*get_next_token(char **str);
 void 		free_cmds(t_cmd *cmds);
 void 		free_av(char **argv);
 void 		free_redirs(t_redir *redirs);
+int 		find_env_index(t_shell_env *shell_env, const char *name);
+char 		*env_get(t_shell_env *shell_env, const char *name);
 
 #endif
