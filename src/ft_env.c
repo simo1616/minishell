@@ -10,15 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+// #include "minishell.h"
 
-int	ft_env(t_env *env)
-{
-	while(env)
-	{
-		if (env->name && env->value)
-			printf("%s=%s\n", env->name, env->value);
-		env = env->next;
-	}
-	return (0);
-}
+// int	ft_env(t_shell_env *shell_env)
+// {
+// 	while(shell_env)
+// 	{
+// 		if (env->name && env->value)
+// 			printf("%s=%s\n", env->name, env->value);
+// 		env = env->next;
+// 	}
+// 	return (0);
+// }

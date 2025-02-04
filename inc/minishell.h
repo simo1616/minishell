@@ -10,6 +10,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <signal.h>
+# include <stdbool.h>
 
 // Une seule variable globale pour les signaux
 extern int g_received_signal;
@@ -54,7 +55,17 @@ char		*get_next_token(char **str);
 void 		free_cmds(t_cmd *cmds);
 void 		free_av(char **argv);
 void 		free_redirs(t_redir *redirs);
+
+// fonction env
 int 		find_env_index(t_shell_env *shell_env, const char *name);
 char 		*env_get(t_shell_env *shell_env, const char *name);
+char		*ft_strjoin_three(const char *name, const char *eq, const char *value);
+int 		env_set(t_shell_env *shell_env, const char *name, const char *value);
+int 		env_unset(t_shell_env *shell_env, const char *name);
+
+//builting
+int			ft_echo(char **args);
+int			ft_pwd(void);
+//int			ft_env(t_env *env);
 
 #endif
