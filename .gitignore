@@ -1,0 +1,55 @@
+# 🚀 Ignore les fichiers binaires et objets
+*.o
+*.a
+*.so
+*.out
+*.exe
+*.dll
+
+# 🚀 Ignore les fichiers générés par le compilateur
+*.gcda
+*.gcno
+*.gcov
+
+# 🚀 Ignore les exécutables générés
+minishell  # Mets ici le nom de ton exécutable final
+
+# 🚀 Ignore les fichiers de logs et temporaires
+*.log
+*.tmp
+*.swp
+*.swo
+*.bak
+
+# 🚀 Ignore les fichiers de debug
+vgcore.*
+gmon.out
+core
+debug.log
+
+# 🚀 Ignore les fichiers spécifiques à VScode
+.vscode/
+*.code-workspace
+
+# 🚀 Ignore les fichiers spécifiques à JetBrains (CLion, WebStorm, etc.)
+.idea/
+
+# 🚀 Ignore les fichiers de Makefile intermédiaires
+Makefile~
+
+# 🚀 Ignore les dépendances (ex: vcpkg)
+vcpkg/
+vcpkg_installed/
+
+# 🚀 Ignore les fichiers de cache
+.cache/
+*.pid
+*.sock
+
+# 🚀 Ignore les fichiers de tests et résultats temporaires
+tests/*.out
+tests/*.diff
+
+# 🚀 Ignore les bibliothèques externes clonées
+libs/
+deps/
