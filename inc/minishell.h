@@ -81,6 +81,7 @@ int 		env_unset(t_shell_env *shell_env, const char *name);
 int			ft_echo(char **args, t_shell_env *shell_env);
 int 		ft_pwd(char **argv, t_shell_env *shell_env);
 int 		ft_env(char **argv, t_shell_env *shell_env);
+int		ft_export(char **args, t_shell_env *shell_env);
 t_builtin 	*init_builtins(void);
 int			excec_builin(t_cmd *cmd, t_shell_env *shell_env);
 int			is_builtin(char	*cmd_name);
