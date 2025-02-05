@@ -36,10 +36,10 @@ char	*ft_strjoin_three(const char *name, const char *eq, const char *value)
 	char	*tmp;
 	char	*result;
 
-	tmp = ft_strjoin(name, eq);
+	tmp = ft_strjoin(name, eq); //VAR = 
 	if(!tmp)
 		return (NULL);
-	result = ft_strjoin(tmp, value);
+	result = ft_strjoin(tmp, value); // VAR = KJSDFHKJ
 	free(tmp);
 	return(result);
 }
@@ -54,7 +54,7 @@ int env_set(t_shell_env *shell_env, const char *name, const char *value)
 	int		i;
 
 
-	new_var = ft_strjoin_three(name, "=", value);
+	new_var = ft_strjoin_three(name, "=", value); 
 	if(!new_var)
 		return (1);
 	index = find_env_index(shell_env, name);

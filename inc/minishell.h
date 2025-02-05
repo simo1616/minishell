@@ -53,13 +53,19 @@ typedef struct s_builtin
 	int		(*func)(char **av, t_shell_env *shell_env);
 }	t_builtin;
 
+// copie env
 t_shell_env	*create_shell_env(char **envp);
 void		destroy_shell_env(t_shell_env *shell_env);
 void		signal_setup(void);
-t_cmd 		*parse_command_line(char *line);
+
+//parsing
+t_cmd		*parse_command_line(char *line, t_shell_env *env);
 void		execute_commands(t_cmd *cmds, t_shell_env *shell_env);
 int			count_tokens(char *str);
-char		*get_next_token(char **str);
+char    	*get_next_token(char **str, t_shell_env *env);
+char		*remplacer_var(char *token, t_shell_env *env);
+
+//free
 void 		free_cmds(t_cmd *cmds);
 void 		free_av(char **argv);
 void 		free_redirs(t_redir *redirs);

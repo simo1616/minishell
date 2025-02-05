@@ -33,7 +33,7 @@ int main (int ac, char **av, char **envp)
             g_received_signal = 0;
         }
 		// parsing
-        cmds = parse_command_line(cmd_line);
+        cmds = parse_command_line(cmd_line, shell_env);
 		
 		// excecuting 
         execute_commands(cmds, shell_env);
