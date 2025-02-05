@@ -21,7 +21,8 @@ SRCS 	= main.c \
 		free.c \
 		ft_echo.c \
 		ft_env.c \
-		ft_pwd.c
+		ft_pwd.c \
+		ft_export.c
 
 OBJS = $(addprefix $(SRC_DIR), $(SRCS:.c=.o))
 
