@@ -11,10 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-// #include <unistd.h>
-// #include <stdio.h>
-// #include <stdbool.h>
-// #include <string.h>
 
 static int	check_option_echo(char *str)
 {
@@ -49,11 +45,12 @@ static void	write_echo(int i, bool new_line, char **args)
 		write(1, "\n", 1);
 }
 
-int	ft_echo(char **args)
+int	ft_echo(char **args, t_shell_env *shell_env) 
 {
 	int		i;
 	bool	new_line;
 
+	(void)shell_env; // on n'en a pas besoin 
 	i = 1;
 	new_line = true;
 	while (args[i] && check_option_echo(args[i]))

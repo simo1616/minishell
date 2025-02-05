@@ -40,9 +40,6 @@ int main (int ac, char **av, char **envp)
     	free_cmds(cmds);
         free(cmd_line);
     }
-    
     destroy_shell_env(shell_env);
     return (shell_env->exit_status);
 }
-
-// SAlut moi fsjhf skjhf lkqsuqhf ljqshg khhgv

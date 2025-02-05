@@ -11,6 +11,8 @@
 # include <readline/history.h>
 # include <signal.h>
 # include <stdbool.h>
+# include <limits.h>
+
 
 // Une seule variable globale pour les signaux
 extern int g_received_signal;
@@ -45,6 +47,12 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 } t_cmd;
 
+typedef struct s_builtin
+{
+	char	*name;
+	int		(*func)(char **av, t_shell_env *shell_env);
+}	t_builtin;
+
 t_shell_env	*create_shell_env(char **envp);
 void		destroy_shell_env(t_shell_env *shell_env);
 void		signal_setup(void);
@@ -64,8 +72,12 @@ int 		env_set(t_shell_env *shell_env, const char *name, const char *value);
 int 		env_unset(t_shell_env *shell_env, const char *name);
 
 //builting
-int			ft_echo(char **args);
-int			ft_pwd(void);
-//int			ft_env(t_env *env);
+int			ft_echo(char **args, t_shell_env *shell_env);
+int 		ft_pwd(char **argv, t_shell_env *shell_env);
+int 		ft_env(char **argv, t_shell_env *shell_env);
+t_builtin 	*init_builtins(void);
+int			excec_builin(t_cmd *cmd, t_shell_env *shell_env);
+int			is_builtin(char	*cmd_name);
+
 
 #endif

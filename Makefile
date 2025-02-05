@@ -11,6 +11,9 @@ INC = -I ./libft/inc -I ./inc
 # Sources et objets
 SRC_DIR = src/
 SRCS 	= main.c \
+		init_builtins.c \
+		excec_built.c \
+		exc_cmd.c \
 		env.c \
 		env_utils.c \
 		signal.c \
