@@ -12,76 +12,37 @@
 
 #include "minishell.h"
 
-void	ft_export(t_shell_env *shell_env, char *var)
+int	ft_export(char **args, t_shell_env *shell_env)
 {
 	int		i;
 	char	**new_env;
 
+	if (!args || !args[0] || !shell_env)
+		return (1);
+	if (!ft_strchr(args[1], '=') || args[1][0] == '=')
+	{
+		ft_printf("-minishell: export:'%s': not a valid identifier\n", args[1]);
+		return (1);
+	}
 	i = 0;
 	while (shell_env->env[i])
 		i++;
 	new_env = malloc(sizeof(char *) * (i + 2));
 	if (!new_env)
-		return ;
+		return (1);
 	i = 0;
 	while (shell_env->env[i])
 	{
-		new_env[i] = strdup(shell_env->env[i]);
+		new_env[i] = ft_strdup(shell_env->env[i]);
 		free(shell_env->env[i]);
 		i++;
 	}
-	new_env[i] = strdup(var);
+	new_env[i] = ft_strdup(args[1]);
 	new_env[i + 1] = NULL;
 	free(shell_env->env);
 	shell_env->env = new_env;
-}
-
-void	print_env(t_shell_env *shell_env)
-{
-	int i;
-
-	i = 0;
-	while (shell_env->env[i])
-	{
-		printf("%s\n", shell_env->env[i]);
-		i++;
-	}
-}
-
-int	main(void)
-{
-	t_shell_env	shell_env;
-	char		**init_env;
-
-	init_env = malloc(sizeof(char *) * 3);
-	init_env[0] = strdup("USER=student");
-	init_env[1] = strdup("PATH=/usr/bin");
-	init_env[2] = NULL;
-	shell_env.env = init_env;
-
-	printf("=== ENV AVANT EXPORT ===\n");
-	print_env(&shell_env);
-
-	// Ajout d'une nouvelle variable
-	printf("\n=== EXPORT HOME ===\n");
-	ft_export(&shell_env, "HOME=/home/user");
-	print_env(&shell_env);
-
-	// Modification de PATH
-	printf("\n=== EXPORT PATH ===\n");
-	ft_export(&shell_env, "PATH=/usr/local/bin");
-	print_env(&shell_env);
-
-	// Ajout d'une autre variable
-	printf("\n=== EXPORT SHELL ===\n");
-	ft_export(&shell_env, "SHELL=/bin/bash");
-	print_env(&shell_env);
-
-	// Libération mémoire
-	int i = 0;
-	while (shell_env.env[i])
-		free(shell_env.env[i++]);
-	free(shell_env.env);
-
 	return (0);
 }
+
+
+
