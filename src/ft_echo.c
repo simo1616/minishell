@@ -12,13 +12,15 @@
 
 #include "minishell.h"
 
-static int	check_option_echo(char *str)
+static bool	check_option_echo(const char *str)
 {
 	int i;
 
 	if (!str || str[0] != '-')
 		return (0);
 	i = 1;
+	if (!str[i])
+		return (false);
 	while (str[i] == 'n')
 		i++;
 	return (str[i] == '\0');
@@ -30,15 +32,10 @@ static void	write_echo(int i, bool new_line, char **args)
 
 	while (args[i])
 	{
-		if (!check_option_echo(args[i]))
-		{
-			if (!first)
-				write(1, " ", 1);
-			write(1, args[i], strlen(args[i]));
-			first = false;
-		}
-		else
-			new_line = false;
+		if (!first)
+			write(1, " ", 1);
+		write(1, args[i], strlen(args[i]));
+		first = false;
 		i++;
 	}
 	if (new_line)
@@ -50,7 +47,7 @@ int	ft_echo(char **args, t_shell_env *shell_env)
 	int		i;
 	bool	new_line;
 
-	(void)shell_env; // on n'en a pas besoin 
+	(void)shell_env;
 	i = 1;
 	new_line = true;
 	while (args[i] && check_option_echo(args[i]))
