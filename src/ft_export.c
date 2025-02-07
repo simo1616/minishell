@@ -32,7 +32,7 @@ static char	**ft_copy_env(char **env)
 		i++;
 	}
 	new_env[i] = NULL;
-	return (new_env)
+	return (new_env);
 }
 
 static void	ft_sort_env(char **env)
@@ -64,7 +64,7 @@ static void	ft_print_sorted_env(char **env)
 	int		i;
 	char	**sorted_env;
 
-	sorted_env = ft_copy_env;
+	sorted_env = ft_copy_env(env);
 	if (!sorted_env)
 		return ;
 	ft_sort_env(sorted_env);
