@@ -32,11 +32,6 @@ int	check_quotes(char *str)
 	i = 0;
 	status_s = 1;
 	status_d = 1;
-	if (str[0] == '"' || str[0] == '\'')
-	{
-		printf("minishell: command not found: %s\n", str);
-		return (0);
-	}
 	while(str[i])
 	{ // ' "test" "" ' // "echo 'hello"
 
@@ -60,21 +55,49 @@ char	*remplacer_var(char *token, t_shell_env *env)
 	char	*new;
 	char	*var_name;
 	char	*var_value;
+	char	*index;
+	int 	len;
+	int 	substr_len;
 
 	if (ft_strcmp(token, "$?") == 0)
 		return(ft_itoa(env->exit_status)); //rmeplacer le token par exitstaus
 	if (ft_strcmp(token, "$") == 0)
 		return(token);
-	if (token[0] == '$') // si non variable $NON_VAR ou $vide
+	index = 0;
+	index = ft_strchr(token, '$');
+	if (index && token[0] == '"')
 	{
-		var_name = token + 1;
-		var_value = env_get(env, var_name);
-		if (var_value)
-			new = ft_strdup(var_value);
-		else
-			new = ft_strdup("");
-		free(token);
-		return(new);
+		if (index[0] == '$') // si VAR commence par '$'
+		{
+			len = ft_strlen(index);
+			// Si le dernier char est un double
+			if (index[len - 1] == '"')
+				substr_len = len - 2;
+			else
+				substr_len = len - 1;
+			var_name = ft_substr(index, 1, substr_len);
+			var_value = env_get(env, var_name);
+			if (var_value)
+				new = ft_strdup(var_value);
+			else
+				new = ft_strdup("");
+			free(token);
+			return new;
+		}
+	}
+	else
+	{
+		if (token[0] == '$') // si non variable $NON_VAR ou $vide
+		{
+			var_name = token + 1;
+			var_value = env_get(env, var_name);
+			if (var_value)
+				new = ft_strdup(var_value);
+			else
+				new = ft_strdup("");
+			free(token);
+			return(new);
+		}
 	}
 	return(token);
 }
@@ -124,12 +147,15 @@ int	count_tokens(char *str)
 
 char *get_next_token(char **str, t_shell_env *env) 
 {
-    char *start;
-    char *token;
-    int len = 0;
-    int i = 0;
-    char quote = 0;
+    char	*start;
+    char	*token;
+    int		len;
+    int		i;
+    char	quote;
 
+	len = 0;
+    i = 0;
+    quote = 0;
     while (ft_isspace((*str)[i]))
         i++;
     start = *str + i;
