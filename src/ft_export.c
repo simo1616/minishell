@@ -12,6 +12,29 @@
 
 #include "minishell.h"
 
+static char	**ft_copy_env(char **env)
+{
+	int		i;
+	char	**new_env;
+
+	i = 0;
+	while (env[i])
+		i++;
+	new_env = malloc(sizeof(char *) * (i + 1));
+	if (!new_env)
+		return (NULL);
+	i = 0;
+	while (env[i])
+	{
+		new_env[i] = ft_strdup(env[i]);
+		if (!new_env[i])
+			return (NULL);
+		i++;
+	}
+	new_env[i] = NULL;
+	return (new_env)
+}
+
 static void	ft_sort_env(char **env)
 {
 	int		i;
@@ -38,15 +61,21 @@ static void	ft_sort_env(char **env)
 
 static void	ft_print_sorted_env(char **env)
 {
-	int	i;
+	int		i;
+	char	**sorted_env;
 
-	ft_sort_env(env);
+	sorted_env = ft_copy_env;
+	if (!sorted_env)
+		return ;
+	ft_sort_env(sorted_env);
 	i = 0;
-	while (env[i])
+	while (sorted_env[i])
 	{
-		ft_printf("declare -x %s\n", env[i]);
+		ft_printf("declare -x %s\n", sorted_env[i]);
+		free(sorted_env[i]);
 		i++;
 	}
+	free(sorted_env);
 }
 
 int	ft_export(char **args, t_shell_env *shell_env)
