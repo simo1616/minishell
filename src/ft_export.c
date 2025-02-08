@@ -12,6 +12,22 @@
 
 #include "minishell.h"
 
+static int	check_export_name(char *args)
+{
+	int	i;
+
+	if (!args || !args[0] || args[0] == '=' || ft_isdigit(args[0]))
+		return (0);
+	i = 0;
+	while (args[i] && args[i] != '=')
+	{
+		if (!ft_isalnum(args[i]) && args[i] != '_')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 static char	**ft_copy_env(char **env)
 {
 	int		i;
@@ -28,7 +44,12 @@ static char	**ft_copy_env(char **env)
 	{
 		new_env[i] = ft_strdup(env[i]);
 		if (!new_env[i])
+		{
+			while (i-- > 0)
+				free(new_env[i]);
+			free(new_env);
 			return (NULL);
+		}
 		i++;
 	}
 	new_env[i] = NULL;
@@ -90,22 +111,29 @@ int	ft_export(char **args, t_shell_env *shell_env)
 		ft_print_sorted_env(shell_env->env);
 		return (0);
 	}
-	if (!ft_strchr(args[1], '=') || args[1][0] == '=')
+	if (!check_export_name(args[1]))
 	{
-		ft_printf("-minishell: export:'%s': not a valid identifier\n", args[1]);
+		ft_printf("-minishell: export: `%s': not a valid identifier\n", args[1]);
 		return (1);
 	}
 	i = 0;
 	while (shell_env->env[i])
+	{
+		if (ft_strncmp(shell_env->env[i], args[1], ft_strchr(args[1], '=') - args[1]) == 0)
+		{
+			free(shell_env->env[i]);
+			shell_env->env[i] = ft_strdup(args[1]);
+			return (0);
+		}
 		i++;
+	}
 	new_env = malloc(sizeof(char *) * (i + 2));
 	if (!new_env)
 		return (1);
 	i = 0;
 	while (shell_env->env[i])
 	{
-		new_env[i] = ft_strdup(shell_env->env[i]);
-		free(shell_env->env[i]);
+		new_env[i] = shell_env->env[i];
 		i++;
 	}
 	new_env[i] = ft_strdup(args[1]);
