@@ -143,54 +143,79 @@ char	*remplacer_var(char *token, t_shell_env *env)
 	char	*new;
 	char	*var_name;
 	char	*var_value;
-	char	*index;
-	int 	len;
-	int 	substr_len;
+	int		var_start;
+	int		var_len;
 	size_t	len_token;
+	int		i;
+	int		j;
+	int		*ctx;
+	char 	*exit_str;
 
-	if (ft_strcmp(token, "$?") == 0)
-		return(ft_itoa(env->exit_status)); //rmeplacer le token par exitstaus
 	if (ft_strcmp(token, "$") == 0)
 		return(token);
 	len_token = calculate_length(token, env);
 	printf("=====> calculate_length(token, env) = %ld\n", len_token);
-	index = 0;
-	index = ft_strchr(token, '$');
-	if (index && token[0] == '"')
+	new = (char *)malloc(sizeof(char) * (len_token + 1));
+	if(!new)
+		return NULL;
+	i = 0;
+	j = 0;
+	var_len = 0;
+	var_start = 0;
+	exit_str = NULL;
+
+	ctx = get_quotes_context((char *)token);
+	if(!ctx)
+		return (NULL);
+	while(token[i])
 	{
-		if (index[0] == '$') // si VAR commence par '$'
+		if (token[i] != '$')
 		{
-			len = ft_strlen(index);
-			// Si le dernier char est un double
-			if (index[len - 1] == '"')
-				substr_len = len - 2;
-			else
-				substr_len = len - 1;
-			var_name = ft_substr(index, 1, substr_len);
-			var_value = env_get(env, var_name);
-			if (var_value)
-				new = ft_strdup(var_value);
-			else
-				new = ft_strdup("");
-			free(token);
-			return new;
+			new[j] = token[i];
+			i++;
+			j++;
 		}
-	}
-	else
-	{
-		if (token[0] == '$') // si non variable $NON_VAR ou $vide
+		else if (token[i] == '$' && ctx[i] != 1)
 		{
-			var_name = token + 1;
-			var_value = env_get(env, var_name);
-			if (var_value)
-				new = ft_strdup(var_value);
+			i++;
+			if(token[i] == '?')
+			{
+				exit_str = ft_itoa(env->exit_status);
+				ft_memcpy(new + j, exit_str, ft_strlen(exit_str));
+				i++;
+				j += ft_strlen(exit_str);
+				free(exit_str);
+			}
 			else
-				new = ft_strdup("");
-			free(token);
-			return(new);
+			{
+				var_start = i;
+				while(token[i] && is_valid_var_char(token[i]))
+					i++;
+				var_len = i - var_start;
+				var_name = ft_substr(token, var_start, var_len);
+				var_value = env_get(env, var_name);
+				if (var_value)
+				{
+					ft_memcpy(new + j, var_value, ft_strlen(var_value)); // ici
+					j += ft_strlen(var_value);
+				}
+				free(var_name);
+			}
 		}
+		else if (token[i] == '$' && ctx[i] == 1)
+		{
+			while(token[i] && ctx[i] == 1)
+			{
+				new[j] = token[i];
+				i++;
+				j++;
+			}
+		}
+		
 	}
-	return(token);
+	new[j] = '\0';
+	free(ctx);
+	return(new);
 }
 
 int	count_tokens(char *str)
@@ -268,8 +293,8 @@ char *get_next_token(char **str, t_shell_env *env)
     token = ft_substr(start, 0, len);
     if (ft_strchr(token, '$'))
         token = remplacer_var(token, env);
-    token = remove_quotes(token);
-    return token;
+    token = remove_quotes(token); // il faut modifier removes quote pour gerer les cas de minishell> ec''ho home
+    return (token);
 }
 
 // line = $? ls -l | grep lol | wc -l 
