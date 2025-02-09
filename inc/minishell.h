@@ -60,12 +60,16 @@ void		signal_setup(void);
 
 //parsing
 t_cmd		*parse_command_line(char *line, t_shell_env *env);
-int			check_quotes(char *str);
+int			*get_quotes_context(char *str);
 void		execute_commands(t_cmd *cmds, t_shell_env *shell_env);
 int			count_tokens(char *str);
 char    	*get_next_token(char **str, t_shell_env *env);
 char		*remplacer_var(char *token, t_shell_env *env);
 char		*remove_quotes(char *token);
+
+//expansion
+size_t		calculate_length(const char *token, t_shell_env *env);
+int			is_valid_var_char(char c);
 
 //free
 void 		free_cmds(t_cmd *cmds);

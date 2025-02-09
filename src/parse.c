@@ -1,5 +1,73 @@
 #include "minishell.h"
 
+int	is_valid_var_char(char c)
+{
+	return (ft_isalnum(c) || c == '_');
+}
+/* 	calcule la taille qu'on dois allouer pour le token entre des " ou ' 
+	si return NULL
+"*/
+size_t	calculate_length(const char *token, t_shell_env *env)
+{
+	int		*ctx;
+	int		i;
+	size_t	len;
+	int		var_start;
+	int		var_len;
+	char	*var_name;
+	char	*var_value;
+	char 	*exit_str;
+
+	ctx = get_quotes_context((char *)token);
+	if(!ctx)
+		return((size_t)(-1));
+	i = 0;
+	len = 0;
+	var_start = 0;
+	var_len = 0;
+	var_name = NULL;
+	var_value = NULL;
+	exit_str = NULL;
+	while(token[i])
+	{
+		if(token[i] == '\'' || token[i] == '"')
+			i++;
+		else if (token[i] == '$' && ctx[i] != 1)
+		{
+			i++;
+			if (!token[i])
+				break;
+			else if (token[i] == '?')
+			{
+				exit_str = ft_itoa(env->exit_status);
+				len += ft_strlen(exit_str);
+				free(exit_str);
+				i++;
+			}
+			else if (token[i] && is_valid_var_char(token[i]))
+			{
+				var_start = i;
+				while (token[i] && is_valid_var_char(token[i]))
+					i++;
+				var_len = i - var_start;
+				var_name = ft_substr(token, var_start, var_len);
+				var_value = env_get(env, var_name);
+				if(var_value)
+					len += ft_strlen(var_value);
+				free(var_name); 
+			}
+			else
+				len++;
+		}
+		else
+		{
+			len++;
+			i++;
+		}
+	}
+	free(ctx);
+	return(len);
+}
 
 char	*remove_quotes(char *token)
 {
@@ -20,35 +88,55 @@ char	*remove_quotes(char *token)
 	}
 	return(token);
 }
-
-int	check_quotes(char *str)
+// 0: aucun, 1: simple, 2: double
+int	*get_quotes_context(char *str)
 {
 	int		i;
-	int 	status_s;
-	int		status_d;
+	int		*context;
+	int 	quote; 
 
 	if(!str)
-		return(0);
+		return(NULL);
+	context = (int *)malloc(sizeof(int) * (ft_strlen(str) + 1));
+	if(!context)
+		return(NULL);
+	quote = 0;
 	i = 0;
-	status_s = 1;
-	status_d = 1;
 	while(str[i])
 	{ // ' "test" "" ' // "echo 'hello"
 
-		if (str[i] == '\'' && status_d == 1)
-			status_s = !status_s;
-		else if (str[i] == '"' && status_s == 1)
-			status_d = !status_d;
+		if (str[i] == '\'' && quote != 2) // on est dans une simple et pas double
+		{
+			if(quote == 0)
+				quote = 1;
+			else
+				quote = 0;
+		}
+		else if (str[i] == '"' && quote != 1)
+		{
+			if(quote == 0)
+				quote = 2;
+			else
+				quote = 0;
+		}
+		context[i] = quote;
 		i++;
 	}
-	if(status_s == 0 || status_d == 0)
+	context[i] = 0; // pour parcourire la chaine aprés
+	// i = 0;
+	// while((size_t)i < (ft_strlen(str) + 1))
+	// {
+	// 	printf("contexte[%d]= %d\n", i, context[i]);
+	// 	i++;
+	// }
+	if(quote != 0)
 	{
 		printf("minishell: syntax error: unclosed quote\n");
-		return(0);
+		free(context);
+		return(NULL);
 	}
-	return(1);
+	return(context);
 }
-
 
 char	*remplacer_var(char *token, t_shell_env *env)
 {
@@ -58,11 +146,14 @@ char	*remplacer_var(char *token, t_shell_env *env)
 	char	*index;
 	int 	len;
 	int 	substr_len;
+	size_t	len_token;
 
 	if (ft_strcmp(token, "$?") == 0)
 		return(ft_itoa(env->exit_status)); //rmeplacer le token par exitstaus
 	if (ft_strcmp(token, "$") == 0)
 		return(token);
+	len_token = calculate_length(token, env);
+	printf("=====> calculate_length(token, env) = %ld\n", len_token);
 	index = 0;
 	index = ft_strchr(token, '$');
 	if (index && token[0] == '"')
@@ -202,7 +293,7 @@ t_cmd	*parse_command_line(char *line, t_shell_env *env)
         return (NULL);
     }
 	current = line;
-	if (!check_quotes(current))
+	if (!get_quotes_context(current))
 	{
         free(cmd);
         return (NULL);
