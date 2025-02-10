@@ -263,37 +263,65 @@ int	count_tokens(char *str)
 
 char *get_next_token(char **str, t_shell_env *env) 
 {
-    char	*start;
-    char	*token;
+	char	*token;
+	char	*buffer;
+    int		pos;
     int		len;
-    int		i;
-    char	quote;
+    int		quote; // 0: aucun, 1: simple, 2: double
+	int		total;
 
+    pos = 0;
+    while ((*str)[pos] && ft_isspace((*str)[pos]))
+        pos++;
+    *str += pos;
+	pos = 0;
 	len = 0;
-    i = 0;
-    quote = 0;
-    while (ft_isspace((*str)[i]))
-        i++;
-    start = *str + i;
-    while ((*str)[i]) 
+	quote = 0;
+	total = ft_strlen(*str);
+	if (!total)
+        return NULL;
+	buffer = (char *)malloc(sizeof(char) * (total + 1));
+	if (!buffer)
+        return NULL;
+    while (pos < total) 
 	{
-        if ((*str)[i] == '\'' || (*str)[i] == '"') 
+        if ((*str)[pos] == '\'' || (*str)[pos] == '"') 
 		{
             if (!quote)
-                quote = (*str)[i];
-            else if (quote == (*str)[i])
+			{
+				if ((*str)[pos]== '\'')
+					quote = 1;
+				else if ((*str)[pos] == '\"')
+					quote = 2;
+			}
+            else if ((quote == 1 && (*str)[pos] == '\'') ||
+				(quote == 2 && (*str)[pos] == '"'))
                 quote = 0;
+			else
+			{
+				buffer[len] = (*str)[pos];
+				len++;
+			}
+			pos++;
         }
-        if (!quote && ft_isspace((*str)[i]))
-            break;
-        len++;
-        i++;
+		else
+		{
+			if (!quote && ft_isspace((*str)[pos]))
+				break;
+			buffer[len] = (*str)[pos];
+			len++;
+			pos++;
+		}
     }
-    *str += i;
-    token = ft_substr(start, 0, len);
-    if (ft_strchr(token, '$'))
-        token = remplacer_var(token, env);
-    token = remove_quotes(token); // il faut modifier removes quote pour gerer les cas de minishell> ec''ho home
+	buffer[len] = '\0';
+    *str += pos;
+	if (ft_strchr(buffer, '$'))
+    {
+        token = remplacer_var(buffer, env);
+        free(buffer);
+    }
+    else
+        token = buffer;
     return (token);
 }
 
