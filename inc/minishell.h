@@ -60,10 +60,16 @@ void		signal_setup(void);
 
 //parsing
 t_cmd		*parse_command_line(char *line, t_shell_env *env);
+int			*get_quotes_context(char *str);
 void		execute_commands(t_cmd *cmds, t_shell_env *shell_env);
 int			count_tokens(char *str);
 char    	*get_next_token(char **str, t_shell_env *env);
 char		*remplacer_var(char *token, t_shell_env *env);
+char		*remove_quotes(char *token);
+
+//expansion
+size_t		calculate_length(const char *token, t_shell_env *env);
+int			is_valid_var_char(char c);
 
 //free
 void 		free_cmds(t_cmd *cmds);
@@ -81,7 +87,7 @@ int 		env_unset(t_shell_env *shell_env, const char *name);
 int			ft_echo(char **args, t_shell_env *shell_env);
 int 		ft_pwd(char **argv, t_shell_env *shell_env);
 int 		ft_env(char **argv, t_shell_env *shell_env);
-int		ft_export(char **args, t_shell_env *shell_env);
+int			ft_export(char **args, t_shell_env *shell_env);
 t_builtin 	*init_builtins(void);
 int			excec_builin(t_cmd *cmd, t_shell_env *shell_env);
 int			is_builtin(char	*cmd_name);
