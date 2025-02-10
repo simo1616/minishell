@@ -83,6 +83,7 @@ static void	ft_sort_env(char **env)
 static void	ft_print_sorted_env(char **env)
 {
 	int		i;
+	int		j;
 	char	**sorted_env;
 
 	sorted_env = ft_copy_env(env);
@@ -92,7 +93,14 @@ static void	ft_print_sorted_env(char **env)
 	i = 0;
 	while (sorted_env[i])
 	{
-		ft_printf("declare -x %s\n", sorted_env[i]);
+		ft_printf("declare -x ");
+		j = 0;
+		while (sorted_env[i][j] && sorted_env[i][j] != '=')
+			ft_printf("%c", sorted_env[i][j++]);
+		if (sorted_env[i][j] && sorted_env[i][j] == '=')
+			ft_printf("=\"%s\"\n", &sorted_env[i][j + 1]);
+		else
+			ft_printf("\n");
 		free(sorted_env[i]);
 		i++;
 	}
