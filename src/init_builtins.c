@@ -25,7 +25,7 @@ t_builtin 	*init_builtins(void)
 		builtins[5].name = ft_strdup("export");
 		builtins[5].func = &ft_export; // remplacer par &builtin_export
 		builtins[6].name = ft_strdup("unset");
-		builtins[6].func = &ft_echo; // remplacer par &builtin_unset
+		builtins[6].func = &ft_unset; // remplacer par &builtin_unset
 		builtins[7].name = NULL;
 		builtins[7].func = NULL;
 	}
