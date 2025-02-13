@@ -47,6 +47,12 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 } t_cmd;
 
+typedef struct s_data 
+{
+	char	*line;
+	int		*ctx;
+	size_t	cpos;
+} t_data;
 typedef struct s_builtin
 {
 	char	*name;
@@ -60,15 +66,15 @@ void		signal_setup(void);
 
 //parsing
 t_cmd		*parse_command_line(char *line, t_shell_env *env);
-int			*get_quotes_context(char *str);
+void	*get_quotes_context(t_data *data);
 void		execute_commands(t_cmd *cmds, t_shell_env *shell_env);
 int			count_tokens(char *str);
-char    	*get_next_token(char **str, t_shell_env *env);
-char		*remplacer_var(char *token, t_shell_env *env);
+char *get_next_token(char **str, t_shell_env *env, t_data *data);
+char	*remplacer_var(char *token, t_shell_env *env, t_data *data);
 char		*remove_quotes(char *token);
 
 //expansion
-size_t		calculate_length(const char *token, t_shell_env *env);
+size_t		calculate_length(const char *token, t_shell_env *env, int *ctx);
 int			is_valid_var_char(char c);
 
 //free
