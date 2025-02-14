@@ -122,19 +122,19 @@ void	*get_quotes_context(t_data *data)
 	}
 	context[i] = 0; // pour parcourire la chaine aprés
 	data->ctx = context;
-	i = 0;
-	while((size_t)i < (ft_strlen(data->line) + 1))
-	{
-		printf("data->ctx[%d] = %d ==> %c\n", i, data->ctx[i], data->line[i]);
-		i++;
-	}
+	// i = 0;
+	// while((size_t)i < (ft_strlen(data->line) + 1))
+	// {
+	// 	printf("data->ctx[%d] = %d ==> %c\n", i, data->ctx[i], data->line[i]);
+	// 	i++;
+	// }
 	if(quote != 0)
 	{
 		printf("minishell: syntax error: unclosed quote\n");
 		free(data->ctx);
 		return(NULL);
 	}
-	printf("data.line dans GQC= %s\n", data->line); // debug
+	//printf("data.line dans GQC= %s\n", data->line); // debug
 	return(data);
 }
 
@@ -151,7 +151,10 @@ char	*remplacer_var(char *token, t_shell_env *env, t_data *data)
 	char 	*exit_str;
 
 	if (ft_strcmp(token, "$") == 0)
-		return(token);
+	{
+		new = ft_strdup(token);
+		return(new);
+	}
 	len_token = calculate_length(token, env, data->ctx);
 	//printf("=====> calculate_length(token, env) = %ld\n", len_token);
 	new = (char *)malloc(sizeof(char) * (len_token + 1));
@@ -177,7 +180,13 @@ char	*remplacer_var(char *token, t_shell_env *env, t_data *data)
 		{
 			i++;
 			data->cpos++;
-			if(token[i] == '?')
+			if (!token[i])
+			{
+				new[j] = '$';
+				j++;
+				break;
+			}
+			else if(token[i] == '?')
 			{
 				exit_str = ft_itoa(env->exit_status);
 				ft_memcpy(new + j, exit_str, ft_strlen(exit_str));
@@ -300,7 +309,27 @@ char *get_next_token(char **str, t_shell_env *env, t_data *data)
     // Remplissage buffer et ctx 
     while (pos < total && (*str)[pos])
     {
-        if ((*str)[pos] == '\'' || (*str)[pos] == '"')
+		if ((*str)[pos] == '\\')
+		{
+			if ((*str)[pos + 1])
+			{
+				// On saute le backslash et on copie le caractère suivant
+				pos++; 
+				buffer[len] = (*str)[pos];
+				token_ctx[len] = quote;  // Contexte inchangé
+				len++;
+				pos++;
+			}
+			else
+			{
+				// Aucun caractère après le backslash, on le traite normalement
+				buffer[len] = (*str)[pos];
+				token_ctx[len] = quote;
+				len++;
+				pos++;
+			}
+		}
+        else if ((*str)[pos] == '\'' || (*str)[pos] == '"')
         {
             if (!quote)
             {
@@ -380,7 +409,7 @@ t_cmd	*parse_command_line(char *line, t_shell_env *env)
     }
 	data.line = line;
 	data.cpos = 0;
-	printf("data.line = %s\n", data.line); // debug
+	//printf("data.line = %s\n", data.line); // debug
 	if (!get_quotes_context(&data))
 	{
         free(cmd);
@@ -392,7 +421,7 @@ t_cmd	*parse_command_line(char *line, t_shell_env *env)
 		cmd->av[i] = get_next_token(&data.line, env, &data);
 		i++;
 	}
-	printf("data.ctx = %ld\n", data.cpos); // debug
+	//printf("data.ctx = %ld\n", data.cpos); // debug
 	cmd->av[i] = NULL;
     cmd->redirs = NULL;
     cmd->next = NULL;
