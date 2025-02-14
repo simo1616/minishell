@@ -110,7 +110,7 @@ void	*get_quotes_context(t_data *data)
 			else
 			quote = 0;
 		}
-		else if (data->line[i] == '"' && quote != 1)
+		else if (data->line[i] == '"' && quote != 1) // on est en double
 		{
 			if(quote == 0)
 				quote = 2;
@@ -125,7 +125,7 @@ void	*get_quotes_context(t_data *data)
 	i = 0;
 	while((size_t)i < (ft_strlen(data->line) + 1))
 	{
-		printf("data->ctx[%d] = %d\n", i, data->ctx[i]);
+		printf("data->ctx[%d] = %d ==> %c\n", i, data->ctx[i], data->line[i]);
 		i++;
 	}
 	if(quote != 0)
@@ -153,7 +153,7 @@ char	*remplacer_var(char *token, t_shell_env *env, t_data *data)
 	if (ft_strcmp(token, "$") == 0)
 		return(token);
 	len_token = calculate_length(token, env, data->ctx);
-	printf("=====> calculate_length(token, env) = %ld\n", len_token);
+	//printf("=====> calculate_length(token, env) = %ld\n", len_token);
 	new = (char *)malloc(sizeof(char) * (len_token + 1));
 	if(!new)
 		return NULL;
@@ -166,7 +166,6 @@ char	*remplacer_var(char *token, t_shell_env *env, t_data *data)
 		return (NULL);
 	while(token[i])
 	{
-		printf("token[%d] = %c et ctx[%d] = %d\n", i, token[i], i, data->ctx[data->cpos]);
 		if (token[i] != '$')
 		{
 			new[j] = token[i];
@@ -212,7 +211,7 @@ char	*remplacer_var(char *token, t_shell_env *env, t_data *data)
 			{
 				new[j] = token[i];
 				i++;
-				data->cpos++;
+				//data->cpos++;
 				j++;
 			}
 		}
@@ -266,75 +265,96 @@ int	count_tokens(char *str)
 	return(count);
 }
 
-char *get_next_token(char **str, t_shell_env *env, t_data *data) 
+char *get_next_token(char **str, t_shell_env *env, t_data *data)
 {
-	char	*token;
-	char	*buffer;
-    int		pos;
-    int		len;
-    int		quote; // 0: aucun, 1: simple, 2: double
-	int		total;
-
+    char    *buffer;
+    int     pos;
+    int     len;
+    int     quote; // 0: none, 1: single, 2: double
+    int     total;
+	int 	*old_ctx;
+	size_t 	old_cpos;
+    int     *token_ctx;
+    char    *token;
+	
     pos = 0;
-	printf("str = %s\n", *str); // debug
     while ((*str)[pos] && ft_isspace((*str)[pos]))
-        pos++;
+	pos++;
     *str += pos;
-	pos = 0;
-	len = 0;
-	quote = 0;
-	total = ft_strlen(*str);
-	if (!total)
-        return NULL;
-	buffer = (char *)malloc(sizeof(char) * (total + 1));
-	if (!buffer)
-        return NULL;
-    while (pos < total) 
-	{
-        if ((*str)[pos] == '\'' || (*str)[pos] == '"') 
-		{
+    pos = 0;
+    len = 0;
+    quote = 0;
+    total = ft_strlen(*str);
+    if (!total)
+		return (NULL);
+    buffer = malloc(sizeof(char) * (total + 1));
+    token_ctx = malloc(sizeof(int) * (total + 1));
+    if (!buffer || !token_ctx)
+    {
+		if (buffer)
+			free(buffer);
+        if (token_ctx)
+			free(token_ctx);
+        return (NULL);
+    }
+    // Remplissage buffer et ctx 
+    while (pos < total && (*str)[pos])
+    {
+        if ((*str)[pos] == '\'' || (*str)[pos] == '"')
+        {
             if (!quote)
-			{
+            {
 				if ((*str)[pos]== '\'')
 					quote = 1;
 				else if ((*str)[pos] == '\"')
 					quote = 2;
-			}
+            }
             else if ((quote == 1 && (*str)[pos] == '\'') ||
 				(quote == 2 && (*str)[pos] == '"'))
+            {
                 quote = 0;
-			else
-			{
-				buffer[len] = (*str)[pos];
-				len++;
-			}
+            }
+            else
+            {
+                buffer[len] = (*str)[pos];
+                token_ctx[len] = quote;
+                len++;
+            }
 			pos++;
         }
-		else
-		{
+        else
+        {
 			if (!quote && ft_isspace((*str)[pos]))
-				break;
-			buffer[len] = (*str)[pos];
-			len++;
-			pos++;
-		}
+                break;
+            buffer[len] = (*str)[pos];
+            token_ctx[len] = quote;
+            len++;
+            pos++;
+        }
     }
-	buffer[len] = '\0';
+    buffer[len] = '\0';
     *str += pos;
 	if (ft_strchr(buffer, '$'))
-    {
-        token = remplacer_var(buffer, env, data);
-        free(buffer);
-    }
-    else
 	{
-
-        token = buffer;
+		old_ctx = data->ctx;
+		old_cpos = data->cpos;
+		data->ctx = token_ctx;
+		data->cpos = 0;
+		token = remplacer_var(buffer, env, data);
+		free(buffer);
+		free(token_ctx);
+		data->ctx = old_ctx;
+		data->cpos = old_cpos;
 	}
-	
-	printf("token = %s\n", token); // debug
-    return (token);
+	else
+	{
+		token = buffer;
+		free(token_ctx);
+	}
+	return token;
+
 }
+
 
 // line = $? ls -l | grep lol | wc -l 
 t_cmd	*parse_command_line(char *line, t_shell_env *env)
@@ -372,6 +392,7 @@ t_cmd	*parse_command_line(char *line, t_shell_env *env)
 		cmd->av[i] = get_next_token(&data.line, env, &data);
 		i++;
 	}
+	printf("data.ctx = %ld\n", data.cpos); // debug
 	cmd->av[i] = NULL;
     cmd->redirs = NULL;
     cmd->next = NULL;
