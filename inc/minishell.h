@@ -27,15 +27,15 @@ typedef struct s_shell_env
 
 typedef enum e_redir_type
 {
-	REDIR_IN,
-	REDIR_OUT,
-	REDIR_APPEND,
-	REDIR_HEREDOC,
+	REDIR_IN, // <
+	REDIR_OUT, // >
+	REDIR_APPEND, // >>
+	REDIR_HEREDOC, // <<
 }	t_redir_type;
 
 typedef struct s_redir
 {
-	t_redir_type	type;
+	t_redir_type	type; // peut etre changer par int 
 	char			*filename;
 	struct	s_redir	*next;
 }	t_redir;
@@ -66,6 +66,7 @@ void		signal_setup(void);
 
 //parsing
 t_cmd		*parse_command_line(char *line, t_shell_env *env);
+char 	**add_to_argv(char **av, const char *token);
 void	*get_quotes_context(t_data *data);
 void		execute_commands(t_cmd *cmds, t_shell_env *shell_env);
 int			count_tokens(char *str);
@@ -76,6 +77,11 @@ char		*remove_quotes(char *token);
 //expansion
 size_t		calculate_length(const char *token, t_shell_env *env, int *ctx);
 int			is_valid_var_char(char c);
+
+// redir
+int				is_redir(char *token);
+t_redir_type	get_redir_type(char *token);
+void			add_redir_to_cmd(t_cmd *cmd, t_redir_type type, char *filename);
 
 //free
 void 		free_cmds(t_cmd *cmds);
@@ -97,6 +103,5 @@ int			ft_export(char **args, t_shell_env *shell_env);
 t_builtin 	*init_builtins(void);
 int			excec_builin(t_cmd *cmd, t_shell_env *shell_env);
 int			is_builtin(char	*cmd_name);
-
 
 #endif

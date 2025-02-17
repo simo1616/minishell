@@ -18,6 +18,7 @@ SRCS 	= main.c \
 		env_utils.c \
 		signal.c \
 		parse.c \
+		redir.c \
 		free.c \
 		ft_echo.c \
 		ft_env.c \

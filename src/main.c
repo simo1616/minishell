@@ -34,10 +34,20 @@ int main (int ac, char **av, char **envp)
         }
 		// parsing
         cmds = parse_command_line(cmd_line, shell_env);
+		if (cmds == NULL)
+		{
+			// Gestion d'erreur déjà présente
+			shell_env->exit_status = 258; // Code d'erreur syntaxique
+		}
+		else
+		{
+			execute_commands(cmds, shell_env);
+			free_cmds(cmds);
+		}
 		
 		// excecuting 
-        execute_commands(cmds, shell_env);
-    	free_cmds(cmds);
+        // execute_commands(cmds, shell_env);
+    	// free_cmds(cmds);
         free(cmd_line);
     }
     destroy_shell_env(shell_env);

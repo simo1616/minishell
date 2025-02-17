@@ -63,7 +63,6 @@ size_t	calculate_length(const char *token, t_shell_env *env, int *ctx)
 			i++;
 		}
 	}
-	//free(ctx);
 	return(len);
 }
 
@@ -102,7 +101,6 @@ void	*get_quotes_context(t_data *data)
 	i = 0;
 	while(data->line[i])
 	{ // ' "test" "" ' // "echo 'hello"
-
 		if (data->line[i] == '\'' && quote != 2) // on est dans une simple et pas double
 		{
 			if(quote == 0)
@@ -125,16 +123,15 @@ void	*get_quotes_context(t_data *data)
 	// i = 0;
 	// while((size_t)i < (ft_strlen(data->line) + 1))
 	// {
-	// 	printf("data->ctx[%d] = %d ==> %c\n", i, data->ctx[i], data->line[i]);
+	// 	printf("data->ctx[%d] = %d ==> %c\n", i, data->ctx[i], data->line[i]); //debug
 	// 	i++;
 	// }
 	if(quote != 0)
 	{
-		printf("minishell: syntax error: unclosed quote\n");
+		ft_putendl_fd("minishell: syntax error: unclosed quote", 2);
 		free(data->ctx);
 		return(NULL);
 	}
-	//printf("data.line dans GQC= %s\n", data->line); // debug
 	return(data);
 }
 
@@ -156,7 +153,6 @@ char	*remplacer_var(char *token, t_shell_env *env, t_data *data)
 		return(new);
 	}
 	len_token = calculate_length(token, env, data->ctx);
-	//printf("=====> calculate_length(token, env) = %ld\n", len_token);
 	new = (char *)malloc(sizeof(char) * (len_token + 1));
 	if(!new)
 		return NULL;
@@ -220,14 +216,12 @@ char	*remplacer_var(char *token, t_shell_env *env, t_data *data)
 			{
 				new[j] = token[i];
 				i++;
-				//data->cpos++;
 				j++;
 			}
 		}
 		
 	}
 	new[j] = '\0';
-	//free(ctx);
 	return(new);
 }
 
@@ -270,7 +264,6 @@ int	count_tokens(char *str)
 			i++;
 		}
 	}
-	//printf("count token%d\n", count);
 	return(count);
 }
 
@@ -384,47 +377,118 @@ char *get_next_token(char **str, t_shell_env *env, t_data *data)
 
 }
 
+char	**add_to_argv(char **av, const char *token)
+{
+	char	**new_av;
+	int		len;
+	int		i;
+
+	len = 0;
+	if(av)
+	{
+		while (av[len])
+			len++;
+	}
+	if (len == 0 && av == NULL)
+	{
+		new_av = malloc(sizeof(char *) * 2);
+		new_av[0] = ft_strdup(token);
+		new_av[1] = NULL;
+		return (new_av);
+	}
+	new_av = malloc(sizeof(char *) * (len + 2));
+	if(!new_av)
+		return (NULL);
+	i = -1;
+	while(++i < len)
+		new_av[i] = av[i];
+	new_av[len] = ft_strdup(token);
+	new_av[len + 1] = NULL;
+	if (av)
+		free(av);
+	return (new_av);
+}
+//debug
+// static void debug_print_cmd(t_cmd *cmd) {
+//     int i = 0;
+//     printf("Commande:\n");
+//     while (cmd->av[i]) {
+//         printf("  av[%d] = [%s]\n", i, cmd->av[i]);
+//         i++;
+//     }
+//     t_redir *redir = cmd->redirs;
+//     while (redir) {
+//         printf("  redir: type = %d, filename = [%s]\n", redir->type, redir->filename);
+//         redir = redir->next;
+//     }
+// }
+
 
 // line = $? ls -l | grep lol | wc -l 
 t_cmd	*parse_command_line(char *line, t_shell_env *env)
 {
-	t_cmd	*cmd;
-	t_data	data;
-	int		token_count;
-	int		i;
-	//char	*current;
+	t_cmd			*cmd;
+	t_data			data;
+	t_redir_type	type;
+	//int				token_count;
+	//int				i;
+	char			*token;
+	char			*filename;
+
 
 	if (!line)
 		return (NULL);
 	cmd = malloc(sizeof(t_cmd));
 	if(!cmd)
 		return(NULL);
-	token_count = count_tokens(line);
-	cmd->av = malloc(sizeof(char *) * (token_count + 1));
-	if (!cmd->av)
-    {
-		free(data.ctx);
-        free(cmd);
-        return (NULL);
-    }
+	//token_count = count_tokens(line);
+	// cmd->av = malloc(sizeof(char *) * (token_count + 1));
+	// if (!cmd->av)
+    // {
+	// 	free(data.ctx);
+    //     free(cmd);
+    //     return (NULL);
+    // }
 	data.line = line;
 	data.cpos = 0;
-	//printf("data.line = %s\n", data.line); // debug
 	if (!get_quotes_context(&data))
 	{
         free(cmd);
         return (NULL);
     }
-	i = 0;
-	while(i < token_count)
-	{
-		cmd->av[i] = get_next_token(&data.line, env, &data);
-		i++;
-	}
-	//printf("data.ctx = %ld\n", data.cpos); // debug
-	cmd->av[i] = NULL;
+	//i = 0;
+	cmd->av = NULL;
     cmd->redirs = NULL;
     cmd->next = NULL;
-    
+	while(1)
+	{
+		token = get_next_token(&data.line, env, &data);
+		if (!token)
+			break;
+		if (is_redir(token))
+		{
+			type = get_redir_type(token);
+			filename = get_next_token(&data.line, env, &data);
+			if (!filename)
+			{
+				ft_putendl_fd("minishell: syntax error near unexpected token `newline'", 2);
+				free (token);
+				free_cmds(cmd);
+				free(data.ctx);
+				return (NULL);
+			}
+			add_redir_to_cmd(cmd, type, filename);
+			free(filename);
+			free(token);
+		}
+		else
+		{
+			cmd->av = add_to_argv(cmd->av, token);
+			free(token);
+		}
+		//i++;
+	}
+	free(data.ctx);
+    //debug_print_cmd(cmd);
     return (cmd);
 }
