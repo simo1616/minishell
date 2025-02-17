@@ -101,6 +101,7 @@ int env_unset(t_shell_env *shell_env, const char *name)
 		shell_env->env[index] = shell_env->env[index + 1];
 		index++;
 	}
-	shell_env->env[index + 1] = NULL;
+	shell_env->env[index] = NULL;
 	return(0);
 }
+

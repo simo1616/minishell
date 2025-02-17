@@ -3,7 +3,7 @@
 void execute_commands(t_cmd *cmds, t_shell_env *env)
 {
     t_cmd 	*current;
-	//t_redir *redir;
+	t_redir *redir;
 	int		ret;
 	int 	i;
 
@@ -32,13 +32,13 @@ void execute_commands(t_cmd *cmds, t_shell_env *env)
 				printf("\n");
 			}
 		}
-        // redir = current->redirs;
-        // while (redir)
-        // {
-        //     printf("\nRedirection: type=%d, file=%s\n", 
-        //            redir->type, redir->filename);
-        //     redir = redir->next;
-        // }
+        redir = current->redirs;
+        while (redir)
+        {
+            printf("\nRedirection: type=%d, file=%s\n", 
+                   redir->type, redir->filename);
+            redir = redir->next;
+        }
         current = current->next;
     }
 }

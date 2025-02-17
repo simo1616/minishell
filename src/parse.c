@@ -428,6 +428,7 @@ char	**add_to_argv(char **av, const char *token)
 t_cmd	*parse_command_line(char *line, t_shell_env *env)
 {
 	t_cmd			*cmd;
+	t_cmd			*cur_cmd;
 	t_data			data;
 	t_redir_type	type;
 	//int				token_count;
@@ -438,9 +439,14 @@ t_cmd	*parse_command_line(char *line, t_shell_env *env)
 
 	if (!line)
 		return (NULL);
-	cmd = malloc(sizeof(t_cmd));
-	if(!cmd)
-		return(NULL);
+	cmd = NULL;
+	// cmd = malloc(sizeof(t_cmd));
+	// if(!cmd)
+	// 	return(NULL);
+	// cmd->av = NULL;
+	// cmd->redirs = NULL;
+	// cmd->next = NULL;
+	cur_cmd = NULL;
 	//token_count = count_tokens(line);
 	// cmd->av = malloc(sizeof(char *) * (token_count + 1));
 	// if (!cmd->av)
@@ -457,15 +463,44 @@ t_cmd	*parse_command_line(char *line, t_shell_env *env)
         return (NULL);
     }
 	//i = 0;
-	cmd->av = NULL;
-    cmd->redirs = NULL;
-    cmd->next = NULL;
 	while(1)
 	{
 		token = get_next_token(&data.line, env, &data);
 		if (!token)
 			break;
-		if (is_redir(token))
+		if (!cmd)
+		{
+			cmd = malloc(sizeof(t_cmd));
+			if (!cmd)
+				return (NULL);
+			cmd->av = NULL;
+			cmd->redirs = NULL;
+			cmd->next = NULL;
+			cur_cmd = cmd;
+		}
+		if (!ft_strcmp(token, "|"))
+		{
+			free(token);
+			if (!cur_cmd->av || cur_cmd->av[0] == NULL)
+			{
+				ft_putendl_fd("minishell: syntax error near unexpected token `|'", 2);
+				free_cmds(cmd);
+				free(data.ctx);
+				return (NULL);
+			}
+			cur_cmd->next = malloc(sizeof(t_cmd));
+			if (!cur_cmd)
+			{
+				free_cmds(cmd);
+				free(data.ctx);
+				return (NULL);
+			}
+			cur_cmd = cur_cmd->next;
+			cur_cmd->av = NULL;
+			cur_cmd->redirs = NULL;
+			cur_cmd->next = NULL;
+		}
+		else if (is_redir(token))
 		{
 			type = get_redir_type(token);
 			filename = get_next_token(&data.line, env, &data);
@@ -477,17 +512,30 @@ t_cmd	*parse_command_line(char *line, t_shell_env *env)
 				free(data.ctx);
 				return (NULL);
 			}
-			add_redir_to_cmd(cmd, type, filename);
+			add_redir_to_cmd(cur_cmd, type, filename);
 			free(filename);
 			free(token);
 		}
 		else
 		{
-			cmd->av = add_to_argv(cmd->av, token);
+			cur_cmd->av = add_to_argv(cur_cmd->av, token);
 			free(token);
 		}
 		//i++;
 	}
+	if (!cmd)
+	{
+		free(data.ctx);
+		return (NULL);
+	}
+	if (!cur_cmd->av || cur_cmd->av[0] == NULL)
+	{
+		ft_putendl_fd("minishell: syntax error near unexpected token `|'", 2);
+		free_cmds(cmd);
+		free(data.ctx);
+		return (NULL);
+	}
+
 	free(data.ctx);
     //debug_print_cmd(cmd);
     return (cmd);
