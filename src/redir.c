@@ -40,19 +40,19 @@ void	add_redir_to_cmd(t_cmd *cmd, t_redir_type type, char *filename)
 		tmp->next = new_rd;
 	}
 	// Détermination de la chaîne de type selon le type passé en paramètre
-	char *redir_type_str;
-    if (type == REDIR_OUT)
-        redir_type_str = "REDIR_OUT";
-    else if (type == REDIR_IN)
-        redir_type_str = "REDIR_IN";
-    else if (type == REDIR_APPEND)
-        redir_type_str = "REDIR_APPEND";
-    else if (type == REDIR_HEREDOC)
-        redir_type_str = "REDIR_HEREDOC";
-    else
-        redir_type_str = "INCONNU";
+	// char *redir_type_str;
+    // if (type == REDIR_OUT)
+    //     redir_type_str = "REDIR_OUT";
+    // else if (type == REDIR_IN)
+    //     redir_type_str = "REDIR_IN";
+    // else if (type == REDIR_APPEND)
+    //     redir_type_str = "REDIR_APPEND";
+    // else if (type == REDIR_HEREDOC)
+    //     redir_type_str = "REDIR_HEREDOC";
+    // else
+    //     redir_type_str = "INCONNU";
 
-    printf("Redirection détectée : type = %s, filename = [%s]\n",
-           redir_type_str, filename);
+    // printf("Redirection détectée : type = %s, filename = [%s]\n",
+    //        redir_type_str, filename);
 }
 
