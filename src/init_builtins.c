@@ -13,7 +13,7 @@ t_builtin 	*init_builtins(void)
 			exit(EXIT_FAILURE);
 		}
 		builtins[0].name = ft_strdup("cd");
-		builtins[0].func = &ft_echo; // remplacer par &builtin_cd
+		builtins[0].func = &ft_cd;
 		builtins[1].name = ft_strdup("exit");
 		builtins[1].func = &ft_exit;
 		builtins[2].name = ft_strdup("pwd");

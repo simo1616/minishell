@@ -83,4 +83,36 @@ void ft_cd(char **args)
 	update_env_vars();
 } */
 
+int	ft_cd(char **args, t_shell_env *shell_env)
+{
+	char	new_pwd[PATH_MAX];
+	char	*oldpwd;
 
+	oldpwd = env_get(shell_env, "PWD");
+	if (!args[1])
+	{
+		ft_putstr_fd("cd : missing argument\n", 2);
+		shell_env->exit_status = 1;
+		return (1);
+	}
+	if (args[1][0] != '.' && args[1][0] != '/')
+	{
+		ft_putstr_fd("cd : only relative or absolute paths allowed\n", 2);
+		shell_env->exit_status = 1;
+		return (1);
+	}
+	if (chdir(args[1]) != 0)
+	{
+		ft_putstr_fd("cd : error changing directory\n", 2);
+		shell_env->exit_status = 1;
+		return (1);
+	}
+	if (getcwd(new_pwd, sizeof(new_pwd)) != NULL)
+	{
+		if (oldpwd)
+			env_set(shell_env, "OLDPWD", oldpwd);
+		env_set(shell_env, "PWD", new_pwd);
+	}
+	shell_env->exit_status = 0;
+	return (0);
+}
