@@ -103,6 +103,7 @@ int			ft_export(char **args, t_shell_env *shell_env);
 int			ft_unset(char **args, t_shell_env *shell_env);
 int 		ft_env(char **argv, t_shell_env *shell_env);
 int			ft_export(char **args, t_shell_env *shell_env);
+int			ft_exit(char **args, t_shell_env *shell);
 t_builtin 	*init_builtins(void);
 int			excec_builin(t_cmd *cmd, t_shell_env *shell_env);
 int			is_builtin(char	*cmd_name);
