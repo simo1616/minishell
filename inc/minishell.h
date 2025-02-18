@@ -86,6 +86,7 @@ int			ft_unset(char **args, t_shell_env *shell_env);
 t_builtin 	*init_builtins(void);
 int			excec_builin(t_cmd *cmd, t_shell_env *shell_env);
 int			is_builtin(char	*cmd_name);
+int			ft_exit(char **args, t_shell_env *shell);
 
 
 #endif

@@ -15,7 +15,7 @@ t_builtin 	*init_builtins(void)
 		builtins[0].name = ft_strdup("cd");
 		builtins[0].func = &ft_echo; // remplacer par &builtin_cd
 		builtins[1].name = ft_strdup("exit");
-		builtins[1].func = &ft_echo; // remplacer par &builtin_exit
+		builtins[1].func = &ft_exit;
 		builtins[2].name = ft_strdup("pwd");
 		builtins[2].func = &ft_pwd;
 		builtins[3].name = ft_strdup("echo");
@@ -23,9 +23,9 @@ t_builtin 	*init_builtins(void)
 		builtins[4].name = ft_strdup("env");
 		builtins[4].func = &ft_env;
 		builtins[5].name = ft_strdup("export");
-		builtins[5].func = &ft_export; // remplacer par &builtin_export
+		builtins[5].func = &ft_export;
 		builtins[6].name = ft_strdup("unset");
-		builtins[6].func = &ft_unset; // remplacer par &builtin_unset
+		builtins[6].func = &ft_unset;
 		builtins[7].name = NULL;
 		builtins[7].func = NULL;
 	}

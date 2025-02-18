@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
+/*   By: jdecarro <jdecarro@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 22:24:17 by mbendidi          #+#    #+#             */
-/*   Updated: 2024/12/17 22:29:12 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/18 09:16:52 by jdecarro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
