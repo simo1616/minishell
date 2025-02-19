@@ -18,7 +18,7 @@ int	ft_cd(char **args, t_shell_env *shell_env)
 	char		new_pwd[PATH_MAX];
 	struct stat	path_stat;
 
-	if (!args[1] || strcmp(args[1], "~") == 0)
+	if (!args[1] || strcmp(args[1], "~") == 0 || strcmp(args[1], "") == 0)
 		path = env_get(shell_env, "HOME");
 	else
 		path = args[1];
