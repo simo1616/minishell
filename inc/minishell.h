@@ -7,6 +7,7 @@
 # include <unistd.h>
 # include <sys/wait.h>
 # include <sys/types.h>
+# include <sys/stat.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <signal.h>
@@ -113,6 +114,7 @@ int			ft_exit(char **args, t_shell_env *shell);
 t_builtin 	*init_builtins(void);
 int			excec_builin(t_cmd *cmd, t_shell_env *shell_env);
 int			is_builtin(char	*cmd_name);
+int			ft_cd(char **args, t_shell_env *shell_env);
 
 // external ls-cat-...etc
 int			excec_external(t_cmd *cmd, t_shell_env *shell_env);
