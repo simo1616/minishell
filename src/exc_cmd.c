@@ -44,33 +44,3 @@ void execute_commands(t_cmd *cmds, t_shell_env *env)
         current = current->next;
     }
 }
-// ancien excecute cmd pour debug :
-// void execute_commands(t_cmd *cmds, t_shell_env *env)
-// {
-//     t_cmd 	*current;
-// 	t_redir *redir;
-// 	int 	i;
-
-
-// 	current = cmds;
-// 	(void)env;
-// 	i = 0;
-//     while (current)
-//     {
-//         printf("Command: ");
-//         while(current->av[i])
-// 		{
-//             printf("[%s] ", current->av[i]);
-// 			i++;
-// 		}
-//         redir = current->redirs;
-//         while (redir)
-//         {
-//             printf("\nRedirection: type=%d, file=%s", 
-//                    redir->type, redir->filename);
-//             redir = redir->next;
-//         }
-//         printf("\n");
-//         current = current->next;
-//     }
-// }
