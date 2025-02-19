@@ -55,7 +55,7 @@ void ft_cd(char **args)
 	if (getcwd(oldpwd, sizeof(oldpwd)) != NULL)
 		setenv("OLDPWD", oldpwd, 1);
 	if (!args[1])
-		path = getenv("HOME");
+		path = env_get("HOME");
 	else if (strcmp(args[1], "-") == 0)
 	{
 		path = getenv("OLDPWD");

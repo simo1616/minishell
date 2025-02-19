@@ -5,11 +5,10 @@ void execute_commands(t_cmd *cmds, t_shell_env *env)
     t_cmd 	*current;
 	t_redir *redir;
 	int		ret;
-	int 	i;
+	int 	i; // debug
 
 
 	current = cmds;
-	i = 0;
     while (current)
     {
         if(current->av && current->av[0])
@@ -22,8 +21,11 @@ void execute_commands(t_cmd *cmds, t_shell_env *env)
 			}
 			else
 			{
-				i = 0;
-				printf("Commande: ");
+				ret = excec_external(current, env);
+				env->exit_status = ret; 
+				// si c'est pas external 
+				i = 0; //debug
+				printf("Commande: "); //debug
 				while(current->av[i])
 				{
 					printf("[%s] ", current->av[i]);

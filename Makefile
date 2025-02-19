@@ -8,11 +8,17 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror -g
 INC = -I ./libft/inc -I ./inc
 
+# Couleurs pour la déco
+GREEN   = \033[1;32m
+CYAN    = \033[1;36m
+RESET   = \033[0m
+
 # Sources et objets
 SRC_DIR = src/
 SRCS 	= main.c \
 		init_builtins.c \
 		excec_built.c \
+		external.c \
 		exc_cmd.c \
 		env.c \
 		env_utils.c \
@@ -30,7 +36,22 @@ SRCS 	= main.c \
 OBJS = $(addprefix $(SRC_DIR), $(SRCS:.c=.o))
 
 # Règles
-all: $(LIBFT) $(NAME)
+all: header $(LIBFT) $(NAME)
+
+
+# Affichage du header
+header:
+	@echo "$(GREEN)    by         $(CYAN)@jdecarro$(GREEN)"
+	@echo "::::    ::::  ::::::::::: ::::    ::: ::::::::::: ::::::::  :::    ::: :::::::::: :::        :::"
+	@echo "+:+:+: :+:+:+     :+:     :+:+:   :+:     :+:    :+:    :+: :+:    :+: :+:        :+:        :+:"
+	@echo "+:+ +:+:+ +:+     +:+     :+:+:+  +:+     +:+    +:+        +:+    +:+ +:+        +:+        +:+"
+	@echo "+#+  +:+  +#+     +#+     +#+ +:+ +#+     +#+    +#++:++#++ +#++:++#++ +#++:++#   +#+        +#+"
+	@echo "+#+       +#+     +#+     +#+  +#+#+#     +#+           +#+ +#+    +#+ +#+        +#+        +#+"
+	@echo "#+#       #+#     #+#     #+#   #+#+#     #+#    #+#    #+# #+#    #+# #+#        #+#        #+#"
+	@echo "###       ###     #+#     ###    #### ########### ########  ###    ### ########## ########## ##########"
+	@echo "###       ### ########### ###    ####            $(CYAN)&$(GREEN)          ###    ###  $(CYAN)@mbendidi$(GREEN) ########## ##########"
+	@echo "$(RESET)"
+
 
 # Compilation de libft
 $(LIBFT):
@@ -47,6 +68,7 @@ $(SRC_DIR)%.o: $(SRC_DIR)%.c
 clean:
 	@make -C libft clean
 	rm -f $(OBJS)
+	@echo "$(CYAN)Clean completed!$(RESET)"
 
 fclean: clean
 	@make -C libft fclean
@@ -54,4 +76,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re header

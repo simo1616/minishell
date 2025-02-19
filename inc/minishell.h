@@ -17,6 +17,12 @@
 // Une seule variable globale pour les signaux
 extern int g_received_signal;
 
+// macro EXIT
+# define EX_CMD_NT_FD 127 // COMMANDE NOT FOUND
+# define EX_CMD_NT_EXE 126 // COMMANDE NOT EXECUTABLE
+# define EXIT_SIG_OFFSET 128 // processus s'est terminer à cause d'un signal
+
+
 // Structure pour l'environnement du shell
 typedef struct s_shell_env
 {
@@ -107,5 +113,10 @@ int			ft_exit(char **args, t_shell_env *shell);
 t_builtin 	*init_builtins(void);
 int			excec_builin(t_cmd *cmd, t_shell_env *shell_env);
 int			is_builtin(char	*cmd_name);
+
+// external ls-cat-...etc
+int			excec_external(t_cmd *cmd, t_shell_env *shell_env);
+char		*resolve_path(char *cmd, char **env);
+char		*search_in_path(char *cmd, char *path_env);
 
 #endif
