@@ -34,7 +34,7 @@ static void	write_echo(int i, bool new_line, char **args)
 	{
 		if (!first)
 			write(1, " ", 1);
-		write(1, args[i], strlen(args[i]));
+		write(1, args[i], ft_strlen(args[i]));
 		first = false;
 		i++;
 	}

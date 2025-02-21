@@ -5,7 +5,7 @@ void execute_commands(t_cmd *cmds, t_shell_env *env)
     t_cmd 	*current;
 	t_redir *redir;
 	int		ret;
-	int 	i; // debug
+	//int 	i; // debug
 
 
 	current = cmds;
@@ -24,14 +24,14 @@ void execute_commands(t_cmd *cmds, t_shell_env *env)
 				ret = excec_external(current, env);
 				env->exit_status = ret; 
 				// si c'est pas external 
-				i = 0; //debug
-				printf("Commande: "); //debug
-				while(current->av[i])
-				{
-					printf("[%s] ", current->av[i]);
-					i++;
-				}
-				printf("\n");
+				// i = 0; //debug
+				// printf("Commande: "); //debug
+				// while(current->av[i])
+				// {
+				// 	printf("[%s] ", current->av[i]);
+				// 	i++;
+				// }
+				// printf("\n");
 			}
 		}
         redir = current->redirs;

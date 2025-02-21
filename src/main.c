@@ -17,7 +17,8 @@ int main (int ac, char **av, char **envp)
 
 	while (shell_env->running)
 	{
-		cmd_line = readline("minishell> ");
+		cmd_line = readline("\001\033[1;35m\002minishell> \001\033[0m\002");
+		//cmd_line = readline("\033[38;5;004mminishell> \033[0m");
 		if (!cmd_line) // Gestion de Ctrl+D
 		{
 			printf("exit\n");
@@ -39,6 +40,10 @@ int main (int ac, char **av, char **envp)
 		{
 			// Gestion d'erreur déjà présente
 			shell_env->exit_status = 258; // Code d'erreur syntaxique
+		}
+		else if (cmds->next)
+		{
+			excec_pipes(cmds, shell_env);
 		}
 		else
 		{
