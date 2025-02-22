@@ -24,7 +24,11 @@ SRCS 	= main.c \
 		env_utils.c \
 		env_utils2.c \
 		signal.c \
-		parse.c \
+		parse1_utils.c \
+		parse2_utils.c \
+		parse_token.c \
+		parse_cmd.c \
+		parse_repl_var.c \
 		redir.c \
 		pipes.c \
 		free.c \
