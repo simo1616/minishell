@@ -1,95 +1,94 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_cmd.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/22 15:50:28 by mbendidi          #+#    #+#             */
+/*   Updated: 2025/02/22 16:56:03 by mbendidi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
+
+int	init_cmd_ifneed(t_cmd **cmd, t_cmd **cur_cmd)
+{
+	if (!(*cmd))
+	{
+		*cmd = malloc(sizeof(t_cmd));
+		if (!(*cmd))
+			return (0);
+		(*cmd)->av = NULL;
+		(*cmd)->redirs = NULL;
+		(*cmd)->next = NULL;
+		*cur_cmd = *cmd;
+	}
+	return (1);
+}
+
+t_cmd	*parse_tokens(t_data *data, t_shell_env *env)
+{
+	t_cmd	*cmd;
+	t_cmd	*cur_cmd;
+	char	*token;
+
+	cmd = NULL;
+	cur_cmd = NULL;
+	while (1)
+	{
+		token = get_next_token(&data->line, env, data);
+		if (!token)
+			break ;
+		if (!init_cmd_ifneed(&cmd, &cur_cmd))
+		{
+			free_cmds(cmd);
+			return (NULL);
+		}
+		if (!process_token(token, data, env, &cur_cmd))
+		{
+			free_cmds(cmd);
+			return (NULL);
+		}
+	}
+	return (cmd);
+}
+
+int	final_verification(t_cmd *cmd)
+{
+	t_cmd	*cur_cmd;
+
+	cur_cmd = cmd;
+	while (cur_cmd->next)
+		cur_cmd = cur_cmd->next;
+	if (!cur_cmd->av || cur_cmd->av[0] == NULL)
+	{
+		ft_putendl_fd("Minishell: syntax error near unexpected token `|'", 2);
+		free_cmds(cmd);
+		return (0);
+	}
+	return (1);
+}
 
 t_cmd	*parse_command_line(char *line, t_shell_env *env)
 {
-	t_cmd			*cmd;
-	t_cmd			*cur_cmd;
-	t_data			data;
-	t_redir_type	type;
-	char			*token;
-	char			*filename;
+	t_data	data;
+	t_cmd	*cmd;
 
 	if (!line)
 		return (NULL);
-	cmd = NULL;
-	cur_cmd = NULL;
 	data.line = line;
 	data.cpos = 0;
 	if (!get_quotes_context(&data))
-	{
-		free(cmd);
 		return (NULL);
-	}
-	while (1)
-	{
-		token = get_next_token(&data.line, env, &data);
-		if (!token)
-			break ;
-		if (!cmd)
-		{
-			cmd = malloc(sizeof(t_cmd));
-			if (!cmd)
-				return (NULL);
-			cmd->av = NULL;
-			cmd->redirs = NULL;
-			cmd->next = NULL;
-			cur_cmd = cmd;
-		}
-		if (!ft_strcmp(token, "|"))
-		{
-			free(token);
-			if (!cur_cmd->av || cur_cmd->av[0] == NULL)
-			{
-				ft_putendl_fd("Minishell: syntax error near unexpected token `|'",
-					2);
-				free_cmds(cmd);
-				free(data.ctx);
-				return (NULL);
-			}
-			cur_cmd->next = malloc(sizeof(t_cmd));
-			if (!cur_cmd)
-			{
-				free_cmds(cmd);
-				free(data.ctx);
-				return (NULL);
-			}
-			cur_cmd = cur_cmd->next;
-			cur_cmd->av = NULL;
-			cur_cmd->redirs = NULL;
-			cur_cmd->next = NULL;
-		}
-		else if (is_redir(token))
-		{
-			type = get_redir_type(token);
-			filename = get_next_token(&data.line, env, &data);
-			if (!filename)
-			{
-				ft_putendl_fd("Minishell: syntax error near unexpected token `newline'",
-					2);
-				free(token);
-				free_cmds(cmd);
-				free(data.ctx);
-				return (NULL);
-			}
-			add_redir_to_cmd(cur_cmd, type, filename);
-			free(filename);
-			free(token);
-		}
-		else
-		{
-			cur_cmd->av = add_to_argv(cur_cmd->av, token);
-			free(token);
-		}
-	}
+	cmd = parse_tokens(&data, env);
 	if (!cmd)
 	{
 		free(data.ctx);
 		return (NULL);
 	}
-	if (!cur_cmd->av || cur_cmd->av[0] == NULL)
+	if (!final_verification(cmd))
 	{
-		ft_putendl_fd("Minishell: syntax error near unexpected token `|'", 2);
-		free_cmds(cmd);
 		free(data.ctx);
 		return (NULL);
 	}

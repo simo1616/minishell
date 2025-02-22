@@ -26,7 +26,8 @@ SRCS 	= main.c \
 		signal.c \
 		parse1_utils.c \
 		parse2_utils.c \
-		parse_token.c \
+		proc_tokens.c \
+		get_next_token.c \
 		parse_cmd.c \
 		parse_repl_var.c \
 		redir.c \
