@@ -1,29 +1,41 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/22 13:01:38 by mbendidi          #+#    #+#             */
+/*   Updated: 2025/02/22 13:05:41 by mbendidi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int find_env_index(t_shell_env *shell_env, const char *name)
+int	find_env_index(t_shell_env *shell_env, const char *name)
 {
-	int i;
-	int name_len;
+	int	i;
+	int	name_len;
 
 	i = 0;
 	name_len = ft_strlen(name);
-	while(shell_env->env[i])
+	while (shell_env->env[i])
 	{
-		if (ft_strncmp(shell_env->env[i], name, name_len) == 0 &&
-			shell_env->env[i][name_len] == '=')
-			return(i);
+		if (ft_strncmp(shell_env->env[i], name, name_len) == 0
+			&& shell_env->env[i][name_len] == '=')
+			return (i);
 		i++;
 	}
-	return(-1);
+	return (-1);
 }
 
-char *env_get(t_shell_env *shell_env, const char *name)
+char	*env_get(t_shell_env *shell_env, const char *name)
 {
-    int index;
-	char *sign_egal;
-	
+	int		index;
+	char	*sign_egal;
+
 	index = find_env_index(shell_env, name);
-	if(index == -1)
+	if (index == -1)
 		return (NULL);
 	sign_egal = ft_strchr(shell_env->env[index], '=');
 	if (!sign_egal)
@@ -36,72 +48,27 @@ char	*ft_strjoin_three(const char *name, const char *eq, const char *value)
 	char	*tmp;
 	char	*result;
 
-	tmp = ft_strjoin(name, eq); //VAR = 
-	if(!tmp)
+	tmp = ft_strjoin(name, eq);
+	if (!tmp)
 		return (NULL);
-	result = ft_strjoin(tmp, value); // VAR = KJSDFHKJ
+	result = ft_strjoin(tmp, value);
 	free(tmp);
-	return(result);
+	return (result);
 }
 
-
-int env_set(t_shell_env *shell_env, const char *name, const char *value)
-{
-	char	*new_var;
-	char	**new_env;
-	int		index;
-	int		cnt;
-	int		i;
-
-
-	new_var = ft_strjoin_three(name, "=", value); 
-	if(!new_var)
-		return (1);
-	index = find_env_index(shell_env, name);
-	if(index != -1)
-	{
-		free(shell_env->env[index]);
-		shell_env->env[index] = new_var;
-	}
-	else
-	{
-		cnt = 0;
-		while (shell_env->env[cnt])
-			cnt++;
-		new_env = malloc(sizeof(char *) * (cnt + 2));
-		if(!new_env)
-		{
-			free(new_var);
-			return(1);
-		}
-		i = 0;
-		while(i < cnt)
-		{
-			new_env[i] = shell_env->env[i];
-			i++;
-		}
-		new_env[cnt] = new_var;
-		new_env[cnt + 1] = NULL;
-		free(shell_env->env);
-		shell_env->env = new_env;
-	}
-	return(0);
-}
-
-int env_unset(t_shell_env *shell_env, const char *name)
+int	env_unset(t_shell_env *shell_env, const char *name)
 {
 	int	index;
 
 	index = find_env_index(shell_env, name);
-	if(index == -1)
-		return(1);
+	if (index == -1)
+		return (1);
 	free(shell_env->env[index]);
-	while(shell_env->env[index + 1])
+	while (shell_env->env[index + 1])
 	{
 		shell_env->env[index] = shell_env->env[index + 1];
 		index++;
 	}
 	shell_env->env[index] = NULL;
-	return(0);
+	return (0);
 }
-

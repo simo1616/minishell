@@ -22,6 +22,7 @@ SRCS 	= main.c \
 		exc_cmd.c \
 		env.c \
 		env_utils.c \
+		env_utils2.c \
 		signal.c \
 		parse.c \
 		redir.c \

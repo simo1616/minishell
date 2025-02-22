@@ -78,7 +78,7 @@ int excec_external(t_cmd *cmd, t_shell_env *shell_env)
 	path = resolve_path(cmd->av[0], shell_env->env); 
 	if (!path)
 	{
-		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd("Minishell: ", 2);
 		write(2, cmd->av[0], ft_strlen(cmd->av[0]));
 		ft_putstr_fd(": Aucun fichier ou dossier de ce nom\n", 2); // \n se debarasser peut etre trouver une autre facons d'erire le message d'erreur et la cmd 
 		return (EX_CMD_NT_FD); 

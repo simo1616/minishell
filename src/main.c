@@ -1,63 +1,77 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/22 12:15:51 by mbendidi          #+#    #+#             */
+/*   Updated: 2025/02/22 12:48:59 by mbendidi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int main (int ac, char **av, char **envp)
+static void	handle_signal(t_shell_env *shell_env)
+{
+	if (g_received_signal)
+	{
+		if (g_received_signal == SIGINT)
+			shell_env->exit_status = 130;
+		g_received_signal = 0;
+	}
+}
+
+static void	process_iteration(t_shell_env *shell_env)
 {
 	char		*cmd_line;
-	t_shell_env	*shell_env;
 	t_cmd		*cmds;
-	int 		ret;
 
-	(void)ac;
-	(void)av;
-
-	shell_env = create_shell_env(envp);
-	if (!shell_env)
-		return (1);
-	signal_setup();
-
-	while (shell_env->running)
+	cmd_line = readline("\001\033[1;35m\002Minishell> \001\033[0m\002");
+	if (!cmd_line)
 	{
-		cmd_line = readline("\001\033[1;35m\002minishell> \001\033[0m\002");
-		//cmd_line = readline("\033[38;5;004mminishell> \033[0m");
-		if (!cmd_line) // Gestion de Ctrl+D
-		{
-			printf("exit\n");
-			break;
-		}
-		if (*cmd_line)
-			add_history(cmd_line);
-
-		// Gestion des signaux reçus
-		if (g_received_signal)
-		{
-			if (g_received_signal == SIGINT)
-				shell_env->exit_status = 130;
-			g_received_signal = 0;
-		}
-		// parsing
-		cmds = parse_command_line(cmd_line, shell_env);
-		if (cmds == NULL)
-		{
-			// Gestion d'erreur déjà présente
-			shell_env->exit_status = 258; // Code d'erreur syntaxique
-		}
-		else if (cmds->next)
-		{
-			excec_pipes(cmds, shell_env);
-		}
-		else
-		{
-			execute_commands(cmds, shell_env);
-			free_cmds(cmds);
-		}
-		
-		// excecuting 
-		// execute_commands(cmds, shell_env);
-		// free_cmds(cmds);
-		free(cmd_line);
+		printf("exit\n");
+		shell_env->running = 0;
+		return ;
 	}
-	ret = shell_env->exit_status;
-	destroy_shell_env(shell_env);
-	shell_env = NULL;
-	return (ret);
+	if (*cmd_line)
+		add_history(cmd_line);
+	handle_signal(shell_env);
+	cmds = parse_command_line(cmd_line, shell_env);
+	if (cmds == NULL)
+		shell_env->exit_status = 258;
+	else if (cmds->next)
+		excec_pipes(cmds, shell_env);
+	else
+	{
+		execute_commands(cmds, shell_env);
+		free_cmds(cmds);
+	}
+	free(cmd_line);
+}
+
+int	main(int ac, char **av, char **envp)
+{
+	t_shell_env	*shell_env;
+	int			ret;
+
+	if (ac == 1)
+	{
+		shell_env = create_shell_env(envp);
+		if (!shell_env)
+			return (1);
+		signal_setup();
+		while (shell_env->running)
+			process_iteration(shell_env);
+		ret = shell_env->exit_status;
+		destroy_shell_env(shell_env);
+		return (ret);
+	}
+	else
+	{
+		ft_putstr_fd("Minishell: ", 2);
+		write(2, av[1], ft_strlen(av[1]));
+		ft_putstr_fd(": Aucun fichier ou dossier de ce nom\n", 2);
+		return (1);
+	}
 }

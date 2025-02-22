@@ -1,129 +1,143 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/22 12:05:11 by mbendidi          #+#    #+#             */
+/*   Updated: 2025/02/22 12:14:21 by mbendidi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
 # include "libft.h"
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <sys/wait.h>
-# include <sys/types.h>
-# include <sys/stat.h>
-# include <readline/readline.h>
+# include <limits.h>
 # include <readline/history.h>
+# include <readline/readline.h>
 # include <signal.h>
 # include <stdbool.h>
-# include <limits.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <sys/stat.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <unistd.h>
 
-
-// Une seule variable globale pour les signaux
-extern int g_received_signal;
+extern int			g_received_signal;
 
 // macro EXIT
 # define EX_CMD_NT_FD 127 // COMMANDE NOT FOUND
 # define EX_CMD_NT_EXE 126 // COMMANDE NOT EXECUTABLE
 # define EXIT_SIG_OFFSET 128 // processus s'est terminer à cause d'un signal
 
-
-// Structure pour l'environnement du shell
+// Structure copie d'environnement du shell
 typedef struct s_shell_env
 {
-    char    **env;          // Copie de l'environnement
-    int     exit_status;    // Status de sortie de la dernière commande
-    int     running;        // Flag pour contrôler l'exécution du shell
-} t_shell_env;
+	char	**env;
+	int		exit_status;
+	int		running;
+}	t_shell_env;
 
+/*
+	IN < OUT > APPEND, >> HEREDOC <<
+*/
 typedef enum e_redir_type
 {
-	REDIR_IN, // <
-	REDIR_OUT, // >
-	REDIR_APPEND, // >>
-	REDIR_HEREDOC, // <<
+	REDIR_IN,
+	REDIR_OUT,
+	REDIR_APPEND,
+	REDIR_HEREDOC,
 }	t_redir_type;
 
 typedef struct s_redir
 {
-	t_redir_type	type; // peut etre changer par int 
+	t_redir_type	type;
 	char			*filename;
-	struct	s_redir	*next;
+	struct s_redir	*next;
 }	t_redir;
 
-typedef struct s_cmd 
+typedef struct s_cmd
 {
 	char			**av;
 	t_redir			*redirs;
 	struct s_cmd	*next;
-} t_cmd;
+}	t_cmd;
 
-typedef struct s_data 
+typedef struct s_data
 {
-	char	*line;
-	int		*ctx;
-	size_t	cpos;
-} t_data;
+	char			*line;
+	int				*ctx;
+	size_t			cpos;
+}					t_data;
 typedef struct s_builtin
 {
-	char	*name;
-	int		(*func)(char **av, t_shell_env *shell_env);
-}	t_builtin;
+	char			*name;
+	int				(*func)(char **av, t_shell_env *shell_env);
+}					t_builtin;
 
 // copie env
-t_shell_env	*create_shell_env(char **envp);
-void		destroy_shell_env(t_shell_env *shell_env);
-void		signal_setup(void);
+t_shell_env			*create_shell_env(char **envp);
+void				destroy_shell_env(t_shell_env *shell_env);
+void				signal_setup(void);
 
-//parsing
-t_cmd		*parse_command_line(char *line, t_shell_env *env);
-char 	**add_to_argv(char **av, const char *token);
-void	*get_quotes_context(t_data *data);
-void		execute_commands(t_cmd *cmds, t_shell_env *shell_env);
-int			count_tokens(char *str);
-char *get_next_token(char **str, t_shell_env *env, t_data *data);
-char	*remplacer_var(char *token, t_shell_env *env, t_data *data);
-char		*remove_quotes(char *token);
+// parsing
+t_cmd				*parse_command_line(char *line, t_shell_env *env);
+char				**add_to_argv(char **av, const char *token);
+void				*get_quotes_context(t_data *data);
+void				execute_commands(t_cmd *cmds, t_shell_env *shell_env);
+int					count_tokens(char *str);
+char				*get_next_token(char **str, t_shell_env *env, t_data *data);
+char				*remplacer_var(char *token, t_shell_env *env, t_data *data);
+char				*remove_quotes(char *token);
 
-//expansion
-size_t		calculate_length(const char *token, t_shell_env *env, int *ctx);
-int			is_valid_var_char(char c);
+// expansion
+size_t				calculate_length(const char *token, t_shell_env *env,
+						int *ctx);
+int					is_valid_var_char(char c);
 
 // redir
-int				is_redir(char *token);
-t_redir_type	get_redir_type(char *token);
-void			add_redir_to_cmd(t_cmd *cmd, t_redir_type type, char *filename);
+int					is_redir(char *token);
+t_redir_type		get_redir_type(char *token);
+void				add_redir_to_cmd(t_cmd *cmd, t_redir_type type,
+						char *filename);
 
 // pipes
-int			excec_pipes(t_cmd *cmds, t_shell_env *env);
+int					excec_pipes(t_cmd *cmds, t_shell_env *env);
 
-//free
-void 		free_cmds(t_cmd *cmds);
-void 		free_av(char **argv);
-void 		free_redirs(t_redir *redirs);
+// free
+void				free_cmds(t_cmd *cmds);
+void				free_av(char **argv);
+void				free_redirs(t_redir *redirs);
 
 // fonction env
-int 		find_env_index(t_shell_env *shell_env, const char *name);
-char 		*env_get(t_shell_env *shell_env, const char *name);
-char		*ft_strjoin_three(const char *name, const char *eq, const char *value);
-int 		env_set(t_shell_env *shell_env, const char *name, const char *value);
-int 		env_unset(t_shell_env *shell_env, const char *name);
+int					find_env_index(t_shell_env *shell_env, const char *name);
+char				*env_get(t_shell_env *shell_env, const char *name);
+char				*ft_strjoin_three(const char *name, const char *eq,
+						const char *value);
+int					env_set(t_shell_env *shell_env, const char *name,
+						const char *value);
+int					env_unset(t_shell_env *shell_env, const char *name);
 
-//builting
-int			ft_echo(char **args, t_shell_env *shell_env);
-int 		ft_pwd(char **argv, t_shell_env *shell_env);
-int			ft_env(char **argv, t_shell_env *shell_env);
-int			ft_export(char **args, t_shell_env *shell_env);
-int			ft_unset(char **args, t_shell_env *shell_env);
-int 		ft_env(char **argv, t_shell_env *shell_env);
-int			ft_export(char **args, t_shell_env *shell_env);
-int			ft_exit(char **args, t_shell_env *shell);
-t_builtin 	*init_builtins(void);
-int			excec_builin(t_cmd *cmd, t_shell_env *shell_env);
-int			is_builtin(char	*cmd_name);
-int			ft_cd(char **args, t_shell_env *shell_env);
+// builting
+int					ft_echo(char **args, t_shell_env *shell_env);
+int					ft_pwd(char **argv, t_shell_env *shell_env);
+int					ft_env(char **argv, t_shell_env *shell_env);
+int					ft_export(char **args, t_shell_env *shell_env);
+int					ft_unset(char **args, t_shell_env *shell_env);
+int					ft_env(char **argv, t_shell_env *shell_env);
+int					ft_export(char **args, t_shell_env *shell_env);
+int					ft_exit(char **args, t_shell_env *shell);
+t_builtin			*init_builtins(void);
+int					excec_builin(t_cmd *cmd, t_shell_env *shell_env);
+int					is_builtin(char *cmd_name);
+int					ft_cd(char **args, t_shell_env *shell_env);
 
 // external ls-cat-...etc
-int			excec_external(t_cmd *cmd, t_shell_env *shell_env);
-char		*resolve_path(char *cmd, char **env);
-char		*search_in_path(char *cmd, char *path_env);
-
-
+int					excec_external(t_cmd *cmd, t_shell_env *shell_env);
+char				*resolve_path(char *cmd, char **env);
+char				*search_in_path(char *cmd, char *path_env);
 
 #endif
