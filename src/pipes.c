@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 09:25:52 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/21 23:27:12 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/22 19:11:34 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,9 +100,9 @@ int	excec_pipes(t_cmd *cmds, t_shell_env *env)
 			}
 			if(cur->av && cur->av[0])
 			{
-				if(is_builtin(cur->av[0]))
+				if(is_builtin(env, cur->av[0]))
 				{
-					ret = excec_builin(cur, env);
+					ret = exec_builtin(cur, env);
 					env->exit_status = ret;
 				}
 				else

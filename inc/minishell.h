@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 12:05:11 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/22 17:03:45 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/22 19:16:17 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,15 @@ extern int			g_received_signal;
 # define EX_CMD_NT_EXE 126 // COMMANDE NOT EXECUTABLE
 # define EXIT_SIG_OFFSET 128 // processus s'est terminer à cause d'un signal
 
+typedef struct s_builtin t_builtin;
+
 // Structure copie d'environnement du shell
 typedef struct s_shell_env
 {
-	char	**env;
-	int		exit_status;
-	int		running;
+	char		**env;
+	int			exit_status;
+	int			running;
+	t_builtin	*builtins;
 }	t_shell_env;
 
 /*
@@ -66,17 +69,18 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }	t_cmd;
 
+struct s_builtin
+{
+	char			*name;
+	int				(*func)(char **av, t_shell_env *shell_env);
+};
+
 typedef struct s_data
 {
 	char			*line;
 	int				*ctx;
 	size_t			cpos;
 }					t_data;
-typedef struct s_builtin
-{
-	char			*name;
-	int				(*func)(char **av, t_shell_env *shell_env);
-}					t_builtin;
 
 // copie env
 t_shell_env			*create_shell_env(char **envp);
@@ -90,6 +94,7 @@ int					handle_redir(char *token, t_data *data, t_shell_env *env, t_cmd **cur_cm
 int					process_token(char *token, t_data *data, t_shell_env *env, t_cmd **cur_cmd);
 t_cmd				*parse_tokens(t_data *data, t_shell_env *env);
 int					init_cmd_ifneed(t_cmd **cmd, t_cmd **cur_cmd);
+char				**init_argv(const char *token);
 int					final_verification(t_cmd *cmd);
 char				**add_to_argv(char **av, const char *token);
 void				*get_quotes_context(t_data *data);
@@ -136,9 +141,9 @@ int					ft_unset(char **args, t_shell_env *shell_env);
 int					ft_env(char **argv, t_shell_env *shell_env);
 int					ft_export(char **args, t_shell_env *shell_env);
 int					ft_exit(char **args, t_shell_env *shell);
-t_builtin			*init_builtins(void);
-int					excec_builin(t_cmd *cmd, t_shell_env *shell_env);
-int					is_builtin(char *cmd_name);
+t_builtin 			*init_builtins(t_shell_env *shell_env);
+int					exec_builtin(t_cmd *cmd, t_shell_env *shell_env);//
+int 				is_builtin(t_shell_env *env, char *cmd_name);
 int					ft_cd(char **args, t_shell_env *shell_env);
 
 // external ls-cat-...etc

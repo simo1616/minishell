@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:32:41 by jdecarro          #+#    #+#             */
-/*   Updated: 2025/02/22 17:11:53 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/22 19:09:56 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ void	execute_commands(t_cmd *cmds, t_shell_env *env)
 	{
 		if (current->av && current->av[0])
 		{
-			if (is_builtin(current->av[0]))
+			if (is_builtin(env, current->av[0]))
 			{
-				ret = excec_builin(current, env);
+				ret = exec_builtin(current, env);
 				env->exit_status = ret;
 			}
 			else
