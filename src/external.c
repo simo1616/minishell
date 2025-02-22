@@ -1,14 +1,5 @@
 #include "minishell.h"
 
-/* 	
-	la on a recup 
-
-	/home/simo1616/.local/bin:/usr/local/sbin:
-	/usr/local/bin:/usr/sbin:/usr/bin:/sbin:
-	/bin:/usr/games:/usr/local/games:
-	/snap/bin:/home/simo1616/.vscode/extensions/ms-python.debugpy
-	-2025.0.0-linux-x64/bundled/scripts/noConfigScripts
-*/
 char	*search_in_path(char *cmd, char *path_env)
 {
 	char		**path_sp;
@@ -21,7 +12,9 @@ char	*search_in_path(char *cmd, char *path_env)
 		return (NULL);
 	i = 0;
 	len = 0;
-	while (path_sp[i])
+	while (path_sp[i]) // /home/simo1616/.local/bin:
+	///usr/local/sbin = usr/local/sbin/ + cmd
+	///usr/local/bin:/usr/sbin ...
 	{
 		len = ft_strlen(path_sp[i]);
 		if (path_sp[i][len - 1] == '/') // verifier si contient déja un / a la fin 
@@ -82,11 +75,12 @@ int excec_external(t_cmd *cmd, t_shell_env *shell_env)
     char	*path;
 	int		status;
 
-	path = resolve_path(cmd->av[0], shell_env->env);
+	path = resolve_path(cmd->av[0], shell_env->env); 
 	if (!path)
 	{
-		ft_putendl_fd("Commande not found!", 2); // peut etre trouver une autre facons d'erire le message d'erreur et la cmd 
-		printf("%s\n", cmd->av[0]);
+		ft_putstr_fd("minishell: ", 2);
+		write(2, cmd->av[0], ft_strlen(cmd->av[0]));
+		ft_putstr_fd(": Aucun fichier ou dossier de ce nom\n", 2); // \n se debarasser peut etre trouver une autre facons d'erire le message d'erreur et la cmd 
 		return (EX_CMD_NT_FD); 
 	}
 	pid = fork();
