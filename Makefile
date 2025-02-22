@@ -19,6 +19,7 @@ SRCS 	= main.c \
 		init_builtins.c \
 		excec_built.c \
 		external.c \
+		external_helpers.c \
 		exc_cmd.c \
 		env.c \
 		env_utils.c \
