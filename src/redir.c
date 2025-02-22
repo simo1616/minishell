@@ -14,11 +14,11 @@
 
 int	is_redir(char *token)
 {
-	return (ft_strcmp(token, "<") == 0 || ft_strcmp(token, ">") == 0 ||
-	ft_strcmp(token, "<<") == 0 || ft_strcmp(token, ">>") == 0);
+	return (ft_strcmp(token, "<") == 0 || ft_strcmp(token, ">") == 0
+		|| ft_strcmp(token, "<<") == 0 || ft_strcmp(token, ">>") == 0);
 }
 
-t_redir_type	get_redir_type(char *token) //changer t_redir_type par int
+t_redir_type	get_redir_type(char *token) // changer t_redir_type par int
 {
 	if (ft_strcmp(token, "<") == 0)
 		return (REDIR_IN);
@@ -33,12 +33,12 @@ t_redir_type	get_redir_type(char *token) //changer t_redir_type par int
 
 void	add_redir_to_cmd(t_cmd *cmd, t_redir_type type, char *filename)
 {
-	t_redir *new_rd;
-	t_redir *tmp;
+	t_redir	*new_rd;
+	t_redir	*tmp;
 
 	new_rd = malloc(sizeof(t_redir));
 	if (!new_rd)
-		return;
+		return ;
 	new_rd->type = type;
 	new_rd->filename = ft_strdup(filename);
 	new_rd->next = NULL;
@@ -52,4 +52,3 @@ void	add_redir_to_cmd(t_cmd *cmd, t_redir_type type, char *filename)
 		tmp->next = new_rd;
 	}
 }
-

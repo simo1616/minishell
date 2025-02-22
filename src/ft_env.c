@@ -18,8 +18,7 @@ int	ft_env(char **argv, t_shell_env *shell_env)
 
 	(void)argv;
 	i = 0;
-
-	while(shell_env->env[i])
+	while (shell_env->env[i])
 	{
 		printf("%s\n", shell_env->env[i]);
 		i++;

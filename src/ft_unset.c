@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jdecarro <jdecarro@student.42lausanne.c    +#+  +:+       +#+        */
+/*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 10:34:06 by jdecarro          #+#    #+#             */
-/*   Updated: 2025/02/11 10:34:06 by jdecarro         ###   ########.fr       */
+/*   Updated: 2025/02/22 19:25:02 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ int	ft_unset(char **args, t_shell_env *shell_env)
 		j = 0;
 		while (shell_env->env[j])
 		{
-			if (ft_strncmp(shell_env->env[j], args[i], len) == 0 && shell_env->env[j][len] == '=')
+			if (ft_strncmp(shell_env->env[j], args[i], len) == 0
+				&& shell_env->env[j][len] == '=')
 			{
 				free(shell_env->env[j]);
 				while (shell_env->env[j])

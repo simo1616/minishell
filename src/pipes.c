@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 09:25:52 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/22 19:11:34 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/22 19:28:54 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,20 @@ static int	ft_lstsize_cmd(t_cmd *cmds)
 	return (size);
 }
 
-// static void debug_print_cmd(t_cmd *cmd) 
+// static void debug_print_cmd(t_cmd *cmd)
 // {
 //     int i = 0;
 //     printf("Commande:\n");
-//     while (cmd->av[i]) 
+//     while (cmd->av[i])
 // 	{
 //         printf("  av[%d] = [%s]\n", i, cmd->av[i]);
 //         i++;
 //     }
 //     t_redir *redir = cmd->redirs;
-//     while (redir) 
+//     while (redir)
 // 	{
-//         printf("  redir: type = %d, filename = [%s].\n", redir->type, redir->filename);
+//         printf("  redir: type = %d, filename = [%s].\n", redir->type,
+	//redir->filename);
 //         redir = redir->next;
 //     }
 // }
@@ -54,7 +55,7 @@ int	excec_pipes(t_cmd *cmds, t_shell_env *env)
 	int		i;
 	int		j;
 	int		ret;
-	t_redir *redir;
+	t_redir	*redir;
 
 	cur = cmds;
 	prev_fd = -1;
@@ -65,9 +66,8 @@ int	excec_pipes(t_cmd *cmds, t_shell_env *env)
 		exit(EXIT_FAILURE);
 	}
 	i = 0;
-	
 	while (cur)
-	{	
+	{
 		if (cur->next)
 		{
 			if (pipe(fd) < 0)
@@ -84,7 +84,6 @@ int	excec_pipes(t_cmd *cmds, t_shell_env *env)
 			free(pids);
 			exit(EXIT_FAILURE);
 		}
-		
 		if (pids[i] == 0)
 		{
 			if (prev_fd != -1)
@@ -98,9 +97,9 @@ int	excec_pipes(t_cmd *cmds, t_shell_env *env)
 				close(fd[0]);
 				close(fd[1]);
 			}
-			if(cur->av && cur->av[0])
+			if (cur->av && cur->av[0])
 			{
-				if(is_builtin(env, cur->av[0]))
+				if (is_builtin(env, cur->av[0]))
 				{
 					ret = exec_builtin(cur, env);
 					env->exit_status = ret;
@@ -108,14 +107,14 @@ int	excec_pipes(t_cmd *cmds, t_shell_env *env)
 				else
 				{
 					ret = excec_external(cur, env);
-					env->exit_status = ret; 
+					env->exit_status = ret;
 				}
 			}
 			redir = cur->redirs;
 			while (redir)
 			{
-				printf("\nRedirection: type=%d, file=%s\n", 
-					redir->type, redir->filename);
+				printf("\nRedirection: type=%d, file=%s\n", redir->type,
+					redir->filename);
 				redir = redir->next;
 			}
 			exit(0); // exit_status ?
@@ -130,7 +129,6 @@ int	excec_pipes(t_cmd *cmds, t_shell_env *env)
 				prev_fd = fd[0];
 			}
 		}
-		
 		cur = cur->next;
 		i++;
 	}
@@ -149,4 +147,4 @@ int	excec_pipes(t_cmd *cmds, t_shell_env *env)
 	return (env->exit_status);
 }
 
-//cmd1 | cmd2 | cmd3 | cmd4 | cmd5
+// cmd1 | cmd2 | cmd3 | cmd4 | cmd5
