@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 10:20:01 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/01/24 10:56:14 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/23 09:40:50 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@
 
 #include "libft.h"
 
-int		ft_isspace(int c)
+int	ft_isspace(int c)
 {
-	if (c == ' ' || c == '\n' || c == '\t' || c == '\v' || c == '\f' ||
-		c == '\r')
+	if (c == ' ' || c == '\n' || c == '\t' || c == '\v' || c == '\f'
+		|| c == '\r')
 		return (1);
 	return (0);
 }

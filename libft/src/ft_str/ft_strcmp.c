@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 22:24:59 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/16 13:54:20 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/23 09:43:51 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,4 +23,3 @@ int	ft_strcmp(const char *s1, const char *s2)
 	}
 	return ((unsigned char)*s1 - (unsigned char)*s2);
 }
-

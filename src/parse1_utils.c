@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:27:04 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/22 19:27:06 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/23 10:26:19 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,65 +15,6 @@
 int	is_valid_var_char(char c)
 {
 	return (ft_isalnum(c) || c == '_');
-}
-
-size_t	calculate_length(const char *token, t_shell_env *env, int *ctx)
-{
-	int		i;
-	size_t	len;
-	int		var_start;
-	int		var_len;
-	char	*var_name;
-	char	*var_value;
-	char	*exit_str;
-
-	if (!ctx)
-		return ((size_t)(-1));
-	i = 0;
-	len = 0;
-	var_start = 0;
-	var_len = 0;
-	var_name = NULL;
-	var_value = NULL;
-	exit_str = NULL;
-	while (token[i])
-	{
-		if (token[i] == '\'' || token[i] == '"')
-			i++;
-		else if (token[i] == '$' && ctx[i] != 1)
-		{
-			i++;
-			if (!token[i])
-				break ;
-			else if (token[i] == '?')
-			{
-				exit_str = ft_itoa(env->exit_status);
-				len += ft_strlen(exit_str);
-				free(exit_str);
-				i++;
-			}
-			else if (token[i] && is_valid_var_char(token[i]))
-			{
-				var_start = i;
-				while (token[i] && is_valid_var_char(token[i]))
-					i++;
-				var_len = i - var_start;
-				var_name = ft_substr(token, var_start, var_len);
-				var_value = env_get(env, var_name);
-				if (var_value)
-					len += ft_strlen(var_value);
-				free(var_name);
-			}
-			else
-				len++;
-		}
-		else
-		{
-			len++;
-			i++;
-		}
-	}
-	return (len);
 }
 
 char	*remove_quotes(char *token)
