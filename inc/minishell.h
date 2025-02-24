@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 12:05:11 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/23 10:26:27 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/24 18:38:36 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,37 @@ typedef struct s_data
 	size_t					cpos;
 }							t_data;
 
+typedef struct s_tokenizer
+{
+	t_data		*data;
+	t_shell_env	*env;
+	char		*buffer;
+	int			*token_ctx;
+	int			pos;
+	int			len;
+	int			quote;
+	int			total;
+}	t_tokenizer;
+
+typedef struct s_vars
+{
+	t_shell_env				*env;
+	t_data					*data;
+	char					*token;
+	char					*new_str;
+	int						i;
+	int						j;
+}	t_vars;
+
+typedef struct s_calc
+{
+	t_shell_env				*env;
+	size_t					len;
+	char					*token;
+	int						*ctx;
+	int						i;
+}	t_calc;
+
 // copie env
 t_shell_env					*create_shell_env(char **envp);
 void						destroy_shell_env(t_shell_env *shell_env);
@@ -103,8 +134,7 @@ void						*get_quotes_context(t_data *data);
 void						execute_commands(t_cmd *cmds,
 								t_shell_env *shell_env);
 int							count_tokens(char *str);
-char						*get_next_token(char **str, t_shell_env *env,
-								t_data *data);
+char						*get_next_token(t_shell_env *env, t_data *data);
 char						*remplacer_var(char *token, t_shell_env *env,
 								t_data *data);
 char						*remove_quotes(char *token);

@@ -1,42 +1,22 @@
 #include "minishell.h"
 
-char	*get_next_token(char **str, t_shell_env *env, t_data *data)
+static void	parse_token(t_tokenizer *tok)
 {
-	char	*buffer;
-	int		pos;
-	int		len;
-	int		quote;
-	int		total;
-	int		*old_ctx;
-	size_t	old_cpos;
-	int		*token_ctx;
-	char	*token;
+		char	*buffer;
+		int		pos;
+		int		len;
+		int		quote;
+		int		total;
+		int		*old_ctx;
+		size_t	old_cpos;
+		int		*token_ctx;
+		int 	**dataline;
 
-	pos = 0;
-	while ((*str)[pos] && ft_isspace((*str)[pos]))
-		pos++;
-	*str += pos;
-	pos = 0;
-	len = 0;
-	quote = 0;
-	total = ft_strlen(*str);
-	if (!total)
-		return (NULL);
-	buffer = malloc(sizeof(char) * (total + 1));
-	token_ctx = malloc(sizeof(int) * (total + 1));
-	if (!buffer || !token_ctx)
+	while (tok->pos < tok->total && tok->data->line[tok->pos])
 	{
-		if (buffer)
-			free(buffer);
-		if (token_ctx)
-			free(token_ctx);
-		return (NULL);
-	}
-	while (pos < total && (*str)[pos])
-	{
-		if ((*str)[pos] == '\\')
+		if (tok->data->line[tok->pos] == '\\')
 		{
-			if ((*str)[pos + 1])
+			if (tok->data->line[tok->pos + 1])
 			{
 				pos++;
 				buffer[len] = (*str)[pos];
@@ -52,9 +32,9 @@ char	*get_next_token(char **str, t_shell_env *env, t_data *data)
 				pos++;
 			}
 		}
-		else if ((*str)[pos] == '\'' || (*str)[pos] == '"')
+		else if (tok->data->line[tok->pos] == '\'' || tok->data->line[tok->pos] == '"')
 		{
-			if (!quote)
+			if (!tok->quote)
 			{
 				if ((*str)[pos] == '\'')
 					quote = 1;
@@ -64,7 +44,7 @@ char	*get_next_token(char **str, t_shell_env *env, t_data *data)
 			else if ((quote == 1 && (*str)[pos] == '\'') || (quote == 2
 					&& (*str)[pos] == '"'))
 			{
-				quote = 0;
+				tok->quote = 0;
 			}
 			else
 			{
@@ -72,7 +52,7 @@ char	*get_next_token(char **str, t_shell_env *env, t_data *data)
 				token_ctx[len] = quote;
 				len++;
 			}
-			pos++;
+			tok->pos++;
 		}
 		else
 		{

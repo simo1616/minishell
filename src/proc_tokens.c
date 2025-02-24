@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 15:39:21 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/22 17:05:25 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/24 16:29:59 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	handle_redir(char *token, t_data *data, t_shell_env *env, t_cmd **cur_cmd)
 	char			*filename;
 
 	type = get_redir_type(token);
-	filename = get_next_token(&data->line, env, data);
+	filename = get_next_token(env, data);
 	if (!filename)
 	{
 		ft_putendl_fd("Minishell: syntax error: unexpected newline", 2);
