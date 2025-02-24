@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
+/*   By: jdecarro <jdecarro@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 12:05:11 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/23 10:26:27 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/24 17:19:42 by jdecarro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <fcntl.h>
 
 extern int					g_received_signal;
 
@@ -156,5 +157,7 @@ int							ft_cd(char **args, t_shell_env *shell_env);
 int							excec_external(t_cmd *cmd, t_shell_env *shell_env);
 char						*resolve_path(char *cmd, char **env);
 char						*search_in_path(char *cmd, char *path_env);
+
+void	handle_redirections(t_cmd *cmd);
 
 #endif
