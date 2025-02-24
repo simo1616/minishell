@@ -31,6 +31,7 @@ SRCS 	= main.c \
 		parse_helpers.c \
 		proc_tokens.c \
 		get_next_token.c \
+		get_n_t_helper.c \
 		parse_cmd.c \
 		parse_repl_var.c \
 		redir.c \

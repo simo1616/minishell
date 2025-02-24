@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 12:05:11 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/24 18:38:36 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/24 20:05:40 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,14 +84,14 @@ typedef struct s_data
 
 typedef struct s_tokenizer
 {
-	t_data		*data;
-	t_shell_env	*env;
-	char		*buffer;
-	int			*token_ctx;
-	int			pos;
-	int			len;
-	int			quote;
-	int			total;
+	t_data					*data;
+	t_shell_env				*env;
+	char					*buffer;
+	int						*token_ctx;
+	int						pos;
+	int						len;
+	int						quote;
+	int						total;
 }	t_tokenizer;
 
 typedef struct s_vars
@@ -135,6 +135,9 @@ void						execute_commands(t_cmd *cmds,
 								t_shell_env *shell_env);
 int							count_tokens(char *str);
 char						*get_next_token(t_shell_env *env, t_data *data);
+char						*expand_token(t_tokenizer *tok);
+void						fill_buffer_and_ctx(t_tokenizer *tok);
+int							alloc_buffer(t_tokenizer *tok);
 char						*remplacer_var(char *token, t_shell_env *env,
 								t_data *data);
 char						*remove_quotes(char *token);

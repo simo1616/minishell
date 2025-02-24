@@ -1,87 +1,98 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_token.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/24 20:04:37 by mbendidi          #+#    #+#             */
+/*   Updated: 2025/02/24 20:06:08 by mbendidi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-static void	parse_token(t_tokenizer *tok)
+static void	handle_backslash(t_tokenizer *tok)
 {
-		char	*buffer;
-		int		pos;
-		int		len;
-		int		quote;
-		int		total;
-		int		*old_ctx;
-		size_t	old_cpos;
-		int		*token_ctx;
-		int 	**dataline;
-
-	while (tok->pos < tok->total && tok->data->line[tok->pos])
+	if (tok->data->line[tok->pos + 1])
 	{
-		if (tok->data->line[tok->pos] == '\\')
-		{
-			if (tok->data->line[tok->pos + 1])
-			{
-				pos++;
-				buffer[len] = (*str)[pos];
-				token_ctx[len] = quote;
-				len++;
-				pos++;
-			}
-			else
-			{
-				buffer[len] = (*str)[pos];
-				token_ctx[len] = quote;
-				len++;
-				pos++;
-			}
-		}
-		else if (tok->data->line[tok->pos] == '\'' || tok->data->line[tok->pos] == '"')
-		{
-			if (!tok->quote)
-			{
-				if ((*str)[pos] == '\'')
-					quote = 1;
-				else if ((*str)[pos] == '\"')
-					quote = 2;
-			}
-			else if ((quote == 1 && (*str)[pos] == '\'') || (quote == 2
-					&& (*str)[pos] == '"'))
-			{
-				tok->quote = 0;
-			}
-			else
-			{
-				buffer[len] = (*str)[pos];
-				token_ctx[len] = quote;
-				len++;
-			}
-			tok->pos++;
-		}
-		else
-		{
-			if (!quote && ft_isspace((*str)[pos]))
-				break ;
-			buffer[len] = (*str)[pos];
-			token_ctx[len] = quote;
-			len++;
-			pos++;
-		}
-	}
-	buffer[len] = '\0';
-	*str += pos;
-	if (ft_strchr(buffer, '$'))
-	{
-		old_ctx = data->ctx;
-		old_cpos = data->cpos;
-		data->ctx = token_ctx;
-		data->cpos = 0;
-		token = remplacer_var(buffer, env, data);
-		free(buffer);
-		free(token_ctx);
-		data->ctx = old_ctx;
-		data->cpos = old_cpos;
+		tok->pos++;
+		fill_buffer_and_ctx(tok);
+		tok->pos++;
 	}
 	else
 	{
-		token = buffer;
-		free(token_ctx);
+		fill_buffer_and_ctx(tok);
+		tok->pos++;
 	}
+}
+
+static void	handle_quote_char(t_tokenizer *tok)
+{
+	char	c;
+
+	c = tok->data->line[tok->pos];
+	if (!tok->quote)
+	{
+		if (c == '\'')
+			tok->quote = 1;
+		else if (c == '\"')
+			tok->quote = 2;
+	}
+	else if ((tok->quote == 1 && c == '\'') || (tok->quote == 2 && c == '"'))
+		tok->quote = 0;
+	else
+		fill_buffer_and_ctx(tok);
+	tok->pos++;
+}
+
+static void	parse_token(t_tokenizer *tok)
+{
+	while (tok->pos < tok->total && tok->data->line[tok->pos])
+	{
+		if (tok->data->line[tok->pos] == '\\')
+			handle_backslash(tok);
+		else if (tok->data->line[tok->pos] == '\'' || tok->data->line[tok->pos] == '"')
+		{
+			handle_quote_char(tok);
+		}
+		else
+		{
+			if (!tok->quote && ft_isspace(tok->data->line[tok->pos]))
+				break ;
+			fill_buffer_and_ctx(tok);
+			tok->pos++;
+		}
+	}
+	tok->buffer[tok->len] = '\0';
+}
+
+static void	skip_spaces(t_tokenizer *tok)
+{
+	while (tok->data->line[tok->pos] && ft_isspace(tok->data->line[tok->pos]))
+		tok->pos++;
+}
+
+char	*get_next_token(t_shell_env *env, t_data *data)
+{
+	t_tokenizer	tok;
+	char	*token;
+
+	tok.data = data;
+	tok.env = env;
+	tok.pos = 0;
+	tok.len = 0;
+	tok.quote = 0;
+	skip_spaces(&tok);
+	data->line += tok.pos;
+	tok.pos = 0;
+	tok.total = ft_strlen(data->line);
+	if (!tok.total)
+		return (NULL);
+	if (!alloc_buffer(&tok))
+		return (NULL);
+	parse_token(&tok);
+	data->line += tok.pos;
+	token = expand_token(&tok);
 	return (token);
 }
