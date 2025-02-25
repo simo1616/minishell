@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 09:52:34 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/23 10:26:24 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/25 18:57:27 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,10 @@ size_t	calculate_length(char *token, t_shell_env *env, int *ctx)
 	while (token[i])
 	{
 		if (token[i] == '\'' || token[i] == '"')
+		{
+			len++;
 			i++;
+		}
 		else if (token[i] == '$' && ctx[i] != 1)
 		{
 			i++;
