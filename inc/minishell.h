@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 12:05:11 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/24 20:05:40 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/25 11:13:26 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <fcntl.h>
 
 extern int					g_received_signal;
 
@@ -152,6 +153,7 @@ int							is_redir(char *token);
 t_redir_type				get_redir_type(char *token);
 void						add_redir_to_cmd(t_cmd *cmd, t_redir_type type,
 								char *filename);
+void						handle_redirections(t_cmd *cmd);
 
 // pipes
 int							excec_pipes(t_cmd *cmds, t_shell_env *env);

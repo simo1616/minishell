@@ -35,6 +35,7 @@ SRCS 	= main.c \
 		parse_cmd.c \
 		parse_repl_var.c \
 		redir.c \
+		ft_redirects.c \
 		pipes.c \
 		free.c \
 		ft_echo.c \
