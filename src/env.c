@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 12:59:17 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/22 13:00:09 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/25 20:11:28 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ t_shell_env	*create_shell_env(char **envp)
 	}
 	shell_env->exit_status = 0;
 	shell_env->running = 1;
+	shell_env->builtins = NULL;
 	return (shell_env);
 }
 
