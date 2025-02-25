@@ -57,3 +57,4 @@ deps/
 # 🚀 Ignore les progress de la libft
 .cache_exists
 .progress_count
+.vscode

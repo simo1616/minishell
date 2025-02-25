@@ -20,7 +20,7 @@ void	handle_heredoc(char *delimiter)
 	if (pipe(pipe_fd) == -1)
 	{
 		perror("pipe");
-		return;
+		return ;
 	}
 	while (1)
 	{
@@ -35,7 +35,8 @@ void	handle_heredoc(char *delimiter)
 		free(line);
 	}
 	close(pipe_fd[1]);
-	dup2(pipe_fd[0], STDIN_FILENO);
+	if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
+		perror("dup2 heredoc");
 	close(pipe_fd[0]);
 }
 
@@ -50,19 +51,23 @@ void	handle_redirections(t_cmd *cmd)
 	while (redir)
 	{
 		fd = -1;
-		if (redir->type == REDIR_IN)
+		if (redir->type == REDIR_HEREDOC)
+		{
+			handle_heredoc(redir->filename);
+			fd = STDIN_FILENO;
+		}
+		else if (redir->type == REDIR_IN)
 			fd = open(redir->filename, O_RDONLY);
 		else if (redir->type == REDIR_OUT)
 			fd = open(redir->filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 		else if (redir->type == REDIR_APPEND)
 			fd = open(redir->filename, O_CREAT | O_WRONLY | O_APPEND, 0644);
-		else if (redir->type == REDIR_HEREDOC)
+		if (fd == -1 && redir->type != REDIR_HEREDOC)
 		{
-			handle_heredoc(redir->filename);
-			redir = redir->next;
-			continue;
+			perror("open");
+			return ;
 		}
-		if (fd != -1)
+		if (fd != 1 && redir->type != REDIR_HEREDOC)
 		{
 			if (redir->type == REDIR_IN || redir->type == REDIR_HEREDOC)
 				dup2(fd, STDIN_FILENO);
@@ -70,8 +75,6 @@ void	handle_redirections(t_cmd *cmd)
 				dup2(fd, STDOUT_FILENO);
 			close(fd);
 		}
-		else
-			perror("open");
 		redir = redir->next;
 	}
 }
