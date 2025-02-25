@@ -52,7 +52,8 @@ static void	parse_token(t_tokenizer *tok)
 	{
 		if (tok->data->line[tok->pos] == '\\')
 			handle_backslash(tok);
-		else if (tok->data->line[tok->pos] == '\'' || tok->data->line[tok->pos] == '"')
+		else if (tok->data->line[tok->pos] == '\''
+			|| tok->data->line[tok->pos] == '"')
 		{
 			handle_quote_char(tok);
 		}
@@ -76,7 +77,7 @@ static void	skip_spaces(t_tokenizer *tok)
 char	*get_next_token(t_shell_env *env, t_data *data)
 {
 	t_tokenizer	tok;
-	char	*token;
+	char		*token;
 
 	tok.data = data;
 	tok.env = env;
