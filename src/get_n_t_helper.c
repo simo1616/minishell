@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 19:30:19 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/24 20:10:08 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/25 20:39:59 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,10 @@ char	*expand_token(t_tokenizer *tok)
 	size_t	old_cpos;
 
 	if (!ft_strchr(tok->buffer, '$'))
+	{
+		free(tok->token_ctx);
 		return (tok->buffer);
+	}
 	old_ctx = tok->data->ctx;
 	old_cpos = tok->data->cpos;
 	tok->data->ctx = tok->token_ctx;

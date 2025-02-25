@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 17:36:07 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/22 17:57:18 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/25 21:01:03 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int	excec_external(t_cmd *cmd, t_shell_env *shell_env)
 	if (pid == 0)
 		exec_child_process(path, cmd, shell_env);
 	waitpid(pid, &status, 0);
+	free(path);
 	update_exit_status(shell_env, status);
 	return (shell_env->exit_status);
 }

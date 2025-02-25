@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 12:59:17 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/25 20:11:28 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/25 20:30:33 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,5 +72,7 @@ void	destroy_shell_env(t_shell_env *shell_env)
 			free(shell_env->env[i++]);
 		free(shell_env->env);
 	}
+	if (shell_env->builtins)
+    	free_builtins(shell_env->builtins);
 	free(shell_env);
 }

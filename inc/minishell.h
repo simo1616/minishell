@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 12:05:11 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/25 11:13:26 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/25 20:24:23 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,6 +162,7 @@ int							excec_pipes(t_cmd *cmds, t_shell_env *env);
 void						free_cmds(t_cmd *cmds);
 void						free_av(char **argv);
 void						free_redirs(t_redir *redirs);
+void						free_builtins(t_builtin *builtins);
 
 // fonction env
 int							find_env_index(t_shell_env *shell_env,

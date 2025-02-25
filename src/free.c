@@ -6,11 +6,26 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 12:53:09 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/22 12:58:17 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/25 20:24:47 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	free_builtins(t_builtin *builtins)
+{
+	int i;
+	
+	i = 0;
+	if (!builtins)
+		return;
+	while (builtins[i].name)
+	{
+		free(builtins[i].name);
+		i++;
+	}
+	free(builtins);
+}
 
 /*
 	Libère une liste chaînée de redirections
