@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 09:25:52 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/22 19:28:54 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/25 21:30:16 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,8 @@ int	excec_pipes(t_cmd *cmds, t_shell_env *env)
 		waitpid(pids[j], &status, 0);
 		j++;
 	}
-	close(fd[0]);
+	if (cur != NULL)
+		close(fd[0]);
 	if (WIFEXITED(status))
 		env->exit_status = WTERMSIG(status);
 	else if (WIFSIGNALED(status))

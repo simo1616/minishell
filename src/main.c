@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 12:15:51 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/22 12:48:59 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/25 21:30:13 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,10 @@ static void	process_iteration(t_shell_env *shell_env)
 	if (cmds == NULL)
 		shell_env->exit_status = 258;
 	else if (cmds->next)
+	{
 		excec_pipes(cmds, shell_env);
+		free_cmds(cmds);
+	}
 	else
 	{
 		execute_commands(cmds, shell_env);

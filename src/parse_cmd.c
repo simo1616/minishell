@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 15:50:28 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/25 21:14:53 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/25 21:30:23 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 int	init_cmd_ifneed(t_cmd **cmd, t_cmd **cur_cmd)
 {
-	if (!(*cmd))
+	if (!*cmd)
 	{
 		*cmd = malloc(sizeof(t_cmd));
-		if (!(*cmd))
+		if (!*cmd)
 			return (0);
-		(*cmd)->av = NULL;
-		(*cmd)->redirs = NULL;
-		(*cmd)->next = NULL;
 		*cur_cmd = *cmd;
+		(*cur_cmd)->next = NULL;
+		(*cur_cmd)->av = NULL;
+		(*cur_cmd)->redirs = NULL;
 	}
 	return (1);
 }
