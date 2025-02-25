@@ -11,6 +11,7 @@ char	*remplacer_var(char *token, t_shell_env *env, t_data *data)
 	int		i;
 	int		j;
 	char	*exit_str;
+	size_t	var_v_len;
 
 	if (ft_strcmp(token, "$") == 0)
 	{
@@ -25,6 +26,7 @@ char	*remplacer_var(char *token, t_shell_env *env, t_data *data)
 	j = 0;
 	var_len = 0;
 	var_start = 0;
+	var_v_len = 0;
 	exit_str = NULL;
 	if (!data->ctx)
 		return (NULL);
@@ -69,8 +71,17 @@ char	*remplacer_var(char *token, t_shell_env *env, t_data *data)
 				var_value = env_get(env, var_name);
 				if (var_value)
 				{
-					ft_memcpy(new + j, var_value, ft_strlen(var_value)); // ici
-					j += ft_strlen(var_value);
+					var_v_len = ft_strlen(var_value);
+					if (j + var_v_len > len_token)
+					{
+						ft_putstr_fd("Erreur: espace insuffisant dans le buffer pour copier \"", 2);
+						ft_putstr_fd(var_value, 2);
+						ft_putendl_fd("\"", 2);
+						free(var_name);
+						return (NULL);
+					}
+					ft_memcpy(new + j, var_value, var_v_len);
+					j += var_v_len;
 				}
 				free(var_name);
 			}
