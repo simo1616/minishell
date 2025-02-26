@@ -58,6 +58,13 @@ char	*remplacer_var(char *token, t_shell_env *env, t_data *data)
 				j += ft_strlen(exit_str);
 				free(exit_str);
 			}
+			else if (!is_valid_var_char(token[i]))
+			{
+				new[j++] = '$';
+				new[j++] = token[i];
+				i++;
+				data->cpos++;
+			}
 			else
 			{
 				var_start = i;

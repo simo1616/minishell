@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 09:52:34 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/25 18:57:27 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/26 18:40:55 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static size_t	process_variable(char *token, t_shell_env *env, int *i)
 	}
 	else
 	{
-		len++;
+		len = 2;
 		(*i)++;
 	}
 	return (len);
