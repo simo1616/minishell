@@ -6,7 +6,7 @@
 /*   By: jdecarro <jdecarro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 17:36:07 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/27 13:53:43 by jdecarro         ###   ########.fr       */
+/*   Updated: 2025/02/27 14:20:30 by jdecarro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,8 @@ static void	exec_child_process(char *path, t_cmd *cmd, t_shell_env *shell_env)
 
 static int	handle_no_path(char *cmd_name)
 {
-	ft_putstr_fd("minishell: ", 2);
-	write(2, cmd_name, ft_strlen(cmd_name));
-	ft_putstr_fd(": No such file or directory\n", 2);
+	ft_putstr_fd(cmd_name, 2);
+	ft_putstr_fd(": command not found\n", 2);
 	return (EX_CMD_NT_FD);
 }
 

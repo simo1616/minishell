@@ -66,7 +66,7 @@ int	handle_redirections(t_cmd *cmd)
 		{
 			ft_putstr_fd("minishell: ", 2);
 			ft_putstr_fd(redir->filename, 2);
-			ft_putstr_fd(": No such file or diretory\n", 2);
+			ft_putstr_fd(": No such file or directory\n", 2);
 			exit(EXIT_FAILURE);
 		}
 		if (fd != -1)
