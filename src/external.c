@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   external.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jdecarro <jdecarro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 17:36:07 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/27 14:20:30 by jdecarro         ###   ########.fr       */
+/*   Updated: 2025/02/27 18:36:11 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 static void	exec_child_process(char *path, t_cmd *cmd, t_shell_env *shell_env)
 {
+	signal(SIGQUIT, SIG_DFL);
 	execve(path, cmd->av, shell_env->env);
 	perror("minishell: error Child process\n");
 	free(path);

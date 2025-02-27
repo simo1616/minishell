@@ -3,6 +3,9 @@ NAME = minishell
 LIBFT = libft/libft.a
 LDFLAGS = -lreadline
 
+# Debugger
+DEBUGGER = valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --trace-children=yes --track-fds=yes --verbose --suppressions=ignore_readline_leaks.supp --log-file=valgrind-out.txt
+
 # Compilateur et flags
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -g
@@ -88,5 +91,8 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
+
+debug: all
+	$(DEBUGGER) ./$(NAME)
 
 .PHONY: all clean fclean re header
