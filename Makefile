@@ -17,10 +17,10 @@ RESET   = \033[0m
 SRC_DIR = src/
 SRCS 	= main.c \
 		init_builtins.c \
-		excec_built.c \
+		exec_built.c \
 		external.c \
 		external_helpers.c \
-		exc_cmd.c \
+		exec_cmd.c \
 		env.c \
 		env_utils.c \
 		env_utils2.c \

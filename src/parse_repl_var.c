@@ -81,7 +81,7 @@ char	*remplacer_var(char *token, t_shell_env *env, t_data *data)
 					var_v_len = ft_strlen(var_value);
 					if (j + var_v_len > len_token)
 					{
-						ft_putstr_fd("Erreur: espace insuffisant dans le buffer pour copier \"", 2);
+						ft_putstr_fd("Error: Not enough space in the buffer to copy\n", 2);
 						ft_putstr_fd(var_value, 2);
 						ft_putendl_fd("\"", 2);
 						free(var_name);

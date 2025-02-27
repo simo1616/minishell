@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
+/*   By: jdecarro <jdecarro@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 09:25:52 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/25 21:30:16 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/26 17:22:28 by jdecarro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,25 +27,7 @@ static int	ft_lstsize_cmd(t_cmd *cmds)
 	return (size);
 }
 
-// static void debug_print_cmd(t_cmd *cmd)
-// {
-//     int i = 0;
-//     printf("Commande:\n");
-//     while (cmd->av[i])
-// 	{
-//         printf("  av[%d] = [%s]\n", i, cmd->av[i]);
-//         i++;
-//     }
-//     t_redir *redir = cmd->redirs;
-//     while (redir)
-// 	{
-//         printf("  redir: type = %d, filename = [%s].\n", redir->type,
-	//redir->filename);
-//         redir = redir->next;
-//     }
-// }
-
-int	excec_pipes(t_cmd *cmds, t_shell_env *env)
+int	exec_pipes(t_cmd *cmds, t_shell_env *env)
 {
 	t_cmd	*cur;
 	pid_t	*pids;
@@ -53,99 +35,74 @@ int	excec_pipes(t_cmd *cmds, t_shell_env *env)
 	int		fd[2];
 	int		status;
 	int		i;
-	int		j;
-	int		ret;
-	t_redir	*redir;
+	int		cmd_count;
 
-	cur = cmds;
 	prev_fd = -1;
-	pids = malloc(sizeof(pid_t) * ft_lstsize_cmd(cur));
+	cmd_count = ft_lstsize_cmd(cmds);
+	pids = malloc(sizeof(pid_t) * cmd_count);
 	if (!pids)
 	{
-		perror("Erreur d'allocation des PIDs");
+		perror("Error PID allocation");
 		exit(EXIT_FAILURE);
 	}
+
 	i = 0;
+	cur = cmds;
 	while (cur)
 	{
-		if (cur->next)
+		if (cur->next && pipe(fd) < 0)
 		{
-			if (pipe(fd) < 0)
-			{
-				perror("Erreur lors de la création du pipe");
-				free(pids);
-				exit(EXIT_FAILURE);
-			}
-		}
-		pids[i] = fork();
-		if (pids[i] < 0)
-		{
-			perror("Erreur lors du fork");
+			perror("Error pipe");
 			free(pids);
 			exit(EXIT_FAILURE);
 		}
+
+		pids[i] = fork();
+		if (pids[i] < 0)
+		{
+			perror("Error fork");
+			free(pids);
+			exit(EXIT_FAILURE);
+		}
+
 		if (pids[i] == 0)
 		{
+			handle_redirections(cur);
 			if (prev_fd != -1)
 			{
-				dup2(prev_fd, STDIN_FILENO);
+				dup2(prev_fd, STDIN_FILENO); //Lire depuis le pipe précédent
 				close(prev_fd);
 			}
 			if (cur->next)
 			{
-				dup2(fd[1], STDOUT_FILENO);
-				close(fd[0]);
+				dup2(fd[1], STDOUT_FILENO); //Écrire dans le pipe suivant
 				close(fd[1]);
+				close(fd[0]);
 			}
-			if (cur->av && cur->av[0])
-			{
-				if (is_builtin(env, cur->av[0]))
-				{
-					ret = exec_builtin(cur, env);
-					env->exit_status = ret;
-				}
-				else
-				{
-					ret = excec_external(cur, env);
-					env->exit_status = ret;
-				}
-			}
-			redir = cur->redirs;
-			while (redir)
-			{
-				printf("\nRedirection: type=%d, file=%s\n", redir->type,
-					redir->filename);
-				redir = redir->next;
-			}
-			exit(0); // exit_status ?
+			if (is_builtin(env, cur->av[0]))
+				exit(exec_builtin(cur, env));
+			else
+				exit(exec_external(cur, env));
 		}
 		else
 		{
 			if (prev_fd != -1)
-				close(prev_fd);
+				close(prev_fd); //Fermer le fd prev
 			if (cur->next)
 			{
-				close(fd[1]);
-				prev_fd = fd[0];
+				close(fd[1]); // Fermer le writedu pipe
+				prev_fd = fd[0]; // Garder le read pour la prochaine commande
 			}
 		}
 		cur = cur->next;
 		i++;
 	}
-	j = 0;
-	while (j < i)
-	{
-		waitpid(pids[j], &status, 0);
-		j++;
-	}
-	if (cur != NULL)
-		close(fd[0]);
+	while (i-- > 0)
+		waitpid(pids[i], &status, 0);
 	if (WIFEXITED(status))
-		env->exit_status = WTERMSIG(status);
+		env->exit_status = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
 		env->exit_status = WTERMSIG(status);
 	free(pids);
 	return (env->exit_status);
 }
-
-// cmd1 | cmd2 | cmd3 | cmd4 | cmd5

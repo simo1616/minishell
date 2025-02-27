@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	handle_heredoc(char *delimiter)
+void	handle_heredoc(char *delimiter, int *heredoc_fd)
 {
 	int		pipe_fd[2];
 	char	*line;
@@ -30,31 +30,31 @@ void	handle_heredoc(char *delimiter)
 			free(line);
 			break ;
 		}
-		write (pipe_fd[1], line, ft_strlen(line));
-		write (pipe_fd[1], "\n", 1);
+		write(pipe_fd[1], line, ft_strlen(line));
+		write(pipe_fd[1], "\n", 1);
 		free(line);
 	}
-	close(pipe_fd[1]);
-	if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
-		perror("dup2 heredoc");
-	close(pipe_fd[0]);
+	close(pipe_fd[1]); //Fermeture du côté écriture du pipe
+	*heredoc_fd = pipe_fd[0]; // tocke la lecture
 }
 
-void	handle_redirections(t_cmd *cmd)
+int	handle_redirections(t_cmd *cmd)
 {
 	int		fd;
 	t_redir	*redir;
+	int		heredoc_fd;
 
+	heredoc_fd = -1;
 	if (!cmd || !cmd->redirs)
-		return ;
+		return (0);
 	redir = cmd->redirs;
 	while (redir)
 	{
 		fd = -1;
 		if (redir->type == REDIR_HEREDOC)
 		{
-			handle_heredoc(redir->filename);
-			fd = STDIN_FILENO;
+			handle_heredoc(redir->filename, &heredoc_fd);
+			fd = heredoc_fd;
 		}
 		else if (redir->type == REDIR_IN)
 			fd = open(redir->filename, O_RDONLY);
@@ -63,11 +63,8 @@ void	handle_redirections(t_cmd *cmd)
 		else if (redir->type == REDIR_APPEND)
 			fd = open(redir->filename, O_CREAT | O_WRONLY | O_APPEND, 0644);
 		if (fd == -1 && redir->type != REDIR_HEREDOC)
-		{
-			perror("open");
-			return ;
-		}
-		if (fd != 1 && redir->type != REDIR_HEREDOC)
+			return (perror("open"), -1);
+		if (fd != -1)
 		{
 			if (redir->type == REDIR_IN || redir->type == REDIR_HEREDOC)
 				dup2(fd, STDIN_FILENO);
@@ -77,4 +74,7 @@ void	handle_redirections(t_cmd *cmd)
 		}
 		redir = redir->next;
 	}
+	return (0);
 }
+
+

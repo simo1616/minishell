@@ -153,10 +153,10 @@ int							is_redir(char *token);
 t_redir_type				get_redir_type(char *token);
 void						add_redir_to_cmd(t_cmd *cmd, t_redir_type type,
 								char *filename);
-void						handle_redirections(t_cmd *cmd);
+int						handle_redirections(t_cmd *cmd);
 
 // pipes
-int							excec_pipes(t_cmd *cmds, t_shell_env *env);
+int							exec_pipes(t_cmd *cmds, t_shell_env *env);
 
 // free
 void						free_cmds(t_cmd *cmds);
@@ -189,7 +189,7 @@ int							is_builtin(t_shell_env *env, char *cmd_name);
 int							ft_cd(char **args, t_shell_env *shell_env);
 
 // external ls-cat-...etc
-int							excec_external(t_cmd *cmd, t_shell_env *shell_env);
+int							exec_external(t_cmd *cmd, t_shell_env *shell_env);
 char						*resolve_path(char *cmd, char **env);
 char						*search_in_path(char *cmd, char *path_env);
 

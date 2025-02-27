@@ -42,7 +42,7 @@ static void	process_iteration(t_shell_env *shell_env)
 		shell_env->exit_status = 258;
 	else if (cmds->next)
 	{
-		excec_pipes(cmds, shell_env);
+		exec_pipes(cmds, shell_env);
 		free_cmds(cmds);
 	}
 	else
@@ -74,7 +74,7 @@ int	main(int ac, char **av, char **envp)
 	{
 		ft_putstr_fd("Minishell: ", 2);
 		write(2, av[1], ft_strlen(av[1]));
-		ft_putstr_fd(": Aucun fichier ou dossier de ce nom\n", 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
 		return (1);
 	}
 }

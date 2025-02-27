@@ -24,7 +24,7 @@ static int	handle_no_path(char *cmd_name)
 {
 	ft_putstr_fd("Minishell: ", 2);
 	write(2, cmd_name, ft_strlen(cmd_name));
-	ft_putstr_fd(": Aucun fichier ou dossier de ce nom\n", 2);
+	ft_putstr_fd(": No such file or directory\n", 2);
 	return (EX_CMD_NT_FD);
 }
 
@@ -44,7 +44,7 @@ static void	update_exit_status(t_shell_env *shell_env, int status)
 		shell_env->exit_status = EXIT_SIG_OFFSET + WTERMSIG(status);
 }
 
-int	excec_external(t_cmd *cmd, t_shell_env *shell_env)
+int	exec_external(t_cmd *cmd, t_shell_env *shell_env)
 {
 	pid_t	pid;
 	char	*path;
