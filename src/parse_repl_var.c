@@ -1,3 +1,5 @@
+
+
 #include "minishell.h"
 
 char	*remplacer_var(char *token, t_shell_env *env, t_data *data)

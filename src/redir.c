@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
+/*   By: jdecarro <jdecarro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:32:41 by jdecarro          #+#    #+#             */
-/*   Updated: 2025/02/22 17:11:40 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/27 12:49:09 by jdecarro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	is_redir(char *token)
 		|| ft_strcmp(token, "<<") == 0 || ft_strcmp(token, ">>") == 0);
 }
 
-t_redir_type	get_redir_type(char *token) // changer t_redir_type par int
+t_redir_type	get_redir_type(char *token)
 {
 	if (ft_strcmp(token, "<") == 0)
 		return (REDIR_IN);

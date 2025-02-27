@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jdecarro <jdecarro@student.42lausanne.c    +#+  +:+       +#+        */
+/*   By: jdecarro <jdecarro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 09:25:52 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/26 17:22:28 by jdecarro         ###   ########.fr       */
+/*   Updated: 2025/02/27 12:50:15 by jdecarro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ int	exec_pipes(t_cmd *cmds, t_shell_env *env)
 		perror("Error PID allocation");
 		exit(EXIT_FAILURE);
 	}
-
 	i = 0;
 	cur = cmds;
 	while (cur)
@@ -56,7 +55,6 @@ int	exec_pipes(t_cmd *cmds, t_shell_env *env)
 			free(pids);
 			exit(EXIT_FAILURE);
 		}
-
 		pids[i] = fork();
 		if (pids[i] < 0)
 		{
@@ -64,7 +62,6 @@ int	exec_pipes(t_cmd *cmds, t_shell_env *env)
 			free(pids);
 			exit(EXIT_FAILURE);
 		}
-
 		if (pids[i] == 0)
 		{
 			handle_redirections(cur);

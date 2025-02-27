@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exc_cmd.c                                          :+:      :+:    :+:   */
+/*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jdecarro <jdecarro@student.42lausanne.c    +#+  +:+       +#+        */
+/*   By: jdecarro <jdecarro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:32:41 by jdecarro          #+#    #+#             */
-/*   Updated: 2025/02/26 17:18:39 by jdecarro         ###   ########.fr       */
+/*   Updated: 2025/02/27 12:50:31 by jdecarro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,3 @@ void	execute_commands(t_cmd *cmds, t_shell_env *env)
 	if (prev_fd != -1)
 		close(prev_fd);
 }
-

@@ -14,7 +14,7 @@
 
 static bool	check_option_echo(const char *str)
 {
-	int i;
+	int	i;
 
 	if (!str || str[0] != '-')
 		return (0);
@@ -28,8 +28,9 @@ static bool	check_option_echo(const char *str)
 
 static void	write_echo(int i, bool new_line, char **args)
 {
-	bool	first = true;
+	bool	first;
 
+	first = true;
 	while (args[i])
 	{
 		if (!first)
@@ -42,7 +43,7 @@ static void	write_echo(int i, bool new_line, char **args)
 		write(1, "\n", 1);
 }
 
-int	ft_echo(char **args, t_shell_env *shell_env) 
+int	ft_echo(char **args, t_shell_env *shell_env)
 {
 	int		i;
 	bool	new_line;

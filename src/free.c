@@ -14,11 +14,11 @@
 
 void	free_builtins(t_builtin *builtins)
 {
-	int i;
-	
+	int	i;
+
 	i = 0;
 	if (!builtins)
-		return;
+		return ;
 	while (builtins[i].name)
 	{
 		free(builtins[i].name);

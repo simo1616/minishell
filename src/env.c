@@ -73,6 +73,8 @@ void	destroy_shell_env(t_shell_env *shell_env)
 		free(shell_env->env);
 	}
 	if (shell_env->builtins)
-    	free_builtins(shell_env->builtins);
+	{
+		free_builtins(shell_env->builtins);
+	}
 	free(shell_env);
 }

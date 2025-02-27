@@ -52,8 +52,8 @@ long	ft_atol(const char *str, int *error)
 			*error = 1;
 			return (0);
 		}
-		if ((result > LONG_MAX / 10) ||
-			(result == LONG_MAX / 10 && (str[i] - '0') > LONG_MAX % 10))
+		if ((result > LONG_MAX / 10)
+			|| (result == LONG_MAX / 10 && (str[i] - '0') > LONG_MAX % 10))
 		{
 			*error = 1;
 			return (0);
