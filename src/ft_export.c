@@ -121,7 +121,7 @@ int	ft_export(char **args, t_shell_env *shell_env)
 	}
 	if (!check_export_name(args[1]))
 	{
-		ft_printf("-minishell: export: `%s': not a valid identifier\n", args[1]);
+		ft_printf("minishell: export: `%s': not a valid identifier\n", args[1]);
 		return (1);
 	}
 	i = 0;

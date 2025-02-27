@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
+/*   By: jdecarro <jdecarro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 12:15:51 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/25 21:30:13 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/27 13:55:30 by jdecarro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	main(int ac, char **av, char **envp)
 	}
 	else
 	{
-		ft_putstr_fd("Minishell: ", 2);
+		ft_putstr_fd("minishell: ", 2);
 		write(2, av[1], ft_strlen(av[1]));
 		ft_putstr_fd(": No such file or directory\n", 2);
 		return (1);

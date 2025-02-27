@@ -63,7 +63,12 @@ int	handle_redirections(t_cmd *cmd)
 		else if (redir->type == REDIR_APPEND)
 			fd = open(redir->filename, O_CREAT | O_WRONLY | O_APPEND, 0644);
 		if (fd == -1 && redir->type != REDIR_HEREDOC)
-			return (perror("open"), -1);
+		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(redir->filename, 2);
+			ft_putstr_fd(": No such file or diretory\n", 2);
+			exit(EXIT_FAILURE);
+		}
 		if (fd != -1)
 		{
 			if (redir->type == REDIR_IN || redir->type == REDIR_HEREDOC)

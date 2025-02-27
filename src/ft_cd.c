@@ -24,7 +24,7 @@ int	ft_cd(char **args, t_shell_env *shell_env)
 		path = args[1];
 	if (args[1] && args[2])
 	{
-		ft_putstr_fd("-minishell: cd: too many arguments\n", 2);
+		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
 		shell_env->exit_status = 1;
 		return (1);
 	}
@@ -38,7 +38,7 @@ int	ft_cd(char **args, t_shell_env *shell_env)
 	}
 	if (chdir(path) != 0)
 	{
-		ft_putstr_fd("-minishell: cd: ", 2);
+		ft_putstr_fd("minishell: cd: ", 2);
 		ft_putstr_fd(path, 2);
 		ft_putstr_fd(": No such file or directory\n", 2);
 		shell_env->exit_status = 1;

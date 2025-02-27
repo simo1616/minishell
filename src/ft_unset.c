@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
+/*   By: jdecarro <jdecarro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 10:34:06 by jdecarro          #+#    #+#             */
-/*   Updated: 2025/02/22 19:25:02 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/27 13:55:11 by jdecarro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	ft_unset(char **args, t_shell_env *shell_env)
 		return (0);
 	if (!check_unset_name(args[1]))
 	{
-		ft_printf("-minishell: unset: `%s': not a valid identifier\n", args[1]);
+		ft_printf("minishell: unset: `%s': not a valid identifier\n", args[1]);
 		return (1);
 	}
 	while (args[i])

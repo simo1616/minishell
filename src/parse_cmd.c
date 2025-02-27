@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
+/*   By: jdecarro <jdecarro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 15:50:28 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/25 21:30:23 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/27 13:55:37 by jdecarro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	final_verification(t_cmd *cmd)
 		cur_cmd = cur_cmd->next;
 	if (!cur_cmd->av || cur_cmd->av[0] == NULL)
 	{
-		ft_putendl_fd("Minishell: syntax error near unexpected token `|'", 2);
+		ft_putendl_fd("minishell: syntax error near unexpected token `|'", 2);
 		free_cmds(cmd);
 		return (0);
 	}

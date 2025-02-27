@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   proc_tokens.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
+/*   By: jdecarro <jdecarro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 15:39:21 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/24 16:29:59 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/27 13:56:20 by jdecarro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	handle_pipe(t_cmd **cur_cmd)
 {
 	if (!(*cur_cmd)->av || (*cur_cmd)->av[0] == NULL)
 	{
-		ft_putendl_fd("Minishell: syntax error near unexpected token `|'", 2);
+		ft_putendl_fd("minishell: syntax error near unexpected token `|'", 2);
 		return (0);
 	}
 	(*cur_cmd)->next = malloc(sizeof(t_cmd));
@@ -38,7 +38,7 @@ int	handle_redir(char *token, t_data *data, t_shell_env *env, t_cmd **cur_cmd)
 	filename = get_next_token(env, data);
 	if (!filename)
 	{
-		ft_putendl_fd("Minishell: syntax error: unexpected newline", 2);
+		ft_putendl_fd("minishell: syntax error: unexpected newline", 2);
 		free(token);
 		return (0);
 	}

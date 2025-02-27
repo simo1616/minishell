@@ -6,7 +6,7 @@
 /*   By: jdecarro <jdecarro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 09:25:52 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/27 12:50:15 by jdecarro         ###   ########.fr       */
+/*   Updated: 2025/02/27 13:56:11 by jdecarro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	exec_pipes(t_cmd *cmds, t_shell_env *env)
 	pids = malloc(sizeof(pid_t) * cmd_count);
 	if (!pids)
 	{
-		perror("Error PID allocation");
+		perror("error PID allocation");
 		exit(EXIT_FAILURE);
 	}
 	i = 0;
@@ -51,14 +51,14 @@ int	exec_pipes(t_cmd *cmds, t_shell_env *env)
 	{
 		if (cur->next && pipe(fd) < 0)
 		{
-			perror("Error pipe");
+			perror("error pipe");
 			free(pids);
 			exit(EXIT_FAILURE);
 		}
 		pids[i] = fork();
 		if (pids[i] < 0)
 		{
-			perror("Error fork");
+			perror("error fork");
 			free(pids);
 			exit(EXIT_FAILURE);
 		}
