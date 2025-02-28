@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 15:50:28 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/28 17:50:24 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/28 21:12:20 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ t_cmd *parse_tokens(t_data *data, t_shell_env *env)
 			!process_token(token_data.token, data, env, &cur_cmd, token_data.token_ctx, token_data.len))
 		{
 			free_cmds(cmd);
-			free(token_data.token);
 			free(token_data.token_ctx);
 			return (NULL);
 		}
@@ -79,9 +78,7 @@ t_cmd	*parse_command_line(char *line, t_shell_env *env)
 	data.line = line;
 	data.cpos = 0;
 	if (!get_quotes_context(&data))
-	{
 		return (NULL);
-	}
 	cmd = parse_tokens(&data, env);
 	if (!cmd)
 	{

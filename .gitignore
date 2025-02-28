@@ -58,3 +58,7 @@ deps/
 .cache_exists
 .progress_count
 .vscode
+
+# 🚀 Ignore les tests
+mstest*
+mstest*/**
