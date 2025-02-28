@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 12:05:11 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/25 20:24:23 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/28 19:21:51 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,8 @@ typedef struct s_tokenizer
 	int						len;
 	int						quote;
 	int						total;
+	int						*original_ctx;
+    size_t					ctx_start;
 }	t_tokenizer;
 
 typedef struct s_vars
@@ -114,6 +116,13 @@ typedef struct s_calc
 	int						i;
 }	t_calc;
 
+typedef struct s_token_data
+{
+    char *token;
+    int *token_ctx;
+    size_t len;
+} t_token_data;
+
 // copie env
 t_shell_env					*create_shell_env(char **envp);
 void						destroy_shell_env(t_shell_env *shell_env);
@@ -124,8 +133,7 @@ t_cmd						*parse_command_line(char *line, t_shell_env *env);
 int							handle_pipe(t_cmd **cur_cmd);
 int							handle_redir(char *token, t_data *data,
 								t_shell_env *env, t_cmd **cur_cmd);
-int							process_token(char *token, t_data *data,
-								t_shell_env *env, t_cmd **cur_cmd);
+int process_token(char *token, t_data *data, t_shell_env *env, t_cmd **cur_cmd, int *token_ctx, size_t len);
 t_cmd						*parse_tokens(t_data *data, t_shell_env *env);
 int							init_cmd_ifneed(t_cmd **cmd, t_cmd **cur_cmd);
 char						**init_argv(const char *token);
@@ -135,7 +143,7 @@ void						*get_quotes_context(t_data *data);
 void						execute_commands(t_cmd *cmds,
 								t_shell_env *shell_env);
 int							count_tokens(char *str);
-char						*get_next_token(t_shell_env *env, t_data *data);
+t_token_data get_next_token(t_shell_env *env, t_data *data);
 char						*expand_token(t_tokenizer *tok);
 void						fill_buffer_and_ctx(t_tokenizer *tok);
 int							alloc_buffer(t_tokenizer *tok);
@@ -153,7 +161,7 @@ int							is_redir(char *token);
 t_redir_type				get_redir_type(char *token);
 void						add_redir_to_cmd(t_cmd *cmd, t_redir_type type,
 								char *filename);
-int						handle_redirections(t_cmd *cmd);
+int							handle_redirections(t_cmd *cmd);
 
 // pipes
 int							exec_pipes(t_cmd *cmds, t_shell_env *env);
@@ -192,5 +200,6 @@ int							ft_cd(char **args, t_shell_env *shell_env);
 int							exec_external(t_cmd *cmd, t_shell_env *shell_env);
 char						*resolve_path(char *cmd, char **env);
 char						*search_in_path(char *cmd, char *path_env);
+void						update_exit_status(t_shell_env *shell_env, int status);
 
 #endif

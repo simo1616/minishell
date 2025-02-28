@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jdecarro <jdecarro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:32:41 by jdecarro          #+#    #+#             */
-/*   Updated: 2025/02/27 15:15:19 by jdecarro         ###   ########.fr       */
+/*   Updated: 2025/02/28 19:32:53 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	execute_commands(t_cmd *cmds, t_shell_env *env)
 	int		saved_stdin;
 	int		saved_stdout;
 	t_redir	*redir;
+	int		status;
 
 	redir = cmds->redirs;
 	prev_fd = -1;
@@ -29,7 +30,17 @@ void	execute_commands(t_cmd *cmds, t_shell_env *env)
 	{
 		saved_stdin = dup(STDIN_FILENO);
 		saved_stdout = dup(STDOUT_FILENO);
-		handle_redirections(current);
+		if (!current->av[0] || current->av[0][0] == '\0')
+		{
+			ft_putstr_fd("minishell: command not found\n", 2);
+			env->exit_status = EX_CMD_NT_FD;
+			dup2(saved_stdin, STDIN_FILENO);
+			dup2(saved_stdout, STDOUT_FILENO);
+			close(saved_stdin);
+			close(saved_stdout);
+			current = current->next;
+			continue;
+		}
 		if (handle_redirections(current) == -1)
 		{
 			ft_putstr_fd("minishell: ", 2);
@@ -74,7 +85,8 @@ void	execute_commands(t_cmd *cmds, t_shell_env *env)
 					close(pipe_fd[1]);
 					prev_fd = pipe_fd[0];
 				}
-				waitpid(pid, &env->exit_status, 0);
+				waitpid(pid, &status, 0);
+				update_exit_status(env, status);
 			}
 		}
 		dup2(saved_stdin, STDIN_FILENO);

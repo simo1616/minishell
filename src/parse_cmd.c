@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jdecarro <jdecarro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 15:50:28 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/27 13:55:37 by jdecarro         ###   ########.fr       */
+/*   Updated: 2025/02/28 17:50:24 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,29 +27,28 @@ int	init_cmd_ifneed(t_cmd **cmd, t_cmd **cur_cmd)
 	return (1);
 }
 
-t_cmd	*parse_tokens(t_data *data, t_shell_env *env)
+t_cmd *parse_tokens(t_data *data, t_shell_env *env)
 {
-	t_cmd	*cmd;
-	t_cmd	*cur_cmd;
-	char	*token;
+	t_cmd *cmd;
+	t_cmd *cur_cmd;
+	t_token_data token_data;
 
 	cmd = NULL;
 	cur_cmd = NULL;
 	while (1)
 	{
-		token = get_next_token(env, data);
-		if (!token)
+		token_data = get_next_token(env, data);
+		if (!token_data.token)
 			break ;
-		if (!init_cmd_ifneed(&cmd, &cur_cmd))
+		if (!init_cmd_ifneed(&cmd, &cur_cmd) ||
+			!process_token(token_data.token, data, env, &cur_cmd, token_data.token_ctx, token_data.len))
 		{
 			free_cmds(cmd);
+			free(token_data.token);
+			free(token_data.token_ctx);
 			return (NULL);
 		}
-		if (!process_token(token, data, env, &cur_cmd))
-		{
-			free_cmds(cmd);
-			return (NULL);
-		}
+		free(token_data.token_ctx);
 	}
 	return (cmd);
 }
@@ -80,7 +79,9 @@ t_cmd	*parse_command_line(char *line, t_shell_env *env)
 	data.line = line;
 	data.cpos = 0;
 	if (!get_quotes_context(&data))
+	{
 		return (NULL);
+	}
 	cmd = parse_tokens(&data, env);
 	if (!cmd)
 	{

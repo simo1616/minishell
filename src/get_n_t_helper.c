@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 19:30:19 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/25 20:39:59 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/28 17:20:06 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,16 +34,16 @@ void	fill_buffer_and_ctx(t_tokenizer *tok)
 	tok->len++;
 }
 
-char	*expand_token(t_tokenizer *tok)
+char *expand_token(t_tokenizer *tok)
 {
-	char	*token;
-	int		*old_ctx;
-	size_t	old_cpos;
+	char *token;
+	int *old_ctx;
+	size_t old_cpos;
 
 	if (!ft_strchr(tok->buffer, '$'))
 	{
-		free(tok->token_ctx);
-		return (tok->buffer);
+		token = tok->buffer;
+		return (token);
 	}
 	old_ctx = tok->data->ctx;
 	old_cpos = tok->data->cpos;
@@ -51,7 +51,6 @@ char	*expand_token(t_tokenizer *tok)
 	tok->data->cpos = 0;
 	token = remplacer_var(tok->buffer, tok->env, tok->data);
 	free(tok->buffer);
-	free(tok->token_ctx);
 	tok->data->ctx = old_ctx;
 	tok->data->cpos = old_cpos;
 	return (token);

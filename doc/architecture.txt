@@ -1,0 +1,613 @@
+%%{init: {
+    'theme': 'default',
+    'themeVariables': {
+      'primaryColor': '#282a36',        %% Fond sombre
+      'primaryTextColor': '#f8f8f2',    %% Texte clair
+      'lineColor': '#6272a4',           %% Lignes avec une touche de bleu/purple
+      'secondaryColor': '#44475a',      %% Éléments secondaires
+      'tertiaryColor': '#50fa7b',       %% Accent pour certains éléments (si supporté)
+      'borderRadius': '4px',
+      'fontFamily': '"Fira Code", monospace'
+    }
+}}%%
+
++-main() <int main (int ac, char **av, char **envp) at main.c:53>
+  +-create_shell_env() <t_shell_env *create_shell_env (char **envp) at env.c:43>
+  | +-malloc()
+  | +-dup_env() <char **dup_env (char **envp) at env.c:15>
+  | | +-malloc()
+  | | +-ft_strdup()
+  | | \-free()
+  | \-free()
+  +-signal_setup() <void signal_setup (void) at signal.c:30>
+  | +-signal()
+  | \-signal_handler() <void signal_handler (int signum) at signal.c:18>
+  |   +-write()
+  |   +-rl_on_new_line()
+  |   +-rl_replace_line()
+  |   \-rl_redisplay()
+  +-process_iteration() <void process_iteration (t_shell_env *shell_env) at main.c:25>
+  | +-readline()
+  | +-printf()
+  | +-add_history()
+  | +-handle_signal() <void handle_signal (t_shell_env *shell_env) at main.c:15>
+  | +-parse_command_line() <t_cmd *parse_command_line (char *line, t_shell_env *env) at parse_cmd.c:73>
+  | | +-get_quotes_context() <void *get_quotes_context (t_data *data) at parse2_utils.c:49>
+  | | | +-malloc()
+  | | | +-ft_strlen()
+  | | | +-remplir_quotes_context() <int remplir_quotes_context (const char *line, int *context) at parse2_utils.c:33>
+  | | | | \-check_quote() <void check_quote (char c, int *quote) at parse2_utils.c:15>
+  | | | +-ft_putendl_fd()
+  | | | \-free()
+  | | +-parse_tokens() <t_cmd *parse_tokens (t_data *data, t_shell_env *env) at parse_cmd.c:30>
+  | | | +-get_next_token() <char *get_next_token (t_shell_env *env, t_data *data) at get_next_token.c:77>
+  | | | | +-skip_spaces() <void skip_spaces (t_tokenizer *tok) at get_next_token.c:71>
+  | | | | | \-ft_isspace()
+  | | | | +-ft_strlen()
+  | | | | +-alloc_buffer() <int alloc_buffer (t_tokenizer *tok) at get_n_t_helper.c:15>
+  | | | | | +-malloc()
+  | | | | | \-free()
+  | | | | +-parse_token() <void parse_token (t_tokenizer *tok) at get_next_token.c:49>
+  | | | | | +-handle_backslash() <void handle_backslash (t_tokenizer *tok) at get_next_token.c:15>
+  | | | | | | \-fill_buffer_and_ctx() <void fill_buffer_and_ctx (t_tokenizer *tok) at get_n_t_helper.c:30>
+  | | | | | +-handle_quote_char() <void handle_quote_char (t_tokenizer *tok) at get_next_token.c:30>
+  | | | | | | \-fill_buffer_and_ctx() <void fill_buffer_and_ctx (t_tokenizer *tok) at get_n_t_helper.c:30>
+  | | | | | +-ft_isspace()
+  | | | | | \-fill_buffer_and_ctx() <void fill_buffer_and_ctx (t_tokenizer *tok) at get_n_t_helper.c:30>
+  | | | | \-expand_token() <char *expand_token (t_tokenizer *tok) at get_n_t_helper.c:37>
+  | | | |   +-ft_strchr()
+  | | | |   +-remplacer_var() <char *remplacer_var (char *token, t_shell_env *env, t_data *data) at parse_repl_var.c:3>
+  | | | |   | +-ft_strcmp()
+  | | | |   | +-ft_strdup()
+  | | | |   | +-calculate_length() <size_t calculate_length (char *token, t_shell_env *env, int *ctx) at calcul_len.c:72>
+  | | | |   | | \-process_variable() <size_t process_variable (char *token, t_shell_env *env, int *i) at calcul_len.c:48>
+  | | | |   | |   +-process_exit_variable() <size_t process_exit_variable (t_shell_env *env) at calcul_len.c:15>
+  | | | |   | |   | +-ft_itoa()
+  | | | |   | |   | +-ft_strlen()
+  | | | |   | |   | \-free()
+  | | | |   | |   +-is_valid_var_char() <int is_valid_var_char (char c) at parse1_utils.c:15>
+  | | | |   | |   | \-ft_isalnum()
+  | | | |   | |   \-process_normal_variable() <size_t process_normal_variable (char *token, t_shell_env *env, int *i) at calcul_len.c:27>
+  | | | |   | |     +-is_valid_var_char() <int is_valid_var_char (char c) at parse1_utils.c:15>
+  | | | |   | |     | \-ft_isalnum()
+  | | | |   | |     +-ft_substr()
+  | | | |   | |     +-env_get() <char *env_get (t_shell_env *shell_env, const char *name) at env_utils.c:32>
+  | | | |   | |     | +-find_env_index() <int find_env_index (t_shell_env *shell_env, const char *name) at env_utils.c:15>
+  | | | |   | |     | | +-ft_strlen()
+  | | | |   | |     | | \-ft_strncmp()
+  | | | |   | |     | \-ft_strchr()
+  | | | |   | |     +-ft_strlen()
+  | | | |   | |     \-free()
+  | | | |   | +-malloc()
+  | | | |   | +-ft_itoa()
+  | | | |   | +-ft_memcpy()
+  | | | |   | +-ft_strlen()
+  | | | |   | +-free()
+  | | | |   | +-is_valid_var_char() <int is_valid_var_char (char c) at parse1_utils.c:15>
+  | | | |   | | \-ft_isalnum()
+  | | | |   | +-ft_substr()
+  | | | |   | \-env_get() <char *env_get (t_shell_env *shell_env, const char *name) at env_utils.c:32>
+  | | | |   |   +-find_env_index() <int find_env_index (t_shell_env *shell_env, const char *name) at env_utils.c:15>
+  | | | |   |   | +-ft_strlen()
+  | | | |   |   | \-ft_strncmp()
+  | | | |   |   \-ft_strchr()
+  | | | |   \-free()
+  | | | +-init_cmd_ifneed() <int init_cmd_ifneed (t_cmd **cmd, t_cmd **cur_cmd) at parse_cmd.c:15>
+  | | | | \-malloc()
+  | | | +-free_cmds() <void free_cmds (t_cmd *cmds) at free.c:63>
+  | | | | +-free_redirs() <void free_redirs (t_redir *redirs) at free.c:20>
+  | | | | | \-free()
+  | | | | +-free_av() <void free_av (char **argv) at free.c:42>
+  | | | | | \-free()
+  | | | | \-free()
+  | | | \-process_token() <int process_token (char *token, t_data *data, t_shell_env *env, t_cmd **cur_cmd) at proc_tokens.c:51>
+  | | |   +-ft_strcmp()
+  | | |   +-free()
+  | | |   +-handle_pipe() <int handle_pipe (t_cmd **cur_cmd) at proc_tokens.c:15>
+  | | |   | +-ft_putendl_fd()
+  | | |   | \-malloc()
+  | | |   +-is_redir() <int is_redir (char *token) at redir.c:15>
+  | | |   | \-ft_strcmp()
+  | | |   +-handle_redir() <int handle_redir (char *token, t_data *data, t_shell_env *env, t_cmd **cur_cmd) at proc_tokens.c:32>
+  | | |   | +-get_redir_type() <t_redir_type get_redir_type (char *token) at redir.c:21>
+  | | |   | | \-ft_strcmp()
+  | | |   | +-get_next_token() <char *get_next_token (t_shell_env *env, t_data *data) at get_next_token.c:77>
+  | | |   | | +-skip_spaces() <void skip_spaces (t_tokenizer *tok) at get_next_token.c:71>
+  | | |   | | | \-ft_isspace()
+  | | |   | | +-ft_strlen()
+  | | |   | | +-alloc_buffer() <int alloc_buffer (t_tokenizer *tok) at get_n_t_helper.c:15>
+  | | |   | | | +-malloc()
+  | | |   | | | \-free()
+  | | |   | | +-parse_token() <void parse_token (t_tokenizer *tok) at get_next_token.c:49>
+  | | |   | | | +-handle_backslash() <void handle_backslash (t_tokenizer *tok) at get_next_token.c:15>
+  | | |   | | | | \-fill_buffer_and_ctx() <void fill_buffer_and_ctx (t_tokenizer *tok) at get_n_t_helper.c:30>
+  | | |   | | | +-handle_quote_char() <void handle_quote_char (t_tokenizer *tok) at get_next_token.c:30>
+  | | |   | | | | \-fill_buffer_and_ctx() <void fill_buffer_and_ctx (t_tokenizer *tok) at get_n_t_helper.c:30>
+  | | |   | | | +-ft_isspace()
+  | | |   | | | \-fill_buffer_and_ctx() <void fill_buffer_and_ctx (t_tokenizer *tok) at get_n_t_helper.c:30>
+  | | |   | | \-expand_token() <char *expand_token (t_tokenizer *tok) at get_n_t_helper.c:37>
+  | | |   | |   +-ft_strchr()
+  | | |   | |   +-remplacer_var() <char *remplacer_var (char *token, t_shell_env *env, t_data *data) at parse_repl_var.c:3>
+  | | |   | |   | +-ft_strcmp()
+  | | |   | |   | +-ft_strdup()
+  | | |   | |   | +-calculate_length() <size_t calculate_length (char *token, t_shell_env *env, int *ctx) at calcul_len.c:72>
+  | | |   | |   | | \-process_variable() <size_t process_variable (char *token, t_shell_env *env, int *i) at calcul_len.c:48>
+  | | |   | |   | |   +-process_exit_variable() <size_t process_exit_variable (t_shell_env *env) at calcul_len.c:15>
+  | | |   | |   | |   | +-ft_itoa()
+  | | |   | |   | |   | +-ft_strlen()
+  | | |   | |   | |   | \-free()
+  | | |   | |   | |   +-is_valid_var_char() <int is_valid_var_char (char c) at parse1_utils.c:15>
+  | | |   | |   | |   | \-ft_isalnum()
+  | | |   | |   | |   \-process_normal_variable() <size_t process_normal_variable (char *token, t_shell_env *env, int *i) at calcul_len.c:27>
+  | | |   | |   | |     +-is_valid_var_char() <int is_valid_var_char (char c) at parse1_utils.c:15>
+  | | |   | |   | |     | \-ft_isalnum()
+  | | |   | |   | |     +-ft_substr()
+  | | |   | |   | |     +-env_get() <char *env_get (t_shell_env *shell_env, const char *name) at env_utils.c:32>
+  | | |   | |   | |     | +-find_env_index() <int find_env_index (t_shell_env *shell_env, const char *name) at env_utils.c:15>
+  | | |   | |   | |     | | +-ft_strlen()
+  | | |   | |   | |     | | \-ft_strncmp()
+  | | |   | |   | |     | \-ft_strchr()
+  | | |   | |   | |     +-ft_strlen()
+  | | |   | |   | |     \-free()
+  | | |   | |   | +-malloc()
+  | | |   | |   | +-ft_itoa()
+  | | |   | |   | +-ft_memcpy()
+  | | |   | |   | +-ft_strlen()
+  | | |   | |   | +-free()
+  | | |   | |   | +-is_valid_var_char() <int is_valid_var_char (char c) at parse1_utils.c:15>
+  | | |   | |   | | \-ft_isalnum()
+  | | |   | |   | +-ft_substr()
+  | | |   | |   | \-env_get() <char *env_get (t_shell_env *shell_env, const char *name) at env_utils.c:32>
+  | | |   | |   |   +-find_env_index() <int find_env_index (t_shell_env *shell_env, const char *name) at env_utils.c:15>
+  | | |   | |   |   | +-ft_strlen()
+  | | |   | |   |   | \-ft_strncmp()
+  | | |   | |   |   \-ft_strchr()
+  | | |   | |   \-free()
+  | | |   | +-ft_putendl_fd()
+  | | |   | +-free()
+  | | |   | \-add_redir_to_cmd() <void add_redir_to_cmd (t_cmd *cmd, t_redir_type type, char *filename) at redir.c:34>
+  | | |   |   +-malloc()
+  | | |   |   \-ft_strdup()
+  | | |   \-add_to_argv() <char **add_to_argv (char **av, const char *token) at parse2_utils.c:82>
+  | | |     +-init_argv() <char **init_argv (const char *token) at parse_helpers.c:15>
+  | | |     | +-malloc()
+  | | |     | \-ft_strdup()
+  | | |     +-create_new_argv() <char **create_new_argv (char **av, int len) at parse2_utils.c:65>
+  | | |     | \-malloc()
+  | | |     +-ft_strdup()
+  | | |     \-free()
+  | | +-free()
+  | | \-final_verification() <int final_verification (t_cmd *cmd) at parse_cmd.c:57>
+  | |   +-ft_putendl_fd()
+  | |   \-free_cmds() <void free_cmds (t_cmd *cmds) at free.c:63>
+  | |     +-free_redirs() <void free_redirs (t_redir *redirs) at free.c:20>
+  | |     | \-free()
+  | |     +-free_av() <void free_av (char **argv) at free.c:42>
+  | |     | \-free()
+  | |     \-free()
+  | +-excec_pipes() <int excec_pipes (t_cmd *cmds, t_shell_env *env) at pipes.c:48>
+  | | +-malloc()
+  | | +-ft_lstsize_cmd() <int ft_lstsize_cmd (t_cmd *cmds) at pipes.c:15>
+  | | +-perror()
+  | | +-exit()
+  | | +-pipe()
+  | | +-free()
+  | | +-fork()
+  | | +-dup2()
+  | | +-close()
+  | | +-is_builtin() <int is_builtin (t_shell_env *env, char *cmd_name) at excec_built.c:15>
+  | | | +-init_builtins() <t_builtin *init_builtins (t_shell_env *shell_env) at init_builtins.c:35>
+  | | | | +-malloc()
+  | | | | +-perror()
+  | | | | +-exit()
+  | | | | \-init_builtin_entries() <void init_builtin_entries (t_builtin *builtins) at init_builtins.c:15>
+  | | | |   +-ft_strdup()
+  | | | |   +-ft_cd() <int ft_cd (char **args, t_shell_env *shell_env) at ft_cd.c:15>
+  | | | |   | +-ft_strcmp()
+  | | | |   | +-env_get() <char *env_get (t_shell_env *shell_env, const char *name) at env_utils.c:32>
+  | | | |   | | +-find_env_index() <int find_env_index (t_shell_env *shell_env, const char *name) at env_utils.c:15>
+  | | | |   | | | +-ft_strlen()
+  | | | |   | | | \-ft_strncmp()
+  | | | |   | | \-ft_strchr()
+  | | | |   | +-ft_putstr_fd()
+  | | | |   | +-stat()
+  | | | |   | +-S_ISDIR()
+  | | | |   | +-chdir()
+  | | | |   | +-getcwd()
+  | | | |   | \-env_set() <int env_set (t_shell_env *shell_env, const char *name, const char *value) at env_utils2.c:43>
+  | | | |   |   +-ft_strjoin_three() <char *ft_strjoin_three (const char *name, const char *eq, const char *value) at env_utils.c:46>
+  | | | |   |   | +-ft_strjoin()
+  | | | |   |   | \-free()
+  | | | |   |   +-find_env_index() <int find_env_index (t_shell_env *shell_env, const char *name) at env_utils.c:15>
+  | | | |   |   | +-ft_strlen()
+  | | | |   |   | \-ft_strncmp()
+  | | | |   |   +-free()
+  | | | |   |   \-expand_env() <int expand_env (t_shell_env *shell_env, char *new_var) at env_utils2.c:15>
+  | | | |   |     +-malloc()
+  | | | |   |     \-free()
+  | | | |   +-ft_exit() <int ft_exit (char **args, t_shell_env *shell) at ft_exit.c:67>
+  | | | |   | +-ft_putstr_fd()
+  | | | |   | +-exit()
+  | | | |   | +-ft_is_numeric() <int ft_is_numeric (const char *str) at ft_exit.c:15>
+  | | | |   | | \-ft_isdigit()
+  | | | |   | \-ft_atol() <long ft_atol (const char *str, int *error) at ft_exit.c:33>
+  | | | |   |   \-ft_isdigit()
+  | | | |   +-ft_pwd() <int ft_pwd (char **argv, t_shell_env *shell_env) at ft_pwd.c:16>
+  | | | |   | +-getcwd()
+  | | | |   | +-printf()
+  | | | |   | \-perror()
+  | | | |   +-ft_echo() <int ft_echo (char **args, t_shell_env *shell_env) at ft_echo.c:45>
+  | | | |   | +-check_option_echo() <bool check_option_echo (const char *str) at ft_echo.c:15>
+  | | | |   | \-write_echo() <void write_echo (int i, bool new_line, char **args) at ft_echo.c:29>
+  | | | |   |   +-write()
+  | | | |   |   \-ft_strlen()
+  | | | |   +-ft_env() <int ft_env (char **argv, t_shell_env *shell_env) at ft_env.c:15>
+  | | | |   | \-printf()
+  | | | |   +-ft_export() <int ft_export (char **args, t_shell_env *shell_env) at ft_export.c:110>
+  | | | |   | +-ft_print_sorted_env() <void ft_print_sorted_env (char **env) at ft_export.c:83>
+  | | | |   | | +-ft_copy_env() <char **ft_copy_env (char **env) at ft_export.c:31>
+  | | | |   | | | +-malloc()
+  | | | |   | | | +-ft_strdup()
+  | | | |   | | | \-free()
+  | | | |   | | +-ft_sort_env() <void ft_sort_env (char **env) at ft_export.c:59>
+  | | | |   | | | \-ft_strcmp()
+  | | | |   | | +-ft_printf()
+  | | | |   | | \-free()
+  | | | |   | +-check_export_name() <int check_export_name (char *args) at ft_export.c:15>
+  | | | |   | | +-ft_isdigit()
+  | | | |   | | \-ft_isalnum()
+  | | | |   | +-ft_printf()
+  | | | |   | +-ft_strncmp()
+  | | | |   | +-ft_strchr()
+  | | | |   | +-free()
+  | | | |   | +-ft_strdup()
+  | | | |   | \-malloc()
+  | | | |   \-ft_unset() <int ft_unset (char **args, t_shell_env *shell_env) at ft_unset.c:31>
+  | | | |     +-check_unset_name() <int check_unset_name (char *args) at ft_unset.c:15>
+  | | | |     | +-ft_isdigit()
+  | | | |     | \-ft_isalnum()
+  | | | |     +-ft_printf()
+  | | | |     +-ft_strlen()
+  | | | |     +-ft_strncmp()
+  | | | |     \-free()
+  | | | \-ft_strcmp()
+  | | +-exec_builtin() <int exec_builtin (t_cmd *cmd, t_shell_env *env) at excec_built.c:31>
+  | | | +-init_builtins() <t_builtin *init_builtins (t_shell_env *shell_env) at init_builtins.c:35>
+  | | | | +-malloc()
+  | | | | +-perror()
+  | | | | +-exit()
+  | | | | \-init_builtin_entries() <void init_builtin_entries (t_builtin *builtins) at init_builtins.c:15>
+  | | | |   +-ft_strdup()
+  | | | |   +-ft_cd() <int ft_cd (char **args, t_shell_env *shell_env) at ft_cd.c:15>
+  | | | |   | +-ft_strcmp()
+  | | | |   | +-env_get() <char *env_get (t_shell_env *shell_env, const char *name) at env_utils.c:32>
+  | | | |   | | +-find_env_index() <int find_env_index (t_shell_env *shell_env, const char *name) at env_utils.c:15>
+  | | | |   | | | +-ft_strlen()
+  | | | |   | | | \-ft_strncmp()
+  | | | |   | | \-ft_strchr()
+  | | | |   | +-ft_putstr_fd()
+  | | | |   | +-stat()
+  | | | |   | +-S_ISDIR()
+  | | | |   | +-chdir()
+  | | | |   | +-getcwd()
+  | | | |   | \-env_set() <int env_set (t_shell_env *shell_env, const char *name, const char *value) at env_utils2.c:43>
+  | | | |   |   +-ft_strjoin_three() <char *ft_strjoin_three (const char *name, const char *eq, const char *value) at env_utils.c:46>
+  | | | |   |   | +-ft_strjoin()
+  | | | |   |   | \-free()
+  | | | |   |   +-find_env_index() <int find_env_index (t_shell_env *shell_env, const char *name) at env_utils.c:15>
+  | | | |   |   | +-ft_strlen()
+  | | | |   |   | \-ft_strncmp()
+  | | | |   |   +-free()
+  | | | |   |   \-expand_env() <int expand_env (t_shell_env *shell_env, char *new_var) at env_utils2.c:15>
+  | | | |   |     +-malloc()
+  | | | |   |     \-free()
+  | | | |   +-ft_exit() <int ft_exit (char **args, t_shell_env *shell) at ft_exit.c:67>
+  | | | |   | +-ft_putstr_fd()
+  | | | |   | +-exit()
+  | | | |   | +-ft_is_numeric() <int ft_is_numeric (const char *str) at ft_exit.c:15>
+  | | | |   | | \-ft_isdigit()
+  | | | |   | \-ft_atol() <long ft_atol (const char *str, int *error) at ft_exit.c:33>
+  | | | |   |   \-ft_isdigit()
+  | | | |   +-ft_pwd() <int ft_pwd (char **argv, t_shell_env *shell_env) at ft_pwd.c:16>
+  | | | |   | +-getcwd()
+  | | | |   | +-printf()
+  | | | |   | \-perror()
+  | | | |   +-ft_echo() <int ft_echo (char **args, t_shell_env *shell_env) at ft_echo.c:45>
+  | | | |   | +-check_option_echo() <bool check_option_echo (const char *str) at ft_echo.c:15>
+  | | | |   | \-write_echo() <void write_echo (int i, bool new_line, char **args) at ft_echo.c:29>
+  | | | |   |   +-write()
+  | | | |   |   \-ft_strlen()
+  | | | |   +-ft_env() <int ft_env (char **argv, t_shell_env *shell_env) at ft_env.c:15>
+  | | | |   | \-printf()
+  | | | |   +-ft_export() <int ft_export (char **args, t_shell_env *shell_env) at ft_export.c:110>
+  | | | |   | +-ft_print_sorted_env() <void ft_print_sorted_env (char **env) at ft_export.c:83>
+  | | | |   | | +-ft_copy_env() <char **ft_copy_env (char **env) at ft_export.c:31>
+  | | | |   | | | +-malloc()
+  | | | |   | | | +-ft_strdup()
+  | | | |   | | | \-free()
+  | | | |   | | +-ft_sort_env() <void ft_sort_env (char **env) at ft_export.c:59>
+  | | | |   | | | \-ft_strcmp()
+  | | | |   | | +-ft_printf()
+  | | | |   | | \-free()
+  | | | |   | +-check_export_name() <int check_export_name (char *args) at ft_export.c:15>
+  | | | |   | | +-ft_isdigit()
+  | | | |   | | \-ft_isalnum()
+  | | | |   | +-ft_printf()
+  | | | |   | +-ft_strncmp()
+  | | | |   | +-ft_strchr()
+  | | | |   | +-free()
+  | | | |   | +-ft_strdup()
+  | | | |   | \-malloc()
+  | | | |   \-ft_unset() <int ft_unset (char **args, t_shell_env *shell_env) at ft_unset.c:31>
+  | | | |     +-check_unset_name() <int check_unset_name (char *args) at ft_unset.c:15>
+  | | | |     | +-ft_isdigit()
+  | | | |     | \-ft_isalnum()
+  | | | |     +-ft_printf()
+  | | | |     +-ft_strlen()
+  | | | |     +-ft_strncmp()
+  | | | |     \-free()
+  | | | \-ft_strcmp()
+  | | +-excec_external() <int excec_external (t_cmd *cmd, t_shell_env *shell_env) at external.c:47>
+  | | | +-resolve_path() <char *resolve_path (char *cmd, char **env) at external_helpers.c:51>
+  | | | | +-ft_strchr()
+  | | | | +-access()
+  | | | | +-ft_strdup()
+  | | | | +-ft_strncmp()
+  | | | | \-search_in_path() <char *search_in_path (char *cmd, char *path_env) at external_helpers.c:26>
+  | | | |   +-ft_split()
+  | | | |   +-build_path_sp() <char *build_path_sp (char *path, char *cmd) at external_helpers.c:15>
+  | | | |   | +-ft_strlen()
+  | | | |   | +-ft_strjoin()
+  | | | |   | \-ft_strjoin_three() <char *ft_strjoin_three (const char *name, const char *eq, const char *value) at env_utils.c:46>
+  | | | |   |   +-ft_strjoin()
+  | | | |   |   \-free()
+  | | | |   +-access()
+  | | | |   +-free_av() <void free_av (char **argv) at free.c:42>
+  | | | |   | \-free()
+  | | | |   \-free()
+  | | | +-handle_no_path() <int handle_no_path (char *cmd_name) at external.c:23>
+  | | | | +-ft_putstr_fd()
+  | | | | +-write()
+  | | | | \-ft_strlen()
+  | | | +-fork()
+  | | | +-handle_fork_error() <int handle_fork_error (char *path, t_shell_env *shell_env) at external.c:31>
+  | | | | +-perror()
+  | | | | \-free()
+  | | | +-exec_child_process() <void exec_child_process (char *path, t_cmd *cmd, t_shell_env *shell_env) at external.c:15>
+  | | | | +-execve()
+  | | | | +-perror()
+  | | | | +-free()
+  | | | | \-exit()
+  | | | +-waitpid()
+  | | | \-update_exit_status() <void update_exit_status (t_shell_env *shell_env, int status) at external.c:39>
+  | | |   +-WIFEXITED()
+  | | |   +-WEXITSTATUS()
+  | | |   +-WIFSIGNALED()
+  | | |   \-WTERMSIG()
+  | | +-printf()
+  | | +-waitpid()
+  | | +-WIFEXITED()
+  | | +-WTERMSIG()
+  | | \-WIFSIGNALED()
+  | +-execute_commands() <void execute_commands (t_cmd *cmds, t_shell_env *env) at exc_cmd.c:15>
+  | | +-dup()
+  | | +-handle_redirections() <void handle_redirections (t_cmd *cmd) at ft_redirects.c:43>
+  | | | +-handle_heredoc() <void handle_heredoc (char *delimiter) at ft_redirects.c:15>
+  | | | | +-pipe()
+  | | | | +-perror()
+  | | | | +-readline()
+  | | | | +-ft_strcmp()
+  | | | | +-free()
+  | | | | +-write()
+  | | | | +-ft_strlen()
+  | | | | +-close()
+  | | | | \-dup2()
+  | | | +-open()
+  | | | +-perror()
+  | | | +-dup2()
+  | | | \-close()
+  | | +-is_builtin() <int is_builtin (t_shell_env *env, char *cmd_name) at excec_built.c:15>
+  | | | +-init_builtins() <t_builtin *init_builtins (t_shell_env *shell_env) at init_builtins.c:35>
+  | | | | +-malloc()
+  | | | | +-perror()
+  | | | | +-exit()
+  | | | | \-init_builtin_entries() <void init_builtin_entries (t_builtin *builtins) at init_builtins.c:15>
+  | | | |   +-ft_strdup()
+  | | | |   +-ft_cd() <int ft_cd (char **args, t_shell_env *shell_env) at ft_cd.c:15>
+  | | | |   | +-ft_strcmp()
+  | | | |   | +-env_get() <char *env_get (t_shell_env *shell_env, const char *name) at env_utils.c:32>
+  | | | |   | | +-find_env_index() <int find_env_index (t_shell_env *shell_env, const char *name) at env_utils.c:15>
+  | | | |   | | | +-ft_strlen()
+  | | | |   | | | \-ft_strncmp()
+  | | | |   | | \-ft_strchr()
+  | | | |   | +-ft_putstr_fd()
+  | | | |   | +-stat()
+  | | | |   | +-S_ISDIR()
+  | | | |   | +-chdir()
+  | | | |   | +-getcwd()
+  | | | |   | \-env_set() <int env_set (t_shell_env *shell_env, const char *name, const char *value) at env_utils2.c:43>
+  | | | |   |   +-ft_strjoin_three() <char *ft_strjoin_three (const char *name, const char *eq, const char *value) at env_utils.c:46>
+  | | | |   |   | +-ft_strjoin()
+  | | | |   |   | \-free()
+  | | | |   |   +-find_env_index() <int find_env_index (t_shell_env *shell_env, const char *name) at env_utils.c:15>
+  | | | |   |   | +-ft_strlen()
+  | | | |   |   | \-ft_strncmp()
+  | | | |   |   +-free()
+  | | | |   |   \-expand_env() <int expand_env (t_shell_env *shell_env, char *new_var) at env_utils2.c:15>
+  | | | |   |     +-malloc()
+  | | | |   |     \-free()
+  | | | |   +-ft_exit() <int ft_exit (char **args, t_shell_env *shell) at ft_exit.c:67>
+  | | | |   | +-ft_putstr_fd()
+  | | | |   | +-exit()
+  | | | |   | +-ft_is_numeric() <int ft_is_numeric (const char *str) at ft_exit.c:15>
+  | | | |   | | \-ft_isdigit()
+  | | | |   | \-ft_atol() <long ft_atol (const char *str, int *error) at ft_exit.c:33>
+  | | | |   |   \-ft_isdigit()
+  | | | |   +-ft_pwd() <int ft_pwd (char **argv, t_shell_env *shell_env) at ft_pwd.c:16>
+  | | | |   | +-getcwd()
+  | | | |   | +-printf()
+  | | | |   | \-perror()
+  | | | |   +-ft_echo() <int ft_echo (char **args, t_shell_env *shell_env) at ft_echo.c:45>
+  | | | |   | +-check_option_echo() <bool check_option_echo (const char *str) at ft_echo.c:15>
+  | | | |   | \-write_echo() <void write_echo (int i, bool new_line, char **args) at ft_echo.c:29>
+  | | | |   |   +-write()
+  | | | |   |   \-ft_strlen()
+  | | | |   +-ft_env() <int ft_env (char **argv, t_shell_env *shell_env) at ft_env.c:15>
+  | | | |   | \-printf()
+  | | | |   +-ft_export() <int ft_export (char **args, t_shell_env *shell_env) at ft_export.c:110>
+  | | | |   | +-ft_print_sorted_env() <void ft_print_sorted_env (char **env) at ft_export.c:83>
+  | | | |   | | +-ft_copy_env() <char **ft_copy_env (char **env) at ft_export.c:31>
+  | | | |   | | | +-malloc()
+  | | | |   | | | +-ft_strdup()
+  | | | |   | | | \-free()
+  | | | |   | | +-ft_sort_env() <void ft_sort_env (char **env) at ft_export.c:59>
+  | | | |   | | | \-ft_strcmp()
+  | | | |   | | +-ft_printf()
+  | | | |   | | \-free()
+  | | | |   | +-check_export_name() <int check_export_name (char *args) at ft_export.c:15>
+  | | | |   | | +-ft_isdigit()
+  | | | |   | | \-ft_isalnum()
+  | | | |   | +-ft_printf()
+  | | | |   | +-ft_strncmp()
+  | | | |   | +-ft_strchr()
+  | | | |   | +-free()
+  | | | |   | +-ft_strdup()
+  | | | |   | \-malloc()
+  | | | |   \-ft_unset() <int ft_unset (char **args, t_shell_env *shell_env) at ft_unset.c:31>
+  | | | |     +-check_unset_name() <int check_unset_name (char *args) at ft_unset.c:15>
+  | | | |     | +-ft_isdigit()
+  | | | |     | \-ft_isalnum()
+  | | | |     +-ft_printf()
+  | | | |     +-ft_strlen()
+  | | | |     +-ft_strncmp()
+  | | | |     \-free()
+  | | | \-ft_strcmp()
+  | | +-exec_builtin() <int exec_builtin (t_cmd *cmd, t_shell_env *env) at excec_built.c:31>
+  | | | +-init_builtins() <t_builtin *init_builtins (t_shell_env *shell_env) at init_builtins.c:35>
+  | | | | +-malloc()
+  | | | | +-perror()
+  | | | | +-exit()
+  | | | | \-init_builtin_entries() <void init_builtin_entries (t_builtin *builtins) at init_builtins.c:15>
+  | | | |   +-ft_strdup()
+  | | | |   +-ft_cd() <int ft_cd (char **args, t_shell_env *shell_env) at ft_cd.c:15>
+  | | | |   | +-ft_strcmp()
+  | | | |   | +-env_get() <char *env_get (t_shell_env *shell_env, const char *name) at env_utils.c:32>
+  | | | |   | | +-find_env_index() <int find_env_index (t_shell_env *shell_env, const char *name) at env_utils.c:15>
+  | | | |   | | | +-ft_strlen()
+  | | | |   | | | \-ft_strncmp()
+  | | | |   | | \-ft_strchr()
+  | | | |   | +-ft_putstr_fd()
+  | | | |   | +-stat()
+  | | | |   | +-S_ISDIR()
+  | | | |   | +-chdir()
+  | | | |   | +-getcwd()
+  | | | |   | \-env_set() <int env_set (t_shell_env *shell_env, const char *name, const char *value) at env_utils2.c:43>
+  | | | |   |   +-ft_strjoin_three() <char *ft_strjoin_three (const char *name, const char *eq, const char *value) at env_utils.c:46>
+  | | | |   |   | +-ft_strjoin()
+  | | | |   |   | \-free()
+  | | | |   |   +-find_env_index() <int find_env_index (t_shell_env *shell_env, const char *name) at env_utils.c:15>
+  | | | |   |   | +-ft_strlen()
+  | | | |   |   | \-ft_strncmp()
+  | | | |   |   +-free()
+  | | | |   |   \-expand_env() <int expand_env (t_shell_env *shell_env, char *new_var) at env_utils2.c:15>
+  | | | |   |     +-malloc()
+  | | | |   |     \-free()
+  | | | |   +-ft_exit() <int ft_exit (char **args, t_shell_env *shell) at ft_exit.c:67>
+  | | | |   | +-ft_putstr_fd()
+  | | | |   | +-exit()
+  | | | |   | +-ft_is_numeric() <int ft_is_numeric (const char *str) at ft_exit.c:15>
+  | | | |   | | \-ft_isdigit()
+  | | | |   | \-ft_atol() <long ft_atol (const char *str, int *error) at ft_exit.c:33>
+  | | | |   |   \-ft_isdigit()
+  | | | |   +-ft_pwd() <int ft_pwd (char **argv, t_shell_env *shell_env) at ft_pwd.c:16>
+  | | | |   | +-getcwd()
+  | | | |   | +-printf()
+  | | | |   | \-perror()
+  | | | |   +-ft_echo() <int ft_echo (char **args, t_shell_env *shell_env) at ft_echo.c:45>
+  | | | |   | +-check_option_echo() <bool check_option_echo (const char *str) at ft_echo.c:15>
+  | | | |   | \-write_echo() <void write_echo (int i, bool new_line, char **args) at ft_echo.c:29>
+  | | | |   |   +-write()
+  | | | |   |   \-ft_strlen()
+  | | | |   +-ft_env() <int ft_env (char **argv, t_shell_env *shell_env) at ft_env.c:15>
+  | | | |   | \-printf()
+  | | | |   +-ft_export() <int ft_export (char **args, t_shell_env *shell_env) at ft_export.c:110>
+  | | | |   | +-ft_print_sorted_env() <void ft_print_sorted_env (char **env) at ft_export.c:83>
+  | | | |   | | +-ft_copy_env() <char **ft_copy_env (char **env) at ft_export.c:31>
+  | | | |   | | | +-malloc()
+  | | | |   | | | +-ft_strdup()
+  | | | |   | | | \-free()
+  | | | |   | | +-ft_sort_env() <void ft_sort_env (char **env) at ft_export.c:59>
+  | | | |   | | | \-ft_strcmp()
+  | | | |   | | +-ft_printf()
+  | | | |   | | \-free()
+  | | | |   | +-check_export_name() <int check_export_name (char *args) at ft_export.c:15>
+  | | | |   | | +-ft_isdigit()
+  | | | |   | | \-ft_isalnum()
+  | | | |   | +-ft_printf()
+  | | | |   | +-ft_strncmp()
+  | | | |   | +-ft_strchr()
+  | | | |   | +-free()
+  | | | |   | +-ft_strdup()
+  | | | |   | \-malloc()
+  | | | |   \-ft_unset() <int ft_unset (char **args, t_shell_env *shell_env) at ft_unset.c:31>
+  | | | |     +-check_unset_name() <int check_unset_name (char *args) at ft_unset.c:15>
+  | | | |     | +-ft_isdigit()
+  | | | |     | \-ft_isalnum()
+  | | | |     +-ft_printf()
+  | | | |     +-ft_strlen()
+  | | | |     +-ft_strncmp()
+  | | | |     \-free()
+  | | | \-ft_strcmp()
+  | | +-excec_external() <int excec_external (t_cmd *cmd, t_shell_env *shell_env) at external.c:47>
+  | | | +-resolve_path() <char *resolve_path (char *cmd, char **env) at external_helpers.c:51>
+  | | | | +-ft_strchr()
+  | | | | +-access()
+  | | | | +-ft_strdup()
+  | | | | +-ft_strncmp()
+  | | | | \-search_in_path() <char *search_in_path (char *cmd, char *path_env) at external_helpers.c:26>
+  | | | |   +-ft_split()
+  | | | |   +-build_path_sp() <char *build_path_sp (char *path, char *cmd) at external_helpers.c:15>
+  | | | |   | +-ft_strlen()
+  | | | |   | +-ft_strjoin()
+  | | | |   | \-ft_strjoin_three() <char *ft_strjoin_three (const char *name, const char *eq, const char *value) at env_utils.c:46>
+  | | | |   |   +-ft_strjoin()
+  | | | |   |   \-free()
+  | | | |   +-access()
+  | | | |   +-free_av() <void free_av (char **argv) at free.c:42>
+  | | | |   | \-free()
+  | | | |   \-free()
+  | | | +-handle_no_path() <int handle_no_path (char *cmd_name) at external.c:23>
+  | | | | +-ft_putstr_fd()
+  | | | | +-write()
+  | | | | \-ft_strlen()
+  | | | +-fork()
+  | | | +-handle_fork_error() <int handle_fork_error (char *path, t_shell_env *shell_env) at external.c:31>
+  | | | | +-perror()
+  | | | | \-free()
+  | | | +-exec_child_process() <void exec_child_process (char *path, t_cmd *cmd, t_shell_env *shell_env) at external.c:15>
+  | | | | +-execve()
+  | | | | +-perror()
+  | | | | +-free()
+  | | | | \-exit()
+  | | | +-waitpid()
+  | | | \-update_exit_status() <void update_exit_status (t_shell_env *shell_env, int status) at external.c:39>
+  | | |   +-WIFEXITED()
+  | | |   +-WEXITSTATUS()
+  | | |   +-WIFSIGNALED()
+  | | |   \-WTERMSIG()
+  | | +-dup2()
+  | | \-close()
+  | +-free_cmds() <void free_cmds (t_cmd *cmds) at free.c:63>
+  | | +-free_redirs() <void free_redirs (t_redir *redirs) at free.c:20>
+  | | | \-free()
+  | | +-free_av() <void free_av (char **argv) at free.c:42>
+  | | | \-free()
+  | | \-free()
+  | \-free()
+  +-destroy_shell_env() <void destroy_shell_env (t_shell_env *shell_env) at env.c:61>
+  | \-free()
+  +-ft_putstr_fd()
+  +-write()
+  \-ft_strlen()
+
+

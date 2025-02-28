@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 19:27:04 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/23 10:26:19 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/28 17:20:49 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	is_valid_var_char(char c)
 	return (ft_isalnum(c) || c == '_');
 }
 
-char	*remove_quotes(char *token)
+char	*remove_quotes(char *token) // pas utilisée
 {
 	int		len;
 	char	*new_token;
