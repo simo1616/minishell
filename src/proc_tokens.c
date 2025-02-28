@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 15:39:21 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/28 21:12:18 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/02/28 22:23:33 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,16 +76,33 @@ int process_token(char *token, t_data *data, t_shell_env *env, t_cmd **cur_cmd, 
 	if (!quote && (!ft_strcmp(token, "|") || is_redir(token)))
 	{
 		if (!ft_strcmp(token, "|"))
-		{
-			result = handle_pipe(cur_cmd);
-			free(token);
-			return (result);
-		}
+        {
+            result = handle_pipe(cur_cmd);
+            free(token);
+            return (result);
+        }
 		else
 		{
-			result = handle_redir(token, data, env, cur_cmd);
-			free(token);
-			return (result);
+			while (token && is_redir(token))
+			{
+				result = handle_redir(token, data, env, cur_cmd);
+				free(token);
+				if (!result)
+					return (0);
+				token = get_next_token(env, data).token;
+			}
+			if (token && !ft_strcmp(token, "|"))
+			{
+				result = handle_pipe(cur_cmd);
+				free(token);
+				return (result);
+			}
+			if (token)
+			{
+				(*cur_cmd)->av = add_to_argv((*cur_cmd)->av, token);
+				free(token);
+			}
+			return (1);
 		}
 	}
 	else
