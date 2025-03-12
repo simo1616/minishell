@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
+/*   By: jdecarro <jdecarro@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 12:05:11 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/28 20:54:20 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/03/12 10:47:55 by jdecarro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,15 @@ typedef struct s_token_data
     size_t len;
 } t_token_data;
 
+typedef struct s_pipe_info
+{
+	int		prev_fd;
+	int		fd[2];
+	pid_t	*pids;
+	int		cmd_count;
+}	t_pipe_info;
+
+
 // copie env
 t_shell_env					*create_shell_env(char **envp);
 void						destroy_shell_env(t_shell_env *shell_env);
@@ -165,6 +174,10 @@ int							handle_redirections(t_cmd *cmd);
 
 // pipes
 int							exec_pipes(t_cmd *cmds, t_shell_env *env);
+int							init_pipe_info(t_pipe_info *pipes, t_cmd *cmds);
+void						child_process_pipes(t_cmd *cur, t_shell_env *env, t_pipe_info *pipes);
+void						parent_process_pipes(t_pipe_info *pipes, t_cmd *cur);
+void						wait_for_children(pid_t *pids, int count, int *status, t_shell_env *env);
 
 // free
 void						free_cmds(t_cmd *cmds);
@@ -195,11 +208,29 @@ t_builtin					*init_builtins(t_shell_env *shell_env);
 int							exec_builtin(t_cmd *cmd, t_shell_env *shell_env);
 int							is_builtin(t_shell_env *env, char *cmd_name);
 int							ft_cd(char **args, t_shell_env *shell_env);
+char						*get_cd_path(char **args, t_shell_env *shell_env);
+int							check_cd_args(char **args, t_shell_env *shell_env);
+int							validate_cd_path(char *path, t_shell_env *shell_env);
+int							print_cd_error(char *path, char *error_msg, t_shell_env *shell_env);
+void						update_env_pwd(t_shell_env *shell_env, char *new_pwd);
 
 // external ls-cat-...etc
 int							exec_external(t_cmd *cmd, t_shell_env *shell_env);
 char						*resolve_path(char *cmd, char **env);
 char						*search_in_path(char *cmd, char *path_env);
 void						update_exit_status(t_shell_env *shell_env, int status);
+
+// exec_cmds_utils
+
+int							fork_and_exec(t_cmd *cmd, t_shell_env *env, t_pipe_info *pipes);
+void						child_process(t_cmd *cmd, t_shell_env *env, t_pipe_info *pipes);
+int							parent_process(pid_t pid, t_pipe_info *pipes, t_cmd *cmd, t_shell_env *env);
+void						reset_std(int saved_stdin, int saved_stdout);
+void						close_prev_fd(int prev_fd);
+
+// exit_utils
+int							ft_is_numeric(const char *str);
+long						ft_atol(const char *str, int *error);
+void						print_exit_error(char *arg, char *msg);
 
 #endif

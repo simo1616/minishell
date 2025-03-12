@@ -39,7 +39,7 @@ SRCS 	= main.c \
 		parse_repl_var.c \
 		redir.c \
 		ft_redirects.c \
-		pipes.c \
+		exec_pipes.c \
 		free.c \
 		ft_echo.c \
 		ft_env.c \
@@ -47,7 +47,11 @@ SRCS 	= main.c \
 		ft_export.c \
 		ft_unset.c \
 		ft_exit.c \
-		ft_cd.c
+		ft_cd.c \
+		exec_cmd_utils.c \
+		exec_pipes_utils.c \
+		ft_cd_utils.c \
+		ft_exit_utils.c
 
 OBJS = $(addprefix $(SRC_DIR), $(SRCS:.c=.o))
 
