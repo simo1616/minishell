@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 15:50:28 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/03/14 15:05:01 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/03/14 15:19:52 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ int	init_cmd_ifneed(t_cmd **cmd, t_cmd **cur_cmd)
 	return (1);
 }
 
-t_cmd *parse_tokens(t_data *data, t_shell_env *env)
+t_cmd	*parse_tokens(t_data *data, t_shell_env *env)
 {
-	t_cmd *cmd;
-	t_cmd *cur_cmd;
-	t_token_data token_data;
+	t_cmd			*cmd;
+	t_cmd			*cur_cmd;
+	t_token_data	token_data;
 
 	cmd = NULL;
 	cur_cmd = NULL;
@@ -40,8 +40,8 @@ t_cmd *parse_tokens(t_data *data, t_shell_env *env)
 		token_data = get_next_token(env, data);
 		if (!token_data.token)
 			break ;
-		if (!init_cmd_ifneed(&cmd, &cur_cmd) ||
-			!process_token(token_data, data, env, &cur_cmd))
+		if (!init_cmd_ifneed(&cmd, &cur_cmd) || !process_token(token_data, data,
+				env, &cur_cmd))
 		{
 			free_cmds(cmd);
 			free(token_data.token_ctx);
