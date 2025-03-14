@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 15:50:28 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/28 21:12:20 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/03/14 15:05:01 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_cmd *parse_tokens(t_data *data, t_shell_env *env)
 		if (!token_data.token)
 			break ;
 		if (!init_cmd_ifneed(&cmd, &cur_cmd) ||
-			!process_token(token_data.token, data, env, &cur_cmd, token_data.token_ctx, token_data.len))
+			!process_token(token_data, data, env, &cur_cmd))
 		{
 			free_cmds(cmd);
 			free(token_data.token_ctx);

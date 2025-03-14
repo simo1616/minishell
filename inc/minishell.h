@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 12:05:11 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/03/14 14:45:05 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/03/14 15:07:13 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,9 +151,8 @@ t_cmd						*parse_command_line(char *line, t_shell_env *env);
 int							handle_pipe(t_cmd **cur_cmd);
 int							handle_redir(char *token, t_data *data,
 								t_shell_env *env, t_cmd **cur_cmd);
-int							process_token(char *token, t_data *data,
-								t_shell_env *env, t_cmd **cur_cmd,
-								int *token_ctx, size_t len);
+int							process_token(t_token_data token_data, t_data *data, t_shell_env *env,
+								t_cmd **cur_cmd);
 t_cmd						*parse_tokens(t_data *data, t_shell_env *env);
 int							init_cmd_ifneed(t_cmd **cmd, t_cmd **cur_cmd);
 char						**init_argv(const char *token);
