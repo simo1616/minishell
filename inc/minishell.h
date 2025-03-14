@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
+/*   By: jdecarro <jdecarro@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 12:05:11 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/03/14 15:07:13 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/03/14 15:38:41 by jdecarro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,5 +255,9 @@ void						close_prev_fd(int prev_fd);
 int							ft_is_numeric(const char *str);
 long						ft_atol(const char *str, int *error);
 void						print_exit_error(char *arg, char *msg);
+
+//export_utils
+void						ft_print_sorted_env(char **env);
+int							check_export_name(char *args);
 
 #endif
