@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 09:52:34 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/26 18:40:55 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/03/14 14:41:12 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,32 @@ static size_t	process_variable(char *token, t_shell_env *env, int *i)
 	return (len);
 }
 
+static size_t	handle_special_chars(char *token, int *ctx, t_shell_env *env,
+		int *i)
+{
+	size_t	len;
+
+	len = 0;
+	if (token[*i] == '\'' || token[*i] == '"')
+	{
+		len++;
+		(*i)++;
+	}
+	else if (token[*i] == '$' && ctx[*i] != 1)
+	{
+		(*i)++;
+		if (!token[*i])
+			return (len);
+		len += process_variable(token, env, i);
+	}
+	else
+	{
+		len++;
+		(*i)++;
+	}
+	return (len);
+}
+
 size_t	calculate_length(char *token, t_shell_env *env, int *ctx)
 {
 	int		i;
@@ -79,24 +105,6 @@ size_t	calculate_length(char *token, t_shell_env *env, int *ctx)
 	i = 0;
 	len = 0;
 	while (token[i])
-	{
-		if (token[i] == '\'' || token[i] == '"')
-		{
-			len++;
-			i++;
-		}
-		else if (token[i] == '$' && ctx[i] != 1)
-		{
-			i++;
-			if (!token[i])
-				break ;
-			len += process_variable(token, env, &i);
-		}
-		else
-		{
-			len++;
-			i++;
-		}
-	}
+		len += handle_special_chars(token, ctx, env, &i);
 	return (len);
 }
