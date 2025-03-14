@@ -6,23 +6,11 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 18:05:27 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/03/13 18:05:32 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/03/14 14:45:15 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static void	handle_exit_status(t_var *v)
-{
-	char	*exit_str;
-
-	exit_str = ft_itoa(v->env->exit_status);
-	ft_memcpy(v->new + v->j, exit_str, ft_strlen(exit_str));
-	v->j += ft_strlen(exit_str);
-	v->i++;
-	v->data->cpos++;
-	free(exit_str);
-}
 
 static void	handle_valid_var(t_var *v)
 {

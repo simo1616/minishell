@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 12:05:11 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/03/14 14:30:25 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/03/14 14:45:05 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +171,7 @@ void						skip_spaces(t_tokenizer *tok);
 char						*remplacer_var(char *token, t_shell_env *env,
 								t_data *data);
 char						*remove_quotes(char *token);
+void						handle_exit_status(t_var *v);
 
 // expansion
 size_t						calculate_length(char *token,
