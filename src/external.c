@@ -56,13 +56,13 @@ int	exec_external(t_cmd *cmd, t_shell_env *shell_env)
 	if (!path)
 		return (handle_no_path(cmd->av[0]));
 	if (stat(path, &sb) == 0 && S_ISDIR(sb.st_mode))
-    {
-        ft_putstr_fd("minishell: ", 2);
-        ft_putstr_fd(path, 2);
-        ft_putstr_fd(": is a directory\n", 2);
-        free(path);
-        return (EX_CMD_NT_EXE);
-    }
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(path, 2);
+		ft_putstr_fd(": is a directory\n", 2);
+		free(path);
+		return (EX_CMD_NT_EXE);
+	}
 	pid = fork();
 	if (pid < 0)
 		return (handle_fork_error(path, shell_env));
