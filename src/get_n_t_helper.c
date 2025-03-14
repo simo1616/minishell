@@ -6,11 +6,17 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 19:30:19 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/28 17:20:06 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/03/14 14:30:34 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	skip_spaces(t_tokenizer *tok)
+{
+	while (tok->data->line[tok->pos] && ft_isspace(tok->data->line[tok->pos]))
+		tok->pos++;
+}
 
 int	alloc_buffer(t_tokenizer *tok)
 {
