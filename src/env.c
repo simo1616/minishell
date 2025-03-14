@@ -6,12 +6,21 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 12:59:17 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/25 20:30:33 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/03/14 15:47:17 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Duplique le tableau d'environnement.
+ *
+ * Alloue et retourne un nouveau tableau de chaînes de caractères contenant
+ * une copie de chaque variable d'environnement passée en paramètre.
+ *
+ * @param envp Tableau d'environnement original.
+ * @return char** Nouveau tableau d'environnement ou NULL en cas d'erreur.
+ */
 static char	**dup_env(char **envp)
 {
 	int		i;
@@ -40,6 +49,16 @@ static char	**dup_env(char **envp)
 	return (env);
 }
 
+/**
+ * @brief Crée l'environnement du shell.
+ *
+ * Alloue et initialise une structure t_shell_env en dupliquant les variables
+ * d'environnement fournies et en initialisant les autres champs.
+ *
+ * @param envp Tableau d'environnement original.
+ * @return t_shell_env* Pointeur vers l'environnement du shell
+ * ou NULL en cas d'erreur.
+ */
 t_shell_env	*create_shell_env(char **envp)
 {
 	t_shell_env	*shell_env;
@@ -59,6 +78,14 @@ t_shell_env	*create_shell_env(char **envp)
 	return (shell_env);
 }
 
+/**
+ * @brief Détruit l'environnement du shell.
+ *
+ * Libère toutes les ressources associées à la structure t_shell_env,
+ * y compris le tableau d'environnement et les builtins.
+ *
+ * @param shell_env Pointeur vers l'environnement du shell à détruire.
+ */
 void	destroy_shell_env(t_shell_env *shell_env)
 {
 	int	i;

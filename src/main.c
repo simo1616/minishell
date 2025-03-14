@@ -6,12 +6,19 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 12:15:51 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/03/13 17:37:54 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/03/14 15:52:50 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Met à jour le statut de sortie en fonction du signal reçu.
+ *
+ * Si SIGINT est reçu, le statut devient 130, puis réinitialise le signal.
+ *
+ * @param shell_env Environnement du shell.
+ */
 static void	handle_signal(t_shell_env *shell_env)
 {
 	if (g_received_signal)
@@ -22,6 +29,16 @@ static void	handle_signal(t_shell_env *shell_env)
 	}
 }
 
+/**
+ * @brief Exécute les commandes selon leur structure et libère la mémoire.
+ *
+ * Si cmds est NULL, le statut passe à 258 (sauf en cas de SIGINT).
+ * Si plusieurs commandes sont chaînées (pipe), appelle exec_pipes(),
+ * sinon exécute la commande avec execute_commands().
+ *
+ * @param cmds Structure des commandes.
+ * @param shell_env Environnement du shell.
+ */
 static void	handle_command_execution(t_cmd *cmds, t_shell_env *shell_env)
 {
 	if (cmds == NULL)
@@ -36,6 +53,14 @@ static void	handle_command_execution(t_cmd *cmds, t_shell_env *shell_env)
 	free_cmds(cmds);
 }
 
+/**
+ * @brief Lit la ligne de commande, la parse et exécute la commande.
+ *
+ * Lit la commande via readline(), ajoute à l'historique,
+ * gère les signaux, parse la commande et exécute selon sa structure.
+ *
+ * @param shell_env Environnement du shell.
+ */
 static void	process_iteration(t_shell_env *shell_env)
 {
 	char	*cmd_line;
@@ -56,6 +81,19 @@ static void	process_iteration(t_shell_env *shell_env)
 	free(cmd_line);
 }
 
+/**
+ * @brief Point d'entrée du shell.
+ *
+ * Initialise l'environnement et la gestion des signaux, entre dans 
+ * la boucle d'invite.
+ * 
+ * Si des arguments supplémentaires sont fournis, affiche une erreur.
+ *
+ * @param ac Nombre d'arguments.
+ * @param av Arguments.
+ * @param envp Variables d'environnement.
+ * @return int Code de sortie.
+ */
 int	main(int ac, char **av, char **envp)
 {
 	t_shell_env	*shell_env;
