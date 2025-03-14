@@ -1,110 +1,114 @@
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_repl_var.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/13 18:05:27 by mbendidi          #+#    #+#             */
+/*   Updated: 2025/03/13 18:05:32 by mbendidi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*remplacer_var(char *token, t_shell_env *env, t_data *data)
+static void	handle_exit_status(t_var *v)
 {
-	char	*new;
+	char	*exit_str;
+
+	exit_str = ft_itoa(v->env->exit_status);
+	ft_memcpy(v->new + v->j, exit_str, ft_strlen(exit_str));
+	v->j += ft_strlen(exit_str);
+	v->i++;
+	v->data->cpos++;
+	free(exit_str);
+}
+
+static void	handle_valid_var(t_var *v)
+{
 	char	*var_name;
 	char	*var_value;
 	int		var_start;
-	int		var_len;
-	size_t	len_token;
-	int		i;
-	int		j;
-	char	*exit_str;
-	size_t	var_v_len;
+
+	var_start = v->i;
+	while (v->token[v->i] && is_valid_var_char(v->token[v->i]))
+	{
+		v->i++;
+		v->data->cpos++;
+	}
+	var_name = ft_substr(v->token, var_start, v->i - var_start);
+	var_value = env_get(v->env, var_name);
+	if (var_value)
+	{
+		ft_memcpy(v->new + v->j, var_value, ft_strlen(var_value));
+		v->j += ft_strlen(var_value);
+	}
+	free(var_name);
+}
+
+static void	handle_dollar(t_var *v)
+{
+	v->i++;
+	v->data->cpos++;
+	if (!v->token[v->i])
+		v->new[v->j++] = '$';
+	else if (v->token[v->i] == '?')
+		handle_exit_status(v);
+	else if (!is_valid_var_char(v->token[v->i]))
+	{
+		v->new[v->j++] = '$';
+		v->new[v->j++] = v->token[v->i++];
+		v->data->cpos++;
+	}
+	else
+		handle_valid_var(v);
+}
+
+static void	process_quoted_dollar(t_var *v)
+{
+	while (v->token[v->i] && v->data->ctx[v->data->cpos] == 1)
+	{
+		v->new[v->j++] = v->token[v->i++];
+		v->data->cpos++;
+	}
+}
+
+static void	process_characters(t_var *v)
+{
+	while (v->token[v->i])
+	{
+		if (v->token[v->i] == '$' && v->data->ctx[v->data->cpos] != 1)
+			handle_dollar(v);
+		else if (v->token[v->i] == '$')
+			process_quoted_dollar(v);
+		else
+		{
+			v->new[v->j++] = v->token[v->i++];
+			v->data->cpos++;
+		}
+	}
+}
+
+char	*remplacer_var(char *token, t_shell_env *env, t_data *data)
+{
+	t_var	v;
 
 	if (ft_strcmp(token, "$") == 0)
+		return (ft_strdup(token));
+	v.token = token;
+	v.env = env;
+	v.data = data;
+	v.new = malloc(calculate_length(token, env, data->ctx) + 1);
+	v.i = 0;
+	v.j = 0;
+	v.len = calculate_length(token, env, data->ctx);
+	if (!v.new || !data->ctx)
 	{
-		new = ft_strdup(token);
-		return (new);
-	}
-	len_token = calculate_length(token, env, data->ctx);
-	new = (char *)malloc(sizeof(char) * (len_token + 1));
-	if (!new)
+		if (v.new)
+			free(v.new);
 		return (NULL);
-	i = 0;
-	j = 0;
-	var_len = 0;
-	var_start = 0;
-	var_v_len = 0;
-	exit_str = NULL;
-	if (!data->ctx)
-		return (NULL);
-	while (token[i])
-	{
-		if (token[i] != '$')
-		{
-			new[j] = token[i];
-			i++;
-			j++;
-			data->cpos++;
-		}
-		else if (token[i] == '$' && data->ctx[data->cpos] != 1)
-		{
-			i++;
-			data->cpos++;
-			if (!token[i])
-			{
-				new[j] = '$';
-				j++;
-				break ;
-			}
-			else if (token[i] == '?')
-			{
-				exit_str = ft_itoa(env->exit_status);
-				ft_memcpy(new + j, exit_str, ft_strlen(exit_str));
-				i++;
-				data->cpos++;
-				j += ft_strlen(exit_str);
-				free(exit_str);
-			}
-			else if (!is_valid_var_char(token[i]))
-			{
-				new[j++] = '$';
-				new[j++] = token[i];
-				i++;
-				data->cpos++;
-			}
-			else
-			{
-				var_start = i;
-				while (token[i] && is_valid_var_char(token[i]))
-				{
-					i++;
-					data->cpos++;
-				}
-				var_len = i - var_start;
-				var_name = ft_substr(token, var_start, var_len);
-				var_value = env_get(env, var_name);
-				if (var_value)
-				{
-					var_v_len = ft_strlen(var_value);
-					if (j + var_v_len > len_token)
-					{
-						ft_putstr_fd("error: Not enough space in the buffer to copy\n", 2);
-						ft_putstr_fd(var_value, 2);
-						ft_putendl_fd("\"", 2);
-						free(var_name);
-						return (NULL);
-					}
-					ft_memcpy(new + j, var_value, var_v_len);
-					j += var_v_len;
-				}
-				free(var_name);
-			}
-		}
-		else if (token[i] == '$' && data->ctx[data->cpos] == 1)
-		{
-			while (token[i] && data->ctx[data->cpos] == 1)
-			{
-				new[j] = token[i];
-				i++;
-				j++;
-			}
-		}
 	}
-	new[j] = '\0';
-	return (new);
+	process_characters(&v);
+	v.new[v.j] = '\0';
+	return (v.new);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jdecarro <jdecarro@student.42lausanne.c    +#+  +:+       +#+        */
+/*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 12:05:11 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/03/12 11:15:41 by jdecarro         ###   ########.fr       */
+/*   Updated: 2025/03/13 18:03:42 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,16 @@ typedef struct s_pipe_info
 	pid_t					*pids;
 	int						cmd_count;
 }	t_pipe_info;
+
+typedef struct s_var {
+	char					*new;
+	char					*token;
+	t_data					*data;
+	t_shell_env				*env;
+	int						i;
+	int						j;
+	size_t					len;
+}	t_var;
 
 // copie env
 t_shell_env					*create_shell_env(char **envp);

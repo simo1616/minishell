@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 12:15:51 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/28 21:12:25 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/03/13 17:37:54 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,24 @@ static void	handle_signal(t_shell_env *shell_env)
 	}
 }
 
+static void	handle_command_execution(t_cmd *cmds, t_shell_env *shell_env)
+{
+	if (cmds == NULL)
+	{
+		if (shell_env->exit_status != 130)
+			shell_env->exit_status = 258;
+	}
+	else if (cmds->next)
+		exec_pipes(cmds, shell_env);
+	else
+		execute_commands(cmds, shell_env);
+	free_cmds(cmds);
+}
+
 static void	process_iteration(t_shell_env *shell_env)
 {
-	char		*cmd_line;
-	t_cmd		*cmds;
+	char	*cmd_line;
+	t_cmd	*cmds;
 
 	cmd_line = readline("\001\033[1;35m\002Minishell> \001\033[0m\002");
 	if (!cmd_line)
@@ -38,18 +52,7 @@ static void	process_iteration(t_shell_env *shell_env)
 		add_history(cmd_line);
 	handle_signal(shell_env);
 	cmds = parse_command_line(cmd_line, shell_env);
-	if (cmds == NULL)
-		shell_env->exit_status = 258;
-	else if (cmds->next)
-	{
-		exec_pipes(cmds, shell_env);
-		free_cmds(cmds);
-	}
-	else
-	{
-		execute_commands(cmds, shell_env);
-		free_cmds(cmds);
-	}
+	handle_command_execution(cmds, shell_env);
 	free(cmd_line);
 }
 
