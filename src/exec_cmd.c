@@ -3,15 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jdecarro <jdecarro@student.42lausanne.c    +#+  +:+       +#+        */
+/*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:32:41 by jdecarro          #+#    #+#             */
-/*   Updated: 2025/03/12 10:01:13 by jdecarro         ###   ########.fr       */
+/*   Updated: 2025/03/14 20:31:11 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Exécute les commandes.
+ *
+ * Sauvegarde STDIN/STDOUT, gère les redirections et exécute la
+ * commande. Si la commande est un builtin sans suite,
+ * elle est exécutée directement, sinon un fork est réalisé.
+ * Enfin, les STDIN/STDOUT sont restaurés et le dernier FD
+ * de pipe est fermé.
+ *
+ * @param cmds Liste chaînée des commandes.
+ * @param env Environnement du shell.
+ */
 void	execute_commands(t_cmd *cmds, t_shell_env *env)
 {
 	t_cmd		*current;

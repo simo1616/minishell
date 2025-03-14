@@ -6,12 +6,22 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 13:05:00 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/22 13:05:43 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/03/14 21:25:05 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Ajoute ou met à jour une variable dans l'environnement.
+ *
+ * Si la variable existe, elle est remplacée par new_var. Sinon,
+ * new_var est ajoutée à la fin du tableau.
+ *
+ * @param shell_env Environnement du shell.
+ * @param new_var Nouvelle variable (chaine "name=value").
+ * @return int 0 en cas de succès, 1 en cas d'erreur.
+ */
 static int	expand_env(t_shell_env *shell_env, char *new_var)
 {
 	char	**new_env;
@@ -40,6 +50,18 @@ static int	expand_env(t_shell_env *shell_env, char *new_var)
 	return (0);
 }
 
+/**
+ * @brief Définit ou met à jour une variable d'environnement.
+ *
+ * Concatène name, "=" et value pour créer une nouvelle variable.
+ * Si la variable existe déjà, elle est remplacée, sinon, elle est
+ * ajoutée à l'environnement.
+ *
+ * @param shell_env Environnement du shell.
+ * @param name Nom de la variable.
+ * @param value Valeur de la variable.
+ * @return int 0 si succès, 1 sinon.
+ */
 int	env_set(t_shell_env *shell_env, const char *name, const char *value)
 {
 	char	*new_var;

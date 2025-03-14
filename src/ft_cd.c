@@ -12,6 +12,16 @@
 
 #include "minishell.h"
 
+/**
+ * @brief Change le répertoire courant.
+ *
+ * Récupère le chemin, vérifie les arguments et le chemin,
+ * puis change le répertoire et met à jour l'environnement.
+ *
+ * @param args Tableau d'arguments.
+ * @param shell_env Environnement du shell.
+ * @return int 0 en cas de succès, 1 sinon.
+ */
 int	ft_cd(char **args, t_shell_env *shell_env)
 {
 	char		*path;

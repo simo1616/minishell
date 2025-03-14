@@ -3,15 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jdecarro <jdecarro@student.42lausanne.c    +#+  +:+       +#+        */
+/*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 09:25:52 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/03/11 15:15:59 by jdecarro         ###   ########.fr       */
+/*   Updated: 2025/03/14 20:58:20 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Initialise un pipe si nécessaire.
+ *
+ * Si la commande courante a un successeur, crée un pipe.
+ * En cas d'erreur, affiche un message et retourne -1.
+ *
+ * @param pipes Structure de pipe.
+ * @param cur Commande courante.
+ * @return int 0 si succès, -1 en cas d'erreur.
+ */
 static int	setup_pipe(t_pipe_info *pipes, t_cmd *cur)
 {
 	if (cur->next && pipe(pipes->fd) < 0)
@@ -22,6 +32,17 @@ static int	setup_pipe(t_pipe_info *pipes, t_cmd *cur)
 	return (0);
 }
 
+/**
+ * @brief Exécute des commandes chaînées avec des pipes.
+ *
+ * Initialise les pipes, effectue un fork pour chaque commande,
+ * puis attend la fin des processus enfants. Retourne le code
+ * de sortie final.
+ *
+ * @param cmds Liste chaînée des commandes.
+ * @param env Environnement du shell.
+ * @return int Code de sortie (exit_status).
+ */
 int	exec_pipes(t_cmd *cmds, t_shell_env *env)
 {
 	t_pipe_info	pipes;

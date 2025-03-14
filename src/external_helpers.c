@@ -6,12 +6,22 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 17:54:57 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/22 17:56:46 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/03/14 21:06:49 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Construit un chemin complet pour une commande.
+ *
+ * Si path se termine par '/', concatène directement cmd, sinon
+ * insère un '/' entre path et cmd.
+ *
+ * @param path Chemin de base.
+ * @param cmd Nom de la commande.
+ * @return char* Chemin complet alloué.
+ */
 static char	*build_path_sp(char *path, char *cmd)
 {
 	int	len;
@@ -23,6 +33,15 @@ static char	*build_path_sp(char *path, char *cmd)
 		return (ft_strjoin_three(path, "/", cmd));
 }
 
+/**
+ * @brief Cherche une commande dans le PATH.
+ *
+ * Découpe path_env par ':' et teste l'exécutabilité de chaque chemin.
+ *
+ * @param cmd Nom de la commande.
+ * @param path_env Variable d'environnement PATH.
+ * @return char* Chemin trouvé ou NULL.
+ */
 char	*search_in_path(char *cmd, char *path_env)
 {
 	char		**path_sp;
@@ -48,6 +67,16 @@ char	*search_in_path(char *cmd, char *path_env)
 	return (NULL);
 }
 
+/**
+ * @brief Résout le chemin d'une commande.
+ *
+ * Si cmd contient '/', vérifie l'exécutabilité directement.
+ * Sinon, cherche la commande dans PATH.
+ *
+ * @param cmd Nom de la commande.
+ * @param env Tableau des variables d'environnement.
+ * @return char* Chemin résolu ou NULL.
+ */
 char	*resolve_path(char *cmd, char **env)
 {
 	char	*path_env;

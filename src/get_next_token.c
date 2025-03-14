@@ -6,12 +6,20 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 20:04:37 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/03/14 14:29:31 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/03/14 17:04:35 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Gère le caractère d'échappement.
+ *
+ * Si le caractère suivant existe, avance et remplit le buffer;
+ * sinon, remplit le buffer et avance.
+ *
+ * @param tok Pointeur sur le tokenizer.
+ */
 static void	handle_backslash(t_tokenizer *tok)
 {
 	if (tok->data->line[tok->pos + 1])
@@ -27,6 +35,13 @@ static void	handle_backslash(t_tokenizer *tok)
 	}
 }
 
+/**
+ * @brief Gère les guillemets dans le token.
+ *
+ * Active ou désactive le mode citation selon le caractère lu.
+ *
+ * @param tok Pointeur sur le tokenizer.
+ */
 static void	handle_quote_char(t_tokenizer *tok)
 {
 	char	c;
@@ -46,6 +61,14 @@ static void	handle_quote_char(t_tokenizer *tok)
 	tok->pos++;
 }
 
+/**
+ * @brief Parse un token depuis la ligne.
+ *
+ * Remplit le buffer et le contexte du token jusqu'à la fin ou
+ * jusqu'à un espace hors citation.
+ *
+ * @param tok Pointeur sur le tokenizer.
+ */
 static void	parse_token(t_tokenizer *tok)
 {
 	while (tok->pos < tok->total && tok->data->line[tok->pos])
@@ -68,6 +91,15 @@ static void	parse_token(t_tokenizer *tok)
 	tok->buffer[tok->len] = '\0';
 }
 
+/**
+ * @brief Initialise le tokenizer.
+ *
+ * Affecte les champs et saute les espaces initiaux.
+ *
+ * @param tok Pointeur sur le tokenizer.
+ * @param env Environnement du shell.
+ * @param data Structure contenant la ligne.
+ */
 static void	init_tokenizer(t_tokenizer *tok, t_shell_env *env, t_data *data)
 {
 	tok->data = data;
@@ -83,6 +115,16 @@ static void	init_tokenizer(t_tokenizer *tok, t_shell_env *env, t_data *data)
 	tok->total = ft_strlen(data->line);
 }
 
+/**
+ * @brief Récupère le prochain token.
+ *
+ * Initialise le tokenizer, alloue le buffer, parse le token et
+ * traite l'expansion si nécessaire.
+ *
+ * @param env Environnement du shell.
+ * @param data Structure contenant la ligne.
+ * @return t_token_data Token obtenu.
+ */
 t_token_data	get_next_token(t_shell_env *env, t_data *data)
 {
 	t_tokenizer		tok;

@@ -12,6 +12,15 @@
 
 #include "minishell.h"
 
+/**
+ * @brief Vérifie l'option -n pour echo.
+ *
+ * Retourne true si la chaîne commence par '-' et contient
+ * uniquement des 'n' après.
+ *
+ * @param str Chaîne à tester.
+ * @return bool true si option -n, false sinon.
+ */
 static bool	check_option_echo(const char *str)
 {
 	int	i;
@@ -26,6 +35,17 @@ static bool	check_option_echo(const char *str)
 	return (str[i] == '\0');
 }
 
+/**
+ * @brief Affiche les arguments d'echo.
+ *
+ * Parcourt args à partir de l'indice i, écrit les mots
+ * séparés par un espace, et ajoute un saut de ligne si
+ * new_line est true.
+ *
+ * @param i Index de départ dans args.
+ * @param new_line Indique s'il faut ajouter un saut de ligne.
+ * @param args Tableau d'arguments.
+ */
 static void	write_echo(int i, bool new_line, char **args)
 {
 	bool	first;
@@ -43,6 +63,15 @@ static void	write_echo(int i, bool new_line, char **args)
 		write(1, "\n", 1);
 }
 
+/**
+ * @brief Exécute la commande echo.
+ *
+ * Gère l'option -n pour supprimer le saut de ligne.
+ *
+ * @param args Tableau d'arguments.
+ * @param shell_env Environnement du shell (non utilisé).
+ * @return int 0.
+ */
 int	ft_echo(char **args, t_shell_env *shell_env)
 {
 	int		i;
@@ -59,9 +88,3 @@ int	ft_echo(char **args, t_shell_env *shell_env)
 	write_echo(i, new_line, args);
 	return (0);
 }
-
-// int main(int argc, char **argv)
-// {
-// 	ft_echo(argv);
-// 	return (0);
-// }

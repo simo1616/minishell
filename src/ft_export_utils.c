@@ -12,6 +12,14 @@
 
 #include "minishell.h"
 
+/**
+ * @brief Copie le tableau d'environnement.
+ *
+ * Alloue et duplique chaque chaîne de env.
+ *
+ * @param env Tableau d'environnement.
+ * @return char** Nouveau tableau ou NULL en erreur.
+ */
 static char	**ft_copy_env(char **env)
 {
 	int		i;
@@ -40,6 +48,13 @@ static char	**ft_copy_env(char **env)
 	return (new_env);
 }
 
+/**
+ * @brief Trie le tableau d'environnement.
+ *
+ * tri simple par comparaison des chaînes.
+ *
+ * @param env Tableau d'environnement à trier.
+ */
 static void	ft_sort_env(char **env)
 {
 	int		i;
@@ -64,6 +79,14 @@ static void	ft_sort_env(char **env)
 	}
 }
 
+/**
+ * @brief Affiche l'environnement trié.
+ *
+ * Copie et trie l'env, puis l'affiche sous la forme
+ * "declare -x name" ou "declare -x name="value"".
+ *
+ * @param env Tableau d'environnement.
+ */
 void	ft_print_sorted_env(char **env)
 {
 	int		i;
@@ -91,6 +114,15 @@ void	ft_print_sorted_env(char **env)
 	free(sorted_env);
 }
 
+/**
+ * @brief Vérifie si un nom pour export est valide.
+ *
+ * Checker le nom, ne doit pas commencer par '=' ou un chiffre, et doit
+ * contenir uniquement des alphanumériques ou '_'.
+ *
+ * @param args Nom à vérifier.
+ * @return int 1 si valide, 0 sinon.
+ */
 int	check_export_name(char *args)
 {
 	int	i;

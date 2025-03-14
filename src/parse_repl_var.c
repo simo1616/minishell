@@ -6,12 +6,21 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 18:05:27 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/03/14 14:45:15 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/03/14 20:11:35 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Traite une variable valide.
+ *
+ * Extrait le nom de la variable depuis token, récupère sa valeur
+ * depuis l'environnement et copie cette valeur dans la nouvelle
+ * chaîne.
+ *
+ * @param v Structure de variables pour le remplacement.
+ */
 static void	handle_valid_var(t_var *v)
 {
 	char	*var_name;
@@ -34,6 +43,14 @@ static void	handle_valid_var(t_var *v)
 	free(var_name);
 }
 
+/**
+ * @brief Traite le caractère '$'.
+ *
+ * Avance l'index et selon le caractère suivant, traite le cas de
+ * fin de chaîne, '?' ou d'un caractère non valide.
+ *
+ * @param v Structure de variables pour le remplacement.
+ */
 static void	handle_dollar(t_var *v)
 {
 	v->i++;
@@ -52,6 +69,14 @@ static void	handle_dollar(t_var *v)
 		handle_valid_var(v);
 }
 
+/**
+ * @brief Traite le '$' dans une citation.
+ *
+ * Copie le caractère '$' et ses suivants tant que le contexte 
+ * indique une citation (ctx == 1).
+ *
+ * @param v Structure de variables pour le remplacement.
+ */
 static void	process_quoted_dollar(t_var *v)
 {
 	while (v->token[v->i] && v->data->ctx[v->data->cpos] == 1)
@@ -61,6 +86,14 @@ static void	process_quoted_dollar(t_var *v)
 	}
 }
 
+/**
+ * @brief Parcourt token et remplace les variables.
+ *
+ * Itère sur token et, selon le caractère, traite la variable ou
+ * copie le caractère directement.
+ *
+ * @param v Structure de variables pour le remplacement.
+ */
 static void	process_characters(t_var *v)
 {
 	while (v->token[v->i])
@@ -77,6 +110,17 @@ static void	process_characters(t_var *v)
 	}
 }
 
+/**
+ * @brief Remplace les variables dans token par leur valeur.
+ *
+ * Alloue une nouvelle chaîne, parcourt token pour remplacer
+ * les variables et retourne la nouvelle chaîne.
+ *
+ * @param token Chaîne contenant des variables.
+ * @param env Environnement du shell.
+ * @param data Structure des données de la ligne.
+ * @return char* Chaîne avec les variables remplacées.
+ */
 char	*remplacer_var(char *token, t_shell_env *env, t_data *data)
 {
 	t_var	v;

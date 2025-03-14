@@ -12,6 +12,14 @@
 
 #include "minishell.h"
 
+/**
+ * @brief Vérifie si une chaîne est numérique.
+ * 
+ * Renvoie 1 si la chaîne représente un nombre, 0 sinon.
+ * 
+ * @param str Chaîne à tester.
+ * @return int 1 si numérique, 0 sinon.
+ */
 int	ft_is_numeric(const char *str)
 {
 	int	i;
@@ -30,6 +38,16 @@ int	ft_is_numeric(const char *str)
 	return (1);
 }
 
+/**
+ * @brief Traite le signe dans la chaîne.
+ * 
+ * Met à jour l'indice et le signe.
+ * 
+ * @param str Chaîne.
+ * @param i Pointeur sur l'indice courant.
+ * @param sign Pointeur sur le signe.
+ * @return int Toujours 0.
+ */
 static int	check_sign(const char *str, int *i, int *sign)
 {
 	if (str[*i] == '-' || str[*i] == '+')
@@ -41,6 +59,15 @@ static int	check_sign(const char *str, int *i, int *sign)
 	return (0);
 }
 
+/**
+ * @brief Vérifie un débordement.
+ * 
+ * Compare le résultat partiel et le chiffre courant.
+ * 
+ * @param result Résultat partiel.
+ * @param digit Caractère chiffre.
+ * @return int 1 en cas de débordement, 0 sinon.
+ */
 static int	check_overflow(long result, char digit)
 {
 	if ((result > LONG_MAX / 10)
@@ -49,6 +76,15 @@ static int	check_overflow(long result, char digit)
 	return (0);
 }
 
+/**
+ * @brief Convertit une chaîne en long.
+ * 
+ * Traite le signe et les chiffres, vérifie le débordement.
+ * 
+ * @param str Chaîne à convertir.
+ * @param error Pointeur sur l'erreur.
+ * @return long Valeur convertie.
+ */
 long	ft_atol(const char *str, int *error)
 {
 	int		i;
@@ -76,6 +112,14 @@ long	ft_atol(const char *str, int *error)
 	return (result * sign);
 }
 
+/**
+ * @brief Affiche une erreur pour exit.
+ * 
+ * Affiche l'argument et le message d'erreur.
+ * 
+ * @param arg Argument problématique.
+ * @param msg Message d'erreur.
+ */
 void	print_exit_error(char *arg, char *msg)
 {
 	ft_putstr_fd("minishell: exit: ", 2);

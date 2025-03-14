@@ -6,12 +6,22 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 15:50:28 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/03/14 15:19:52 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/03/14 16:56:02 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Initialise une commande si nécessaire.
+ *
+ * Si la commande n'est pas encore allouée, alloue une nouvelle structure
+ * t_cmd, initialise ses champs et met à jour cur_cmd.
+ *
+ * @param cmd Pointeur vers la commande principale.
+ * @param cur_cmd Pointeur vers la commande courante.
+ * @return int 1 en cas de succès, 0 en cas d'échec.
+ */
 int	init_cmd_ifneed(t_cmd **cmd, t_cmd **cur_cmd)
 {
 	if (!*cmd)
@@ -27,6 +37,17 @@ int	init_cmd_ifneed(t_cmd **cmd, t_cmd **cur_cmd)
 	return (1);
 }
 
+/**
+ * @brief Parse les tokens de la ligne de commande en une liste.
+ *
+ * Lit et traite les tokens jusqu'à épuisement. Pour chaque token, 
+ * initialise la commande si nécessaire et appelle process_token.
+ * En cas d'erreur, libère les commandes et retourne NULL.
+ *
+ * @param data Structure contenant la ligne de commande et son contexte.
+ * @param env Environnement du shell.
+ * @return t_cmd* Liste chaînée des commandes ou NULL en cas d'erreur.
+ */
 t_cmd	*parse_tokens(t_data *data, t_shell_env *env)
 {
 	t_cmd			*cmd;
@@ -52,6 +73,16 @@ t_cmd	*parse_tokens(t_data *data, t_shell_env *env)
 	return (cmd);
 }
 
+/**
+ * @brief Vérifie la syntaxe finale de la liste de commandes.
+ *
+ * Parcourt la liste jusqu'à la dernière commande et vérifie que celle-ci 
+ * possède des arguments. Si non, affiche une erreur, libère les commandes,
+ * et retourne 0.
+ *
+ * @param cmd Liste chaînée des commandes.
+ * @return int 1 si la vérification est réussie, 0 sinon.
+ */
 int	final_verification(t_cmd *cmd)
 {
 	t_cmd	*cur_cmd;
@@ -68,6 +99,17 @@ int	final_verification(t_cmd *cmd)
 	return (1);
 }
 
+/**
+ * @brief Parse la ligne de commande et retourne la liste de commandes.
+ *
+ * Initialise la structure t_data avec la ligne, récupère le contexte des 
+ * citations, parse les tokens en commandes et effectue une vérification finale.
+ * En cas d'erreur, libère le contexte et retourne NULL.
+ *
+ * @param line Ligne de commande saisie.
+ * @param env Environnement du shell.
+ * @return t_cmd* Liste chaînée des commandes ou NULL en cas d'erreur.
+ */
 t_cmd	*parse_command_line(char *line, t_shell_env *env)
 {
 	t_data	data;

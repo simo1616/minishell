@@ -12,6 +12,16 @@
 
 #include "minishell.h"
 
+/**
+ * @brief Affiche le répertoire de travail courant.
+ *
+ * Utilise getcwd pour récupérer le chemin et l'affiche.
+ * En cas d'échec, affiche l'erreur avec perror.
+ *
+ * @param argv Non utilisé.
+ * @param shell_env Non utilisé.
+ * @return int 0 en cas de succès, 1 en cas d'erreur.
+ */
 int	ft_pwd(char **argv, t_shell_env *shell_env)
 {
 	char	cwd[PATH_MAX];
@@ -29,24 +39,3 @@ int	ft_pwd(char **argv, t_shell_env *shell_env)
 		return (1);
 	}
 }
-
-// int	main(int argc, char **argv)
-// {
-// 	ft_pwd();
-// 	return (0);
-// }
-// int main ()
-// {
-// 	int i;
-// 	i = 0;
-// 	t_builtin g_builtins[] = {
-// 		{"cd",     &builtin_cd},
-// 		{"exit",   &builtin_exit},
-// 		{"pwd",    &builtin_pwd},
-// 		{"echo",   &builtin_echo},
-// 		{"env",    &builtin_env},
-// 		{"export", &builtin_export},
-// 		{"unset",  &builtin_unset},
-// 		{NULL,     NULL}
-// 	};
-// }

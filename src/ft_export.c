@@ -12,6 +12,15 @@
 
 #include "minishell.h"
 
+/**
+ * @brief Met à jour une variable existante.
+ *
+ * Parcourt env et remplace la variable si le nom correspond.
+ *
+ * @param env Tableau d'environnement.
+ * @param arg Chaîne "name=value".
+ * @return int 1 si mise à jour, -1 en erreur, 0 si non trouvée.
+ */
 static int	update_existing_var(char **env, char *arg)
 {
 	int	i;
@@ -34,6 +43,15 @@ static int	update_existing_var(char **env, char *arg)
 	return (0);
 }
 
+/**
+ * @brief Ajoute une nouvelle variable à l'environnement.
+ *
+ * Alloue un nouveau tableau avec la variable en fin.
+ *
+ * @param shell_env Environnement du shell.
+ * @param arg Chaîne "name=value" à ajouter.
+ * @return int 0 si succès, 1 en cas d'erreur.
+ */
 static int	add_new_var(t_shell_env *shell_env, char *arg)
 {
 	int		i;
@@ -60,6 +78,16 @@ static int	add_new_var(t_shell_env *shell_env, char *arg)
 	return (0);
 }
 
+/**
+ * @brief Gère la commande export.
+ *
+ * Si aucun argument n'est donné, affiche l'env trié.
+ * Sinon, vérifie et met à jour ou ajoute la variable.
+ *
+ * @param args Tableau d'arguments.
+ * @param shell_env Environnement du shell.
+ * @return int 0 si succès, 1 en erreur.
+ */
 int	ft_export(char **args, t_shell_env *shell_env)
 {
 	int	ret;

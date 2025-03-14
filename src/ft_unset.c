@@ -3,15 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jdecarro <jdecarro@student.42lausanne.c    +#+  +:+       +#+        */
+/*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 10:34:06 by jdecarro          #+#    #+#             */
-/*   Updated: 2025/03/14 15:33:45 by jdecarro         ###   ########.fr       */
+/*   Updated: 2025/03/14 21:25:37 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Vérifie la validité d'un nom pour unset.
+ *
+ * Le nom ne doit pas être vide, commencer par '=' ou un chiffre,
+ * et doit être composé d'alphanumériques ou '_'.
+ *
+ * @param args Nom à vérifier.
+ * @return int 1 si valide, 0 sinon.
+ */
 static int	check_unset_name(char *args)
 {
 	int	i;
@@ -28,6 +37,14 @@ static int	check_unset_name(char *args)
 	return (1);
 }
 
+/**
+ * @brief Vérifie un argument de unset.
+ *
+ * Si l'argument n'est pas un identifiant valide, affiche une erreur.
+ *
+ * @param arg Argument à vérifier.
+ * @return int 0 si valide, 1 sinon.
+ */
 static int	check_unset_arg(char *arg)
 {
 	if (!check_unset_name(arg))
@@ -38,6 +55,16 @@ static int	check_unset_arg(char *arg)
 	return (0);
 }
 
+/**
+ * @brief Renvoie l'index d'une variable dans env.
+ *
+ * Compare var avec chaque élément de env en 
+ * s'assurant que le nom est suivi de '='.
+ *
+ * @param env Tableau d'environnement.
+ * @param var Nom de la variable.
+ * @return int Index de la variable, ou -1 si introuvable.
+ */
 static int	env_var_index(char **env, char *var)
 {
 	int	i;
@@ -54,6 +81,14 @@ static int	env_var_index(char **env, char *var)
 	return (-1);
 }
 
+/**
+ * @brief Supprime une variable de l'environnement.
+ *
+ * Libère la variable à l'index donné et décale le reste du tableau.
+ *
+ * @param env Tableau d'environnement.
+ * @param index Index de la variable à supprimer.
+ */
 static void	remove_env_var(char **env, int index)
 {
 	free(env[index]);
@@ -64,6 +99,16 @@ static void	remove_env_var(char **env, int index)
 	}
 }
 
+/**
+ * @brief Implémente la commande unset.
+ *
+ * Parcourt les arguments et supprime la variable
+ * correspondante dans l'environnement.
+ *
+ * @param args Tableau d'arguments.
+ * @param shell_env Environnement du shell.
+ * @return int 0 si succès, 1 en cas d'erreur.
+ */
 int	ft_unset(char **args, t_shell_env *shell_env)
 {
 	int	i;

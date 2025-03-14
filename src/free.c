@@ -6,12 +6,20 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 12:53:09 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/25 20:24:47 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/03/14 16:57:34 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Libère le tableau des builtins.
+ *
+ * Parcourt le tableau des builtins et libère le nom de chaque builtin, 
+ * puis libère le tableau lui-même.
+ *
+ * @param builtins Tableau des builtins.
+ */
 void	free_builtins(t_builtin *builtins)
 {
 	int	i;
@@ -27,11 +35,14 @@ void	free_builtins(t_builtin *builtins)
 	free(builtins);
 }
 
-/*
-	Libère une liste chaînée de redirections
-	On libère d'abord le nom du fichier qui a été alloué
-	Puis la structure de redirection elle-même
-*/
+/**
+ * @brief Libère une liste chaînée de redirections.
+ *
+ * Libère d'abord le nom de fichier associé à chaque redirection, puis 
+ * libère chaque maillon de la liste.
+ *
+ * @param redirs Liste chaînée de redirections.
+ */
 void	free_redirs(t_redir *redirs)
 {
 	t_redir	*current;
@@ -48,12 +59,14 @@ void	free_redirs(t_redir *redirs)
 	}
 }
 
-/*
-	Libère le tableau d'arguments d'une commande
-	On parcourt le tableau jusqu'à NULL
-	Libération de chaque argument
-	Libération du tableau lui-même
-*/
+/**
+ * @brief Libère un tableau d'arguments.
+ *
+ * Parcourt le tableau d'arguments jusqu'à NULL, libère chaque argument, 
+ * puis libère le tableau lui-même.
+ *
+ * @param argv Tableau d'arguments.
+ */
 void	free_av(char **argv)
 {
 	int	i;
@@ -69,12 +82,14 @@ void	free_av(char **argv)
 	free(argv);
 }
 
-/*
-	Fonction principale qui libère toute la liste de commandes
-	On libère d'abord les redirections de la commande
-	Puis les arguments
-	Enfin la structure de commande elle-même
-*/
+/**
+ * @brief Libère une liste chaînée de commandes.
+ *
+ * Libère d'abord les redirections de chaque commande, ensuite le 
+ * tableau d'arguments, et enfin la commande elle-même.
+ *
+ * @param cmds Liste chaînée de commandes.
+ */
 void	free_cmds(t_cmd *cmds)
 {
 	t_cmd	*current;

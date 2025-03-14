@@ -12,6 +12,15 @@
 
 #include "minishell.h"
 
+/**
+ * @brief Gère un heredoc.
+ *
+ * Crée un pipe, lit les lignes avec "> " et écrit dans le pipe
+ * jusqu'à ce que le délimiteur soit atteint.
+ *
+ * @param delimiter Chaîne indiquant la fin du heredoc.
+ * @param heredoc_fd Pointeur sur le FD heredoc.
+ */
 static void	handle_heredoc(char *delimiter, int *heredoc_fd)
 {
 	int		pipe_fd[2];
@@ -38,6 +47,17 @@ static void	handle_heredoc(char *delimiter, int *heredoc_fd)
 	*heredoc_fd = pipe_fd[0];
 }
 
+/**
+ * @brief Ouvre un FD selon le type de redirection.
+ *
+ * Pour un heredoc, appelle handle_heredoc. Pour une
+ * redirection d'entrée, ouvre le fichier en lecture.
+ * Pour la sortie, ouvre en écriture (troncature ou ajout).
+ *
+ * @param redir Redirection à traiter.
+ * @param heredoc_fd Pointeur sur le FD heredoc.
+ * @return int FD ouvert ou -1 en cas d'erreur.
+ */
 static int	open_redirection(t_redir *redir, int *heredoc_fd)
 {
 	int	fd;
@@ -64,6 +84,14 @@ static int	open_redirection(t_redir *redir, int *heredoc_fd)
 	return (fd);
 }
 
+/**
+ * @brief Applique une redirection.
+ *
+ * Duplique le FD dans STDIN ou STDOUT selon le type, puis ferme FD.
+ *
+ * @param fd FD à rediriger.
+ * @param type Type de redirection.
+ */
 static void	apply_redirection(int fd, int type)
 {
 	if (type == REDIR_IN || type == REDIR_HEREDOC)
@@ -73,6 +101,14 @@ static void	apply_redirection(int fd, int type)
 	close(fd);
 }
 
+/**
+ * @brief Gère toutes les redirections d'une commande.
+ *
+ * Parcourt la liste des redirections et les applique.
+ *
+ * @param cmd Commande contenant les redirections.
+ * @return int 0 si succès, -1 en cas d'erreur.
+ */
 int	handle_redirections(t_cmd *cmd)
 {
 	t_redir	*redir;

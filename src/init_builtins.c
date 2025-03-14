@@ -6,12 +6,20 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 18:38:15 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/22 19:21:11 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/03/14 21:01:01 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Initialise les entrées des builtins.
+ *
+ * Remplit le tableau builtins avec les noms des builtins
+ * et pointeurs de fonctions pour chacunes.
+ *
+ * @param builtins Tableau des builtins à initialiser.
+ */
 static void	init_builtin_entries(t_builtin *builtins)
 {
 	builtins[0].name = ft_strdup("cd");
@@ -32,6 +40,16 @@ static void	init_builtin_entries(t_builtin *builtins)
 	builtins[7].func = NULL;
 }
 
+/**
+ * @brief Initialise et retourne le tableau des builtins.
+ *
+ * Si shell_env->builtins n'est pas encore alloué, alloue un tableau
+ * de 8 entrées et appelle init_builtin_entries. En cas d'erreur
+ * d'allocation, affiche une erreur et quitte.
+ *
+ * @param shell_env Environnement du shell.
+ * @return t_builtin* Tableau des builtins.
+ */
 t_builtin	*init_builtins(t_shell_env *shell_env)
 {
 	if (shell_env->builtins == NULL)

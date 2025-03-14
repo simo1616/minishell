@@ -6,12 +6,22 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 17:36:07 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/02/28 19:24:29 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/03/14 21:06:12 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Exécute le processus enfant pour une commande externe.
+ *
+ * Remplace le comportement de SIGQUIT, puis lance execve.
+ * En cas d'erreur, affiche un message, libère path et quitte.
+ *
+ * @param path Chemin de la commande.
+ * @param cmd Commande à exécuter.
+ * @param shell_env Environnement du shell.
+ */
 static void	exec_child_process(char *path, t_cmd *cmd, t_shell_env *shell_env)
 {
 	signal(SIGQUIT, SIG_DFL);
@@ -21,6 +31,14 @@ static void	exec_child_process(char *path, t_cmd *cmd, t_shell_env *shell_env)
 	exit(EXIT_FAILURE);
 }
 
+/**
+ * @brief Gère le cas où la commande n'est pas trouvée.
+ *
+ * Affiche un message d'erreur indiquant que la commande n'a pas été trouvée.
+ *
+ * @param cmd_name Nom de la commande.
+ * @return int Code d'erreur EX_CMD_NT_FD.
+ */
 static int	handle_no_path(char *cmd_name)
 {
 	ft_putstr_fd("minishell: ", 2);
@@ -29,6 +47,16 @@ static int	handle_no_path(char *cmd_name)
 	return (EX_CMD_NT_FD);
 }
 
+/**
+ * @brief Gère une erreur lors du fork.
+ *
+ * Affiche l'erreur, met à jour le statut de sortie,
+ * libère path et retourne ce statut.
+ *
+ * @param path Chemin de la commande.
+ * @param shell_env Environnement du shell.
+ * @return int Code de sortie mis à jour.
+ */
 static int	handle_fork_error(char *path, t_shell_env *shell_env)
 {
 	perror("minishell");
@@ -37,6 +65,15 @@ static int	handle_fork_error(char *path, t_shell_env *shell_env)
 	return (shell_env->exit_status);
 }
 
+/**
+ * @brief Met à jour le statut de sortie de l'environnement.
+ *
+ * Si le processus s'est terminé normalement, récupère le code de sortie.
+ * Sinon, ajoute un offset au numéro du signal.
+ *
+ * @param shell_env Environnement du shell.
+ * @param status Statut renvoyé par waitpid.
+ */
 void	update_exit_status(t_shell_env *shell_env, int status)
 {
 	if (WIFEXITED(status))
@@ -45,6 +82,16 @@ void	update_exit_status(t_shell_env *shell_env, int status)
 		shell_env->exit_status = EXIT_SIG_OFFSET + WTERMSIG(status);
 }
 
+/**
+ * @brief Exécute une commande externe.
+ *
+ * Résout le chemin de la commande, vérifie qu'elle n'est pas un répertoire,
+ * fork le processus et attend sa fin. Met à jour le statut de sortie.
+ *
+ * @param cmd Commande à exécuter.
+ * @param shell_env Environnement du shell.
+ * @return int Code de sortie.
+ */
 int	exec_external(t_cmd *cmd, t_shell_env *shell_env)
 {
 	pid_t		pid;
