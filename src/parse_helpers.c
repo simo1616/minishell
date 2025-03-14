@@ -6,11 +6,16 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 18:28:15 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/03/14 14:44:35 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/03/14 15:24:26 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	is_valid_var_char(char c)
+{
+	return (ft_isalnum(c) || c == '_');
+}
 
 char	**init_argv(const char *token)
 {

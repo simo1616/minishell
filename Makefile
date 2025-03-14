@@ -28,7 +28,6 @@ SRCS 	= main.c \
 		env_utils.c \
 		env_utils2.c \
 		signal.c \
-		parse1_utils.c \
 		calcul_len.c \
 		parse2_utils.c \
 		parse_helpers.c \
