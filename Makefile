@@ -51,7 +51,8 @@ SRCS 	= main.c \
 		exec_pipes_utils.c \
 		ft_cd_utils.c \
 		ft_exit_utils.c \
-		ft_export_utils.c
+		ft_export_utils.c \
+		ft_redirects_utils.c
 
 OBJS = $(addprefix $(SRC_DIR), $(SRCS:.c=.o))
 

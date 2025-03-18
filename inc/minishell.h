@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
+/*   By: jdecarro <jdecarro@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 12:05:11 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/03/14 22:02:59 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/03/18 17:09:56 by jdecarro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,6 +233,9 @@ t_redir_type				get_redir_type(char *token);
 void						add_redir_to_cmd(t_cmd *cmd, t_redir_type type,
 								char *filename);
 int							handle_redirections(t_cmd *cmd);
+void						setup_heredoc_signal(struct sigaction *sa);
+int							open_redirection(t_redir *redir, int *heredoc_fd);
+int							handle_heredoc(char *delimiter, int *heredoc_fd);
 
 /* --- Fonctions Pipe --- */
 int							exec_pipes(t_cmd *cmds, t_shell_env *env);
