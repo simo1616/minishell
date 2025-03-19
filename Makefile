@@ -4,7 +4,7 @@ LIBFT = libft/libft.a
 LDFLAGS = -lreadline
 
 # Debugger
-DEBUGGER = valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --trace-children=yes --track-fds=yes --verbose --suppressions=ignore_readline_leaks.supp --log-file=valgrind-out.txt
+DEBUGGER = valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --trace-children=yes --track-fds=yes --verbose --suppressions=$(PWD)/ignore_readline_leaks.supp --log-file=valgrind-out.txt
 
 # Compilateur et flags
 CC = gcc
@@ -34,6 +34,7 @@ SRCS 	= main.c \
 		proc_tokens.c \
 		get_next_token.c \
 		get_n_t_helper.c \
+		backslash.c \
 		parse_cmd.c \
 		parse_repl_var.c \
 		redir.c \

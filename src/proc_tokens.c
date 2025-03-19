@@ -6,7 +6,7 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 15:39:21 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/03/14 20:17:35 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/03/19 07:40:21 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,12 @@ int	handle_redir(char *token, t_data *data, t_shell_env *env, t_cmd **cur_cmd)
 		ft_putstr_fd("'\n", 2);
 		if (filename_data.token)
 			free(filename_data.token);
+		free(filename_data.token_ctx);
 		return (0);
 	}
 	filename = filename_data.token;
 	add_redir_to_cmd(*cur_cmd, type, filename);
+	free(filename);
 	free(filename_data.token_ctx);
 	return (1);
 }

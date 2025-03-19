@@ -6,34 +6,11 @@
 /*   By: mbendidi <mbendidi@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 20:04:37 by mbendidi          #+#    #+#             */
-/*   Updated: 2025/03/14 17:04:35 by mbendidi         ###   ########.fr       */
+/*   Updated: 2025/03/19 07:57:50 by mbendidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/**
- * @brief Gère le caractère d'échappement.
- *
- * Si le caractère suivant existe, avance et remplit le buffer;
- * sinon, remplit le buffer et avance.
- *
- * @param tok Pointeur sur le tokenizer.
- */
-static void	handle_backslash(t_tokenizer *tok)
-{
-	if (tok->data->line[tok->pos + 1])
-	{
-		tok->pos++;
-		fill_buffer_and_ctx(tok);
-		tok->pos++;
-	}
-	else
-	{
-		fill_buffer_and_ctx(tok);
-		tok->pos++;
-	}
-}
 
 /**
  * @brief Gère les guillemets dans le token.
